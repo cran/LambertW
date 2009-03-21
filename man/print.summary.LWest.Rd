@@ -1,9 +1,9 @@
 \name{print.summary.LWest}
 \alias{print.summary.LWest}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Summary of estimation }
+\title{Summary of Estimation Results}
 \description{
- Gives a summary of a Lambert W estimation. (GMM or ML)
+Gives a "nice" summary for Lambert W estimation results (GMM or MLE). Output similar to \code{summary.lm}.
 }
 \usage{
 \method{print}{summary.LWest}(x, ...)
@@ -15,7 +15,7 @@
 }
 
 \value{
-Output with estimation results and useful info for Y implied by this model.
+Output with estimation results plus useful information for the theoretical Y and X implied by the estimated \eqn{\theta}.
 }
 \references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished}
 \author{Georg M. Goerg}

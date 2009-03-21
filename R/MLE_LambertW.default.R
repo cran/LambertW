@@ -1,6 +1,6 @@
 `MLE_LambertW.default` <-
 function(y, distname=c("normal"),
-theta.0=IGMM(y)$theta, ... ) {
+theta.0=IGMM(y)$theta) {
 ####################################### Likelihood function
 LambertW_logLH=function(theta){
 delta=theta[1]
@@ -50,19 +50,20 @@ min.LambertW_logLH=function(theta) {
 fit=nlminb(min.LambertW_logLH, start=theta.0, lower = lb, upper = ub)
 theta.hat=fit$par
 
-H=numericNHessian(f=LambertW_logLH, t0=theta.hat)
+#H=numericNHessian(f=LambertW_logLH, t0=theta.hat)
 
 names(theta.hat)=c("delta", "mu_x", "sigma_x")
 if (distname=="t") names(theta.hat)=c("delta", "mu_x", "sigma_x", "nu")
 
 est=NULL
+est$data = y
+est$logLH = LambertW_logLH
 est$theta.0 = theta.0
 est$theta = theta.hat
-est$hessian = H
+#est$hessian = H
 est$call = match.call()
 est$distname = distname
 est$message = fit$message
-est$data = y
 est$method = c("MLE")
 
 class(est) = "LWest"

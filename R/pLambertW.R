@@ -1,10 +1,11 @@
 `pLambertW` <-
-function(y, theta=c(0,0,1), distname="normal", ...) {
+function(y, theta=c(0,0,1), distname="normal") {
 delta=theta[1]
 mu_x=theta[2]
 sigma_x=theta[3]
-nu=NULL
-if (distname=="t") nu=theta[4]
+nu=theta[4]
+
+if (length(theta) == 3 & distname=="t") stop("You must specify a degrees of freedom parameter for student-t input.")
 
 if (delta < 0) {
 y=-y
@@ -40,6 +41,9 @@ G_1=F_x(x_0)-F_x(x_1)
 
 G=G_0*as.numeric(z>=0)+G_1*as.numeric(z<0)
 #if (is.na(G)) G=0
+
+if (delta ==0) {G=F_x(y)}
+
 G
 }
 

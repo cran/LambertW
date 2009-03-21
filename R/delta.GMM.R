@@ -1,5 +1,5 @@
 `delta.GMM` <-
-function(y, robust=FALSE, c=mean(y), s=sqrt(var(y)), gamma_x=0, ...){
+function(y, robust=FALSE, c=mean(y), s=sqrt(var(y)), gamma_x=0){
 z=(y-c)/s
 ###### Estimate delta
 obj.f=function(delta){

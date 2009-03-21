@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Underlying transformation H}
 \description{
- The Lambert W function is the inverse function of this function.
+ The Lambert W function is the inverse of this function.
 }
 \usage{
 H(u)
@@ -14,13 +14,10 @@ H(u)
 }
 
 \value{
-returns the value z = u exp(u).
+Returns the value z = u exp(u).
 }
 \references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished}
 \author{Georg M. Goerg}
-
-
-
-% Add one or more standard keywords, see file 'KEYWORDS' in the
+% Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{math}

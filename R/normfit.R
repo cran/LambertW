@@ -1,12 +1,12 @@
 `normfit` <-
-function(data, volatility=FALSE, plot=TRUE,...) {
+function(data, volatility=FALSE, plot.it=TRUE) {
 # various normality tests (both graphically and statistically)
 # Input: Either a data-vector or a model (will use the residuals of the model)
 # Testing vector 'x': normfit(x)
 # Testing residuals of model 'mod': normfit(mod)
 if (!is.numeric(data)) data=data$res
 
-if (plot) {
+if (plot.it) {
 T=length(data)
 h=hist(data, plot=FALSE)
 mu=mean(data)

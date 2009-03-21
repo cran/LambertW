@@ -1,5 +1,5 @@
 `mom.LambertW.X.Gauss` <-
-function(theta, ...){
+function(theta){
 names(theta)=NULL
 delta=theta[1]
 mu_x=theta[2]

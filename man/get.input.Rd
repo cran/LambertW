@@ -23,6 +23,14 @@ get.input(y, theta)
 
 
 \examples{
+y=rLambertW(n=1000, c(0.1,0,1))
+fit.gmm=IGMM(y)
+summary(fit.gmm)
+
+x=get.input(y, fit.gmm$theta)$x
+plot(x)
+normfit(x)
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

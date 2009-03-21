@@ -1,9 +1,9 @@
 \name{delta.01}
 \alias{delta.01}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Appropriate delta for zero mean, unit variance output}
+\title{Calculate delta for zero mean, unit variance output}
 \description{
-This function calculates the input mean and standard deviation such that the resulting Lambert W Gaussian random variable has zero mean, and unit variance. This is useful for generating, e.g. a standardized white noise sequence.
+This function calculates the input mean and standard deviation given \eqn{\delta} such that the resulting Lambert W Gaussian RV has zero mean, and unit variance. This is useful for generating, e.g. a standardized white noise sequence.
 }
 \usage{
 delta.01(delta)
@@ -22,8 +22,8 @@ delta.01(delta)
 
 
 \examples{
-delta.01(0.1)
-delta.01(0)
+delta.01(0) # for delta = 0 it holds input == output, therefore M =0, S=1
+delta.01(0.1)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

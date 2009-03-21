@@ -3,21 +3,27 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Non-principal branch probability }
 \description{
-Computes the probability that the non-principal branch is important for the back-transformed data.
+Computes the probability that the non-principal branch is caused the observed data. 
 }
 \usage{
-p_1(delta, distname = "normal", nu = NULL, ...)
+p_1(delta, distname = "normal", nu = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{delta}{ skewness parameter }
   \item{distname}{ distribution }
   \item{nu}{ degrees of freedom (if \code{distname="t"}) }
-  \item{\dots}{ ... }
+}
+
+\details{
+This probability equals
+\deqn{
+P(U < -\frac{1}{|\delta|})
+}
 }
 
 \value{
-probability
+Probability (in practice very small).
 }
 \references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished}
 \author{Georg M. Goerg}

@@ -1,12 +1,12 @@
 \name{plot.LWest}
 \alias{plot.LWest}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Plot Estimation results }
+\title{ Plot Lambert W Estimation Results }
 \description{
-Plots a histogram, empirical density of the data, and compares it to the estimated Gaussian (t) and Lambert W - Gaussian (t) density.
+A plotting method for the \code{LWest} class. For the estimated delta dn given the data, plots a histogram, empirical density of the data, and compares it to the estimated theoretical Gaussian (t) and Lambert W - Gaussian (t) density.
 }
 \usage{
-\method{plot}{LWest}(x, ...)
+\method{plot}{LWest}(x,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

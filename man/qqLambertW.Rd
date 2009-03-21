@@ -6,7 +6,7 @@
 A qq-plot with Lambert W - Gaussian (t) quantiles. 
 }
 \usage{
-qqLambertW(y, theta = c(0, 0, 1), distname = "normal", plot.it = TRUE, ...)
+qqLambertW(y, theta = IGMM(y)$theta, distname = "normal", plot.it = TRUE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -16,15 +16,19 @@ qqLambertW(y, theta = c(0, 0, 1), distname = "normal", plot.it = TRUE, ...)
   \item{plot.it}{ should it be plotted }
   \item{\dots}{ ... }
 }
-\details{
-  ~~ If necessary, more details than the description above ~~
-}
+
 \value{
   \item{x}{Theoretical quantiles (sorted)}
   \item{y}{Empirical quantiles (sorted)}
 }
 \references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished}
 \author{Georg M. Goerg}
+
+\examples{
+y=rLambertW(n=200, c(0.2,1,2))
+qqLambertW(y, theta=IGMM(y)$theta)
+
+}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{univar}

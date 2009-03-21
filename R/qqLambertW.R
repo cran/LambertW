@@ -1,5 +1,8 @@
-qqLambertW=function(y, theta=c(0,0,1), distname="normal", plot.it = TRUE, ...) 
+`qqLambertW` <-
+function(y, theta=IGMM(y)$theta, distname="normal", plot.it = TRUE, ...) 
 {
+if (length(theta) == 3 & distname=="t") stop("You must specify a degrees of freedom parameter for student-t input.")
+
 ylim = range(y)
 xlab = "Theoretical Quantiles"
 ylab = "Sample Quantiles"
@@ -15,10 +18,12 @@ main = "Lambert W - t Q-Q Plot"
     if (0 == (n <- length(y))) 
         stop("y is empty")
  p.n=ppoints(n)
-x=sapply(p.n, qLambertW, theta, distname)
+ x=qLambertW(p.n, theta, distname)
+#x=sapply(p.n, qLambertW, theta, distname)
     if (plot.it) {
         plot(sort(x), sort(y), main = main, xlab = xlab, ylab = ylab, ylim = ylim, ...)
-	qqline(y, col=2, lty=2)
+	#qqline(y-theta[1], col=2, lty=2)
 }
     invisible(list(x = sort(x), y = sort(y)))
 }
+

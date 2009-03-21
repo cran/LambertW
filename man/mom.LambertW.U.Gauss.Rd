@@ -1,9 +1,9 @@
 \name{mom.LambertW.U.Gauss}
 \alias{mom.LambertW.U.Gauss}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Moments of Y for Standard Gaussian input }
+\title{Moments of Z for Standard Gaussian Input }
 \description{
-Given delta, compute the moments of Z.
+Given delta, computes the first 4 moments of Z for standard Gaussian input U.
 }
 \usage{
 mom.LambertW.U.Gauss(delta)

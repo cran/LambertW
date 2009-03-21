@@ -14,7 +14,7 @@ d1W_1(z)
 }
 
 \value{
-derivative at z
+Derivative of \eqn{W_1(.)} evaluated at z.
 }
 \references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished}
 \author{Georg M. Goerg}

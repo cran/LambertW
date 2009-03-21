@@ -1,10 +1,11 @@
 `dLambertW` <-
-function(y, theta=c(0,0,1), distname=c("normal"), ...) {
+function(y, theta=c(0,0,1), distname=c("normal")) {
 delta=theta[1]
 mu_x=theta[2]
 sigma_x=theta[3]
-nu=NULL
-if (distname=="t") nu=theta[4]
+nu=theta[4]
+
+if (length(theta) == 3 & distname=="t") stop("You must specify a degrees of freedom parameter for student-t input.")
 
 if (delta < 0) {
 y=-y
