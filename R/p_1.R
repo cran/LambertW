@@ -1,5 +1,5 @@
 `p_1` <-
-function(delta, distname="normal", nu=NULL,...) {
+function(delta, distname="normal", nu=NULL) {
 if (delta < 0 ) delta =-delta
 if (distname=="normal") {
 out=pnorm(-1/delta)

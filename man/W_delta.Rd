@@ -1,9 +1,9 @@
 \name{W_delta}
 \alias{W_delta}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Inverse transformation}
+\title{Inverse transformation for Lambert W random variables}
 \description{
-Inverse transformation of the Lambert W random variables. This function uses the principal branch.
+Inverse transformation for Lambert W RVs. This function uses the principal branch.
 }
 \usage{
 W_delta(z, delta)
@@ -15,7 +15,7 @@ W_delta(z, delta)
 }
 
 \value{
-function value
+Computes the value \eqn{1/\delta * W(\delta z)}.
 }
 \references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished}
 \author{Georg M. Goerg}

@@ -1,5 +1,5 @@
 `delta.test` <-
-function(object, ...){
+function(object){
 DNAME = deparse(substitute(object$data))
 n=length(object$data)
 
@@ -9,6 +9,6 @@ pval=1-pnorm(A)
 RVAL <- list(statistic = c(Statistic = A), p.value = pval, method = "Simulation based GMM significanc test (Asymptotic Gaussian)", 
         data.name = DNAME)
     class(RVAL) <- "htest"
-    return(RVAL)
+return(RVAL)
 }
 

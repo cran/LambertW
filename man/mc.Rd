@@ -14,7 +14,7 @@ mc(x)
 }
 
 \value{
-robust skewness measure
+A robust measure of skewness. Details see references.
 }
 \references{Brys, G., M. Hubert, and A. Struyf (2004). \dQuote{A robust measure of skewness}. Journal of Computa-
 tional and Graphical Statistics 13 (4), 996 - 1017.}
@@ -27,7 +27,6 @@ x=rnorm(100)
 mc(x)
 y=rLambertW(n=100, theta=c(0.4,1,2))
 mc(y)
-
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

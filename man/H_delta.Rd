@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Transformation with delta}
 \description{
-Function of the underlying transformation of Lambert W random variables.
+Function of the underlying transformation for Lambert W RV.
 }
 \usage{
 H_delta(u, delta)
@@ -15,12 +15,10 @@ H_delta(u, delta)
 }
 
 \value{
-returns z = u exp(delta * u).
+Returns z = u exp(delta * u).
 }
 \references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished}
 \author{Georg M. Goerg}
-
-
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
