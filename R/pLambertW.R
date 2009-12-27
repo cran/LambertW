@@ -1,5 +1,6 @@
-`pLambertW` <-
-function(y, theta=c(0,0,1), distname="normal") {
+pLambertW <-
+function(q, theta=c(0,0,1), distname=c("normal")) {
+y=q
 delta=theta[1]
 mu_x=theta[2]
 sigma_x=theta[3]
@@ -32,18 +33,20 @@ x_1=r_1*sigma_x+mu_x
 F_x=function(X) pnorm(X, mean=mu_x, sd=sigma_x)
 if (distname=="t") {
 fac=sqrt(nu/(nu-2))
-F_x=function(X) pt((X-mu_x)/fac*sigma_x, df=nu)
+F_x=function(X) pt((X-mu_x)*fac/sigma_x, df=nu)
 }
 
-G=0
+if (delta ==0) {G=F_x(y)}
+else{
 G_0=F_x(x_0)
 G_1=F_x(x_0)-F_x(x_1)
 
 G=G_0*as.numeric(z>=0)+G_1*as.numeric(z<0)
-#if (is.na(G)) G=0
 
-if (delta ==0) {G=F_x(y)}
+G[is.na((G < -1))] = 0
 
+if (sign(theta[1]) < 0) G = as.numeric(sign(theta[1]) < 0) - G
+}
 G
 }
 

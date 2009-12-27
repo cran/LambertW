@@ -1,20 +1,47 @@
 \name{W}
 \alias{W}
+\alias{W_1}
+\alias{d1W}
+\alias{d1W_1}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Lambert W function (principal branch) }
+\title{ Lambert W function and derivative }
 \description{
-Principal branch of the Lambert W function. This is a short name for \code{lambert_W0} in the package \code{gsl}.
+The Lambert W function and its derivative. For both the principal and non-principal branch. (These are wrapper functions for \code{lambert_W0} in the package \code{gsl}.)
 }
 \usage{
 W(z)
+W_1(z)
+d1W(z)
+d1W_1(z)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{z}{ value }
+  \item{z}{ a numeric vector of real values. }
+}
+
+\details{
+The Lambert W function \eqn{W(z)} is implicitly defined as the inverse function of 
+\deqn{
+W(z) \exp(W(z)) = z.
+}
+
+For \eqn{z \geq 0} the solution is unique \code{W(z)}.
+
+For \eqn{-1/e \leq z < 0} it has two solutions: the principal branch \code{W(z)} and the non-principal branch \code{W_1(z)}.
+
+For \eqn{z  < -1/e} no solution exists in the reals.
+
+
+The derivative can be expressed as a function of \eqn{W(z)}:
+\deqn{
+W'(z) = \frac{1}{(1 + W(z)) \exp(W(z)} =  \frac{W(z)}{z(1 + W(z))}, \quad z \neq 0, -1/e.
+}
+
+For details see the references.
 }
 
 \value{
-Function value or NaN.
+Function value or NaN if \eqn{z < -1/e}.
 }
 \references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished
 
@@ -22,10 +49,13 @@ Corless, R. M., G. H. Gonnet, D. E. G. Hare, and D. J. Jeffrey (1993). \dQuote{O
 }
 \author{Georg M. Goerg}
 
-\seealso{\code{\link[gsl]{lambert_W0}}}
+\seealso{\code{\link[gsl]{lambert_W0}}, \code{\link[gsl]{lambert_Wm1}}}
 \examples{
-W(5) # exists
-W(-5) # does not exist
+W(5) # exists in R
+W(-5) # does not exist in R
+
+W(-0.25) # the "reasonable" input event
+W_1(-0.25) # the "extreme" input event
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

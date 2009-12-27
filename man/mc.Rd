@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{MedCouple Estimator}
 \description{
-Robust measure of skewness. 
+A robust measure of asymmetry.
 }
 \usage{
 mc(x)
@@ -14,7 +14,7 @@ mc(x)
 }
 
 \value{
-A robust measure of skewness. Details see references.
+The robust measure of skewness. Details see references.
 }
 \references{Brys, G., M. Hubert, and A. Struyf (2004). \dQuote{A robust measure of skewness}. Journal of Computa-
 tional and Graphical Statistics 13 (4), 996 - 1017.}
@@ -23,9 +23,9 @@ tional and Graphical Statistics 13 (4), 996 - 1017.}
 
 
 \examples{
-x=rnorm(100)
+x=rnorm(1000)
 mc(x)
-y=rLambertW(n=100, theta=c(0.4,1,2))
+y=rLambertW(n=1000, theta=c(0.4,1,2))
 mc(y)
 
 }

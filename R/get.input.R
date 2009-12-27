@@ -1,4 +1,4 @@
-`get.input` <-
+get.input <-
 function(y, theta) {
 delta=theta[1]
 c=theta[2]

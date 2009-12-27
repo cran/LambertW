@@ -1,6 +1,5 @@
-`qLambertW` <-
-function(p, theta, distname="normal") {
-
+qLambertW <-
+function(p, theta = c(0,0,1), distname=c("normal")) {
 
 if (length(theta) == 3 & distname=="t") stop("You must specify a degrees of freedom parameter for student-t input.")
 
@@ -33,10 +32,6 @@ Q=fit$min
 }
 Q
 }
-
-###################################
-
 round(sapply(p, aux),10)
-
 }
 

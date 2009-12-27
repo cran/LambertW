@@ -1,23 +1,24 @@
-\name{KS.test.t}
-\alias{KS.test.t}
+\name{ks.test.t}
+\alias{ks.test.t}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{One-sided Kolmogorov - Smirnov test for student-t distribution}
+\title{One-sample Kolmogorov-Smirnov test for student-t distribution}
 \description{
-Performs a one-sided KS test if data is student-t with nu degrees of freedom, mean \eqn{mu_x}, and stand. dev. \eqn{sigma_x}. If these parameters are not specified, the MLE estimates for the data are used (see \code{fitdistr}).
+Performs a one-sided KS test for the null hypothesis that the data comes from a student-t distribution with \eqn{\nu} degrees of freedom, mean \eqn{\mu_x}, and standard deviation \eqn{\sigma_x}. If the parameters are not specified, the ML estimates given the data are used (see \code{fitdistr}).
 }
 \usage{
-KS.test.t(y, theta = NULL)
+ks.test.t(y, theta = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{y}{ data }
-  \item{theta}{ theta incl. df parameter nu}
+  \item{y}{ a numeric vector of data values. }
+  \item{theta}{ \eqn{\theta} including the degrees of freedom parameter \eqn{\nu}. by default \code{theta = NULL}, thus parameters will be estimated from the data \code{y}.}
 }
 
 \value{
   A list with class "htest" containing the following components:
   \item{statistic}{the value of the Kolomogorv-Smirnov statistic.}
   \item{p.value }{the p-value for the test.}
+  \item{alternative }{a character string describing the alternative hypothesis.}
   \item{method}{the character string "One-sample Kolmogorov-Smirnov test student-t" plus rounded parameter values.}
   \item{data.name}{a character string giving the name(s) of the data.}
 }
