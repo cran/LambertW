@@ -1,4 +1,4 @@
-`mc` <-
+mc <-
 function(x) {
 
 if (length(x)> 3000) stop("\n Observation has more than 3000 observations. Please reduce number")

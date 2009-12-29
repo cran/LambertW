@@ -5,7 +5,7 @@
 \description{
   These data were collected in a study of how 
   data on various characteristics of the blood varied with sport
-  body size and sex of the athlete. Equivalent to the \code{ais} dataset in the DAAG package.
+  body size and sex of the athlete. Identical to the \code{ais} dataset in the \code{DAAG} package.
 }
 \usage{data(AA)}
 \format{

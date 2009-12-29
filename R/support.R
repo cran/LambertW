@@ -1,4 +1,4 @@
-`support` <-
+support <-
 function(theta) {
 delta=theta[1]
 mu=theta[2]

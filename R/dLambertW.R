@@ -1,4 +1,4 @@
-`dLambertW` <-
+dLambertW <-
 function(y, theta=c(0,0,1), distname=c("normal")) {
 delta=theta[1]
 mu_x=theta[2]
@@ -38,12 +38,14 @@ s=sigma_x/fac
 f_x=function(X) dt((X-mu_x)/s, df=nu)/s
 }
 
-g=0
+if (delta == 0) g=f_x(y)
+else{
 g_0=f_x(x_0)*d1W(delta*z)
 g_1=f_x(x_0)*d1W(delta*z)-f_x(x_1)*d1W_1(delta*z)
 
 g=g_0*as.numeric(z>=0)+g_1*as.numeric(z<0)
-g[g==NA]=0
+g[is.na((g < -1))]=0 ## a trick to determine the NaN values of g
+}
 g
 }
 

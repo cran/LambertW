@@ -4,23 +4,23 @@
 \docType{package}
 \title{Lambert W Random Variables}
 \description{
-Lambert W random variables (RV) offer a new way of dealing with slightly skewed data. It is based on an input/ouput framework - for details see References. This package contains the most important functions to perform an adequate analysis. Lambert W data can be simulated, parameters estimated and results can be plotted in a proper way. Quantile functions allow a more realistic analysis and inference of skewed data.
+Lambert W random variables (RV) offer a new way of dealing with slightly skewed data. It is based on an input/ouput framework - for details see references. This package contains the most important functions and methods to perform an adequate analysis. Lambert W data can be simulated, parameters estimated and results can be plotted in a proper way. Quantile functions allow a more realistic analysis and inference of skewed data.
+
+Comments, suggestions, improvements, error reports, ... are more than welcome. Feel free to contact me.
 }
 \details{
 \tabular{ll}{
 Package: \tab LambertW\cr
 Type: \tab Package\cr
-Version: \tab 0.1.5\cr
-Date: \tab 2009-03-21\cr
+Version: \tab 0.1.8\cr
+Date: \tab 2009-12-27\cr
 License: \tab GPL-2\cr
 LazyLoad: \tab yes\cr
 }
 
 }
 \author{
-Georg M. Goerg <e0225792@student.tuwien.ac.at>
-
-Maintainer: Georg M. Goerg <e0225792@student.tuwien.ac.at>
+Author and Maintainer: Georg M. Goerg <gmg@stat.cmu.edu>
 }
 \references{
 Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished
@@ -54,8 +54,30 @@ plot(fit.gmm)
 fit.ml=MLE_LambertW(y)
 summary(fit.ml)
 plot(fit.ml)
+
+## a finance example
+
+M = ts(EuStockMarkets[201:1802,])
+R = ts(diff(log(M))*100)
+
+plot(M)
+plot(R)
+
+skewness(R[,"SMI"]) ## negative skewness
+kurtosis(R[,"SMI"]) ## very high excess kurtosis
+
+fit.SMI=IGMM(R[,"SMI"])
+summary(fit.SMI) ## negative but small delta
+x = get.input(R[,"SMI"], fit.SMI$theta)$x
+plot(ts(cbind(R[,"SMI"], x)), main="")
+
+
+fitML.SMI = MLE_LambertW(R[,"SMI"])
+summary(fitML.SMI) 
+
+fitMLt.SMI = MLE_LambertW(R[,"SMI"], "t")
+summary(fitMLt.SMI)
+plot(fitMLt.SMI)
 }
 
 \keyword{ package }
-
-

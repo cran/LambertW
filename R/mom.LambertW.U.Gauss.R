@@ -1,5 +1,5 @@
-`mom.LambertW.U.Gauss` <-
-function(delta){
+mom.LambertW.U.Gauss <-
+function(delta = 0){
 ######## moments of lambertW - Gaussian
 m1=delta*exp((delta^2)/2)
 

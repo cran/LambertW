@@ -1,4 +1,4 @@
-`summary.LWest` <-
+summary.LWest <-
 function(object, ...) {
 
 if (!is.null(object$logLH)) {

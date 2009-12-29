@@ -1,4 +1,4 @@
-`delta.GMM` <-
+delta.GMM <-
 function(y, robust=FALSE, c=mean(y), s=sqrt(var(y)), gamma_x=0){
 z=(y-c)/s
 ###### Estimate delta

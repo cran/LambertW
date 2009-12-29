@@ -1,5 +1,5 @@
-`plot.LWest` <-
-function(x, ...) {
+plot.LWest <-
+function(x, QQ = FALSE, ...) {
 
 y=x$data
 
@@ -31,14 +31,17 @@ COL=c(1,2,4)
 LWD=c(1,2,1)
 LTY=c(1,1,3)
 
-H=hist(y, sqrt(length(y)), plot=FALSE)
+n=length(y)
+BS = ceiling((range(y)[2]-range(y)[1])/(3.96 * sd(y)*n^(-1/3)))
+
+H=hist(y, BS, plot=FALSE)
 D.np=density(y)$y
 D.p=aux.compare(seq(x_l, x_u, length=100))
 S=support(x$theta)
 sup.l=seq(max(S[1], x_l), min(S[2], x_u), length=100)
 D.pLW=aux.lambert(sup.l[-c(1, length(sup.l))])
 
-hist(y, sqrt(length(y)), xlim=c(x_l, x_u), main=paste("Density Estimates - ",x$method), 
+hist(y, BS, xlim=c(x_l, x_u), main=paste("Density Estimates"), 
 ylim=range(D.np, D.p, D.pLW, H$intensities), prob=TRUE, density=20, col="darkgray", ylab="")
 
 lines(density(y), lwd=LWD[1], lty=LTY[1])
@@ -47,7 +50,7 @@ plot(aux.lambert,min(sup.l),max(sup.l), lwd=LWD[2], col=COL[2], lty=LTY[2], ylab
 abline(v=S, lwd=2, lty=3, col=2)
 
 
-leg.txt=c("Kernel", "Lambert W - Gaussian", "Gaussian")
+leg.txt=c("Kernel", paste("Lambert W - Gaussian \n (", x$method,")", sep=""), "Gaussian")
 if (x$distname=="t") leg.txt=c("Kernel", "Lambert W - t", "t")
 
 pos="topleft"
@@ -60,7 +63,10 @@ if (x$theta[1] > 0) {
 pos.r="right"
 leg.txt.r=paste("Lower bound: \n a =",round(S[1],2))
 }
-
 legend(pos.r, leg.txt.r)
+if (QQ) {
+x11()
+qqLambertW(y, theta=x$theta, distname=x$distname)
+}
 }
 

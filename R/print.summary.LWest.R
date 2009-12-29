@@ -1,4 +1,4 @@
-`print.summary.LWest` <-
+print.summary.LWest <-
 function(x, ...) {
 cat("Call: ")
 print(x$call)

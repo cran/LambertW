@@ -1,4 +1,4 @@
-`normfit` <-
+normfit <-
 function(data, volatility=FALSE, plot.it=TRUE) {
 # various normality tests (both graphically and statistically)
 # Input: Either a data-vector or a model (will use the residuals of the model)
@@ -18,7 +18,7 @@ y=dnorm(x,mu,sigma)
 title=""
 if (volatility) mfrow=c(3,2)
 else mfrow=c(2,2)
-par(mfrow=mfrow, mar=c(2.5,2.2,1,1))
+par(mfrow=mfrow, mar=c(4.5,4.5,1,1))
 
 plot(data)
 
@@ -36,23 +36,33 @@ COL=c(1,2)
 LWD=c(1,2)
 LTY=c(1,2)
 
-H=hist(y, sqrt(length(y)), plot=FALSE)
+n=length(y)
+BS = ceiling((range(y)[2]-range(y)[1])/(3.96 * sd(y)*n^(-1/3)))
+
+H=hist(x=y, breaks=BS, plot=FALSE)
 D.np=density(y)$y
 D.p=aux.compare(seq(x_l, x_u, length=100))
 
-
-hist(y, sqrt(length(y)), xlim=c(x_l, x_u), ylim=range(D.np, D.p, H$intensities), prob=TRUE, density=10, col="gray", main="", ylab="")
+hist(y, BS, xlim=c(x_l, x_u), ylim=range(D.np, D.p, H$intensities), prob=TRUE, density=10, col="darkgray", main="Empirical/Theoretical Densities", ylab="")
 lines(density(y), lwd=LWD[1], main=paste("Density Estimates"))
 plot(aux.compare, x_l,x_u,  add=TRUE, lty=LTY[2], col=COL[2], lwd=LWD[2])
 
-legend("topright", c(paste("Mu : ", round(mean(y), 2)),paste("Var : ", round(var(y), 2))) )
+if (skewness(y) >= 0) {
+legend("topright", c(paste("mean:", round(mean(y), 2)),paste("var: ", round(var(y), 2))) )
+legend("right", c("Kernel","Gaussian"), lty=LTY, col=COL, lwd=LWD)
+}
+if (skewness(y) < 0) {
+legend("topleft", c(paste("mean:", round(mean(y), 2)),paste("var: ", round(var(y), 2))) )
+legend("left", c("Kernel","Gaussian"), lty=LTY, col=COL, lwd=LWD)
+}
+
 }
 
 
 ########
 acf(data)
 hist_dens(data)
-qqnorm(data, main="")
+qqnorm(data)
 qqline(data)
 
 if (volatility) {

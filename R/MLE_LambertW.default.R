@@ -1,4 +1,4 @@
-`MLE_LambertW.default` <-
+MLE_LambertW.default <-
 function(y, distname=c("normal"),
 theta.0=IGMM(y)$theta) {
 ####################################### Likelihood function
