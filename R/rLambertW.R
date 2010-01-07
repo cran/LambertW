@@ -3,18 +3,20 @@ function(n, theta=c(0,0,1), distname=c("normal"), input=NULL, ZmUv=FALSE, return
 
 if (length(theta) == 3 & distname=="t") stop("You must specify a degrees of freedom parameter for student-t input.")
 
-if (ZmUv!=FALSE) { ####### Zero mean, Unit variance output ?!
+delta=theta[1]
+
+####### Zero mean, Unit variance output ?!
+if (ZmUv!=FALSE) { 
 if (distname=="t") stop("Zero-mean, unit-variance input only for Gaussian input. Provide a theta for Gaussian input.")
 
 theta = delta.01(delta)
 }
 
-### default is Gaussian X
-delta=theta[1]
 mu_x=theta[2]
 sigma_x=theta[3]
 nu=theta[4]
 
+### default is Gaussian X
 if (distname=="normal") x=rnorm(n, mean=mu_x, sd=sigma_x)
 if (distname=="t") {
 fac=sqrt(nu/(nu-2))

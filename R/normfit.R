@@ -1,5 +1,5 @@
 normfit <-
-function(data, volatility=FALSE, plot.it=TRUE) {
+function(data, plot.it=TRUE, volatility=FALSE) {
 # various normality tests (both graphically and statistically)
 # Input: Either a data-vector or a model (will use the residuals of the model)
 # Testing vector 'x': normfit(x)
@@ -75,6 +75,7 @@ par(mfrow=c(1,1))
 AD=ad.test(data)
 SW=shapiro.test(data)
 SF=sf.test(data)
-list(sw=SW, sf=SF,ad=AD)
+CVM = cvm.test(data)
+list(ad=AD, cvm=CVM, sf=SF,sw=SW)
 }
 

@@ -1,11 +1,7 @@
 summary.LWest <-
 function(object, ...) {
 
-if (!is.null(object$logLH)) {
-H=numericNHessian(f=object$logLH, t0=object$theta)
-object$hessian=H
-se=sqrt(diag(solve(-object$hessian)))
-}
+if (!is.null(object$hessian)) se=sqrt(diag(solve(object$hessian)))
 
 if (object$method=="IGMM") {
 se=c(0.4, 1, sqrt(1/2))/sqrt(length(object$data))
@@ -20,16 +16,19 @@ dimnames(TAB) = list(names(tval), c(" Estimate", " Std. Error", " t value", "Pr(
 res=NULL
 res$call = object$call
 res$method = object$method
-res$input = get.input(object$data, theta=object$theta)$x
+res$data = object$data
+res$input = get.input(object$data, theta=object$theta)
 res$coefmat = TAB
 res$hessian=object$hessian
 res$distname = object$distname
-res$nobs = length(object$data)
+res$n = length(object$data)
 res$support = support(object$theta)
 res$data.range = range(object$data)
-res$p_1 =  p_1(object$theta[1])
-if (object$distname=="t") res$p_1 = p_1(object$theta[1], object$distname, nu=object$theta[4])
-
+if (object$method == "MLE") {
+res$p_1 = p_1(delta=object$theta[1], distname=object$distname, nu=object$theta[4], n=1)
+res$p_1n = p_1(delta=object$theta[1], distname=object$distname, nu=object$theta[4], n=res$n)
+}
+else res$p_1 = res$p_1n = NA
 class(res)= "summary.LWest"
 res
 }

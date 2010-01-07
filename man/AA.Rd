@@ -41,39 +41,9 @@ Telford, R.D. and Cunningham, R.B. 1991.  Sex, sport and
   body-size dependency of hematology in highly trained athletes.
   Medicine and Science in Sports and Exercise 23: 788-794.
 }
-\keyword{datasets}
-
-
 \examples{
-data(AA)
-attach(AA)
-X=AA[AA$sex=="f",]
-y=X$bmi
-
-op=par(no.readonly=TRUE)
-par(mfrow=c(2,1), mar=c(2,4,3,1))
-plot(y)
-hist(y, prob=TRUE, 15)
-lines(density(y))
-par(op)
-
-fit.gmm=IGMM(y)
-summary(fit.gmm) # Delta is significant and positive
-plot(fit.gmm)
-# Comparison of Theoretical and Empirical Moments
-mom.LambertW.X.Gauss(fit.gmm$theta)
-rbind(mean(y), sd(y), skewness(y), kurtosis(y))
-
-x=get.input(y, fit.gmm$theta)$x
-
-op=par(no.readonly=TRUE)
-par(mfrow=c(2,1), mar=c(2,4,3,1))
-plot(x)
-hist(x, prob=TRUE, 15)
-lines(density(x))
-par(op)
-
-plot(fit.gmm)
+# See first example in 'LambertW-package'
 }
+\keyword{datasets}
 
 

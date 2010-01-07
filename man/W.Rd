@@ -6,7 +6,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Lambert W function and derivative }
 \description{
-The Lambert W function and its derivative. For both the principal and non-principal branch. (These are wrapper functions for \code{lambert_W0} in the package \code{gsl}.)
+The Lambert W function \code{W(z), W_1(z)} and its first derivative (\code{d1W(z), d1W_1(z)}). For both the principal and non-principal branch. (These are wrapper functions for \code{lambert_W0, lambert_Wm1} in the package \code{gsl}.)
 }
 \usage{
 W(z)
@@ -27,7 +27,7 @@ W(z) \exp(W(z)) = z.
 
 For \eqn{z \geq 0} the solution is unique \code{W(z)}.
 
-For \eqn{-1/e \leq z < 0} it has two solutions: the principal branch \code{W(z)} and the non-principal branch \code{W_1(z)}.
+For \eqn{-1/e \leq z < 0} it has two solutions: the principal (\code{W(z)}) and non-principal branch (\code{W_1(z)}).
 
 For \eqn{z  < -1/e} no solution exists in the reals.
 
@@ -43,8 +43,7 @@ For details see the references.
 \value{
 Function value or NaN if \eqn{z < -1/e}.
 }
-\references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished
-
+\references{
 Corless, R. M., G. H. Gonnet, D. E. G. Hare, and D. J. Jeffrey (1993). \dQuote{On the Lambert W function}. preprint.
 }
 \author{Georg M. Goerg}

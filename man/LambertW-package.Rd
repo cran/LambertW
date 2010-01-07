@@ -4,53 +4,38 @@
 \docType{package}
 \title{Lambert W Random Variables}
 \description{
-Lambert W random variables (RV) offer a new way of dealing with slightly skewed data. It is based on an input/ouput framework - for details see references. This package contains the most important functions and methods to perform an adequate analysis. Lambert W data can be simulated, parameters estimated and results can be plotted in a proper way. Quantile functions allow a more realistic analysis and inference of skewed data.
+Lambert W random variables (RV) offer a new way of dealing with slightly skewed data. It is based on an input/ouput framework - see Details and References. This package contains the most important functions and methods to perform an adequate analysis. Lambert W data can be simulated, parameters estimated, and results plotted in a "nice" way. Quantile functions allow a more realistic analysis and inference of skewed data.
 
-Comments, suggestions, improvements, error reports, ... are more than welcome. Feel free to contact me.
-}
-\details{
-\tabular{ll}{
-Package: \tab LambertW\cr
-Type: \tab Package\cr
-Version: \tab 0.1.8\cr
-Date: \tab 2009-12-27\cr
-License: \tab GPL-2\cr
-LazyLoad: \tab yes\cr
+Comments, suggestions, code improvements/accelerations, bug reports, ... are more than welcome: feel free to contact me.
 }
 
-}
 \author{
-Author and Maintainer: Georg M. Goerg <gmg@stat.cmu.edu>
+Author and maintainer: Georg M. Goerg <gmg@stat.cmu.edu>
 }
 \references{
 Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished
 }
 
 \examples{
+## Replicate parts of the statistical analysis in the References
 data(AA)
 attach(AA)
 X=AA[AA$sex=="f",]
 y=X$bmi
 
 op=par(no.readonly=TRUE)
-par(mfrow=c(2,1), mar=c(2,4,3,1))
-plot(y)
-hist(y, prob=TRUE, 15)
-lines(density(y))
-par(op)
+normfit(y)
 
 fit.gmm=IGMM(y)
-summary(fit.gmm) # Delta is significant and positive
+summary(fit.gmm) # delta is significant and positive
 plot(fit.gmm)
-# Comparison of Theoretical and Empirical Moments
-mom.LambertW.X.Gauss(fit.gmm$theta)
-rbind(mean(y), sd(y), skewness(y), kurtosis(y))
+# Comparison of theoretical and empirical moments
+mLambertW(fit.gmm$theta)
+cbind(mean(y), sd(y), skewness(y), kurtosis(y))
 
-x=get.input(y, fit.gmm$theta)$x
-normfit(x)
+x=get.input(y, fit.gmm$theta)
+normfit(x) # input is normal -> MLE - Gaussian fit
 
-
-plot(fit.gmm)
 fit.ml=MLE_LambertW(y)
 summary(fit.ml)
 plot(fit.ml)
@@ -61,6 +46,7 @@ M = ts(EuStockMarkets[201:1802,])
 R = ts(diff(log(M))*100)
 
 plot(M)
+x11()
 plot(R)
 
 skewness(R[,"SMI"]) ## negative skewness
@@ -68,16 +54,17 @@ kurtosis(R[,"SMI"]) ## very high excess kurtosis
 
 fit.SMI=IGMM(R[,"SMI"])
 summary(fit.SMI) ## negative but small delta
-x = get.input(R[,"SMI"], fit.SMI$theta)$x
+x = get.input(R[,"SMI"], fit.SMI$theta)
+normfit(x) # not normal
 plot(ts(cbind(R[,"SMI"], x)), main="")
 
-
+## MLE
 fitML.SMI = MLE_LambertW(R[,"SMI"])
 summary(fitML.SMI) 
 
 fitMLt.SMI = MLE_LambertW(R[,"SMI"], "t")
 summary(fitMLt.SMI)
-plot(fitMLt.SMI)
+plot(fitMLt.SMI, QQ=TRUE)
 }
 
 \keyword{ package }

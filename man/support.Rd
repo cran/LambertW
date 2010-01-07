@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Truncated support}
 \description{
-Computes the support \eqn{[a,b]} (including \eqn{a,b = \pm \infty}) of Y given \eqn{\theta}.
+Computes the theoretical support \eqn{[a,b]}, \eqn{a,b \in R \cup \pm \infty} of Y given \eqn{\theta}.
 }
 \usage{
 support(theta)
@@ -21,7 +21,7 @@ Half-open interval on the real line (if \eqn{\delta \neq 0}). For \eqn{\delta = 
 
 \examples{
 support(c(0,0,1)) # as delta = 0
-support(c(0.1,0,1)) # truncated
+support(c(0.1,0,1)) # truncated on the left, as delta >0
 
 }
 

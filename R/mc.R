@@ -1,7 +1,7 @@
 mc <-
 function(x) {
 
-if (length(x)> 3000) stop("\n Observation has more than 3000 observations. Please reduce number")
+if (length(x)> 3000) stop("\n Data vector has more than 3000 observations. Please reduce number")
 
 #### kernel
 h=function(z1,z2) {
