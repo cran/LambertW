@@ -17,9 +17,9 @@ W_delta_1(z, delta = 0)
 }
 
 \details{
-A Lambert W RV is defined by the transformation
+A Lambert W RV is defined using the transformation
 \deqn{
-z = u \exp(\delta u), \quad \delta \in R.
+z = u \exp(\delta u)=:H_{\delta}(u), \quad \delta \in R.
 }
 The function \code{W_delta(z)} (and \code{W_delta_1(z)}) are the inverse functions of this transformation. If \eqn{\delta = 0}, then \eqn{z = u} and the inverse transformation also equals the identity.
 

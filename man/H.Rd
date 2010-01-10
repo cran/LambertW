@@ -10,11 +10,11 @@ H(u)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{u}{ a numeric vector of real values.}
+  \item{u}{ a numeric vector of real/complex values.}
 }
 
 \value{
-Returns \eqn{z = u \exp(u)} for \eqn{u \in R}. If \eqn{u} is a vector, so is \eqn{z}.
+Returns \eqn{z = u \exp(u)} for \eqn{u \in C}. If \eqn{u} is a vector, so is \eqn{z}.
 }
 \references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished}
 \author{Georg M. Goerg}

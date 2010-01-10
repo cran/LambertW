@@ -1,73 +1,48 @@
 MLE_LambertW.default <-
 function(y, distname=c("normal"),
-theta.0=IGMM(y)$theta) {
+theta.0=IGMM(y)$theta, hessian=TRUE) {
 ####################################### Likelihood function
 LambertW_logLH=function(theta){
-delta=theta[1]
-mu_x=theta[2]
-sigma_x=theta[3]
-nu=NULL
-if (distname=="t") nu=theta[4]
-################## standardize
-L=0
-z=(y-mu_x)/sigma_x
 
-lb=-1/exp(1)/max(z)
-ub=-1/exp(1)/min(z)
-
-if (delta<=lb[1]) {
-L=-500000
-#print("Delta must be greater than the lower bound")
-}
-if (delta>=ub[1]) {
-L=-500000
-#print("Delta must be smaller than the upper bound")
-}
-
-g.log=log(dLambertW(y, theta, distname="normal"))
-if (distname=="t") g.log=log(dLambertW(y, theta, distname="t"))
-
+g.log=log(dLambertW(y, theta, distname))
 L=sum(g.log)
-if (is.na(L)) L=-200000
-return(L)
+if (is.na(L)) L=-10^6
+
+r.y = range(y)
+s.Y = support(theta)
+
+if (r.y[1] <= s.Y[1] | r.y[2] >= s.Y[2]) {
+	overlap = min(abs(r.y-s.Y))
+	L = -(overlap*10+1)*10^4
+}
+L
 }
 
 if (distname=="t") {
-x.hat=get.input(y, theta.0)$x
+x.hat=get.input(y, theta.0)
 t.fit=suppressWarnings(fitdistr(x.hat, distname))
 theta.0[4]=t.fit$est[3]
 names(theta.0)=c("delta", "mu_x", "sigma_x", "nu")
 }
-
-z=(y-theta.0[2])/theta.0[3]
-lb=c(-1/exp(1)/max(z),-Inf, 0, 2.1)+0.00001
-ub=c(-1/exp(1)/min(z), Inf, Inf, 100)-0.0001
+else names(theta.0)=c("delta", "mu_x", "sigma_x")
 
 min.LambertW_logLH=function(theta) {
 -LambertW_logLH(theta)
 }
 
-fit=nlminb(min.LambertW_logLH, start=theta.0, lower = lb, upper = ub)
-theta.hat=fit$par
-
-#H=numericNHessian(f=LambertW_logLH, t0=theta.hat)
-
-names(theta.hat)=c("delta", "mu_x", "sigma_x")
-if (distname=="t") names(theta.hat)=c("delta", "mu_x", "sigma_x", "nu")
-
+fit=suppressWarnings(nlm(min.LambertW_logLH, p=theta.0, hessian=hessian))
+names(fit$estimate) = names(theta.0)
 est=NULL
 est$data = y
 est$logLH = LambertW_logLH
 est$theta.0 = theta.0
-est$theta = theta.hat
-#est$hessian = H
+est$theta = fit$estimate
+est$hessian = fit$hessian
 est$call = match.call()
 est$distname = distname
 est$message = fit$message
 est$method = c("MLE")
-
 class(est) = "LWest"
 
-est
+return(est)
 }
-

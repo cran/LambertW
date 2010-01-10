@@ -1,9 +1,9 @@
 delta.GMM <-
-function(y, robust=FALSE, c=mean(y), s=sqrt(var(y)), gamma_x=0){
+function(y, c=median(y), s=sqrt(var(y)), gamma_x=0, robust=FALSE){
 z=(y-c)/s
 ###### Estimate delta
 obj.f=function(delta){
-u.d=1/delta*W(delta*z)
+u.d=W_delta(z, delta)
 if (!robust) s3=skewness(u.d)
 else s3=mc(u.d)
 (s3-gamma_x)^2
@@ -14,7 +14,7 @@ ub=-1/exp(1)/min(z)-0.00001
 fit=optimise(f=obj.f, interval=c(lb,ub))
 delta.hat=fit$minimum
 
-u=1/delta.hat*W(delta.hat*z)
+u=W_delta(z, delta.hat)
 x=u*s+c
 
 mom.x=c(mean(x), sqrt(var(x)))

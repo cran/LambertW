@@ -1,3 +1,3 @@
 sd <-
-function(x) sqrt(var(x))
+function(x) stats::sd(x)
 

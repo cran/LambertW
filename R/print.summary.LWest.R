@@ -21,8 +21,11 @@ colnames(M) = c("a", "b")
 rownames(M) = c("Support", "Data range")
 print(M)
 
-cat("\n p_1 = Probability that non-principal branch affects the solution: ")
+cat("\n p_1 (non-principal branch) for n=1: ")
 cat(x$p_1)
+cat("\n")
+cat(paste(" p_1 (non-principal branch) for n=", x$n,": ", sep=""))
+cat(x$p_1n)
 cat("\n")
 }
 
