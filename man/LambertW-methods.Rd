@@ -6,86 +6,88 @@
 \alias{mLambertW}
 \alias{qqLambertW}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Cumulative Distribution Function}
+\title{The Lambert W x F Distribution}
 \description{
-Density, distribution function, quantile function and random generation for the Lambert W \eqn{\times} Gaussian (or student-t) distribution with parameter vector \eqn{\theta = (\delta, \mu_x, \sigma_x)} for Gaussian (or \eqn{\theta = (\delta, \mu_x, \sigma_x, \nu)} for student-t) input.
+Density, distribution function, quantile function and random number generation for the Lambert W \eqn{\times} \eqn{F_X(x \mid \boldsymbol \beta)} distribution with parameter vector \eqn{(\alpha, \boldsymbol \beta, \gamma, \delta)}.
 
-A QQ-plot for LambertW - Gaussian (or t) for given data can be displayed.
-Computation of theoretical moments. So far only for Lambert W - Gaussian, i.e\ \eqn{\theta = (\delta, \mu_x, \sigma_x)}.
+Implemented distributions (\code{distname = ...}) are:  \code{"cauchy"}, \code{"chisq"}, \code{"exp"}, \code{"normal"}, \code{"t"}, \code{"unif"}. To be extended.
+
+\code{qqLambertW} computes and plots the sample quantiles of the data \code{y} versus the theoretical Lambert W \eqn{\times} \eqn{F} theoretical quantiles implied by the parameter estimate \eqn{\widehat{\theta}}.
+
+\code{mLambertW} computes the first 4 central moments of a Lambert W \eqn{\times} Gaussian.
 }
 \usage{
-dLambertW(y, theta = c(0, 0, 1), distname = c("normal"))
-pLambertW(q, theta = c(0, 0, 1), distname = c("normal"))
-qLambertW(p, theta = c(0, 0, 1), distname = c("normal"))
-rLambertW(n, theta = c(0, 0, 1), distname = c("normal"), input = NULL, ZmUv = FALSE, return.input = FALSE)
-
-mLambertW(delta = 0, theta = c(delta, 0,1), distname = c("normal"))
-qqLambertW(y, theta = IGMM(y)$theta, distname = c("normal"), plot.it = TRUE, ...)
+dLambertW(y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL)
+pLambertW(q, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL) 
+qLambertW(p, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL)
+rLambertW(n = 1000, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = "normal", return.input = FALSE, input.U = NULL)
+mLambertW(beta = c(0, 1), distname = c("normal"), gamma = 0, delta = 0, alpha = 1)
+qqLambertW(y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), plot.it = TRUE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{y,q}{ vector of quantiles. }
   \item{p}{ vector of probability levels }
   \item{n}{ number of observations}
-  \item{theta}{ parameter vector }
-  \item{delta}{ skewness parameter }
-  \item{distname}{input distribution. default \code{"normal"}. alternative \code{"t"}}
-  \item{input}{pre-specified input data; optional.}
-  \item{ZmUv}{ Should the mean and standard deviation of X be chosen such that Y is a zero mean, unit variance RV? default \code{FALSE}. See \code{\link{delta.01}}.}
-  \item{return.input}{ Should the simulated input x, leading to output y be returned? default \code{FALSE}; Caution: if \code{TRUE} then the output is not a vector anymore, but a list containing the input x and the output y.}
-  \item{plot.it}{ Should the QQ plot be displayed or only the (sorted) theoretical and empirical quantiles be returned? default: \code{TRUE}. }
+  \item{distname}{input distribution. default \code{"normal"}.}
+  \item{beta}{ parameter vector \eqn{\boldsymbol \beta}  of the input distribution}
+  \item{gamma}{ skewness parameter; default: \code{0} }
+  \item{delta}{ heavy-tail parameter (= Tukey's h in case of a normal distribution); default: \code{0} }
+  \item{alpha}{ exponent; default: \code{1} }
+\item{return.input}{ indicator for returning the simulated input x that gets transformed to the actual observations \code{y}; default: \code{FALSE}. Warning: if \code{TRUE} then the output is not a vector anymore, but a list containing the input \code{x} and the output \code{y}.}
+  \item{plot.it}{ Should the QQ plot be displayed or only the (sorted) theoretical and empirical quantiles be returned? default: \code{TRUE}.}
+  \item{input.U}{ you can supply your own version of U (either a vector of simulated values or a function defining the pdf/cdf/quanitle function of U); default: \code{NULL}.}
   \item{\dots}{further arguments passed to or from other methods.}
 }
 \details{
-See the references for the analytic expressions of the pdf and cdf. Quantile function is computed numerically (no analytic expression yet). 
+See the references for the analytic expressions of the pdf and cdf. Quantiles are computed numerically for the \code{type = "s"} case (no analytic expression yet); for \code{"h"} or \code{"hh"} quantiles can be computed analytically given the input quantile function and \eqn{\theta}.
 
-Random number generation allows to specify input data, and also has an option (\code{ZmUv = TRUE}) to force (theoretically) \eqn{\mu_y = 0} and \eqn{\sigma_y =1}. This is particularly useful in (financial) time series analysis, where often an iid white noise sequence with these properties is necessary.
-
-Caution: if \code{return.input = TRUE} then the output is not a vector anymore, but a list containing the input x and the output y.
+All functions have the optinal argument of user-supplied versions of the zero-mean, unit variance input U. For example, if you have your own density function as \code{dmydist(u) = function(u) ...)} then you can pass this function to \code{dLambertW(..., input.U = dmydist(u))} and it will use this pdf to generate plots, estimates, etc.  Important: for user-defined input, all \code{input.U} in \code{dLambertW}, \code{pLambertW}, ... must be supplied correctly. 
 }
 
 \value{
-\code{dLambertW}  gives the density, \code{pLambertW} the cumulative distribution
-     function, \code{qLambertW} the quantile function, and \code{rLambertW} 
-     generates random deviates.
+Following the standard distributions in R (e.g. \code{rnorm}, \code{rexp}, ...) the notation and functionality of LambertW distribution work as expected:
+\code{dLambertW}  computes the value of the pdf at \code{y}, \code{pLambertW} the cdf at \code{y}, \code{qLambertW} is the quantile function, and \code{rLambertW} generates random deviates from a Lambert W \eqn{\times} \eqn{F_X(x \mid \boldsymbol \beta)} distribution.
 
-\code{mLambertW} returns a vector with the 4 theoretical (central / standardized) moments of \eqn{Y} implied by \eqn{\delta} and/or \eqn{\theta} (works so far only for \code{distname = "normal"}):
+\code{mLambertW} returns a vector with the 4 theoretical (central/standardized) moments of \eqn{Y} implied by \eqn{\boldsymbol \beta} and \code{distname} (works so far only for \code{distname = "normal"}):
   \item{mu}{mean}
   \item{sigma}{standard deviation}
-  \item{gamma_1}{skewness}
-  \item{gamma_2}{excess kurtosis (=0 for Gaussian)}
+  \item{skewness}{skewness}
+  \item{kurtosis}{kurtosis (i.e. = 3 for a Gaussian)}
 
-\code{qqLambertW} returns a list of 2 vectors: (in accordance to the output of \code{qqnorm})
+\code{qqLambertW} returns a list of 2 vectors (in accordance to the output of \code{qqnorm}):
   \item{x}{theoretical quantiles (sorted)}
   \item{y}{empirical quantiles (sorted)}
 
-By default \code{rLambertW} returns the sampled LambertW - F data vector. If \code{return.input = TRUE}, then the output is a list of 2 vectors:
+By default \code{rLambertW} returns a sampled Lambert W \eqn{\times} \eqn{F_X(x \mid \boldsymbol \beta)} data vector. If \code{return.input = TRUE}, then the output is a list of 2 vectors:
   \item{x}{simulated input}
-  \item{y}{Lambert W random sample (implied by \code{x})}
+  \item{y}{Lambert W random sample (given by \code{x} and the functional relation \eqn{y = func(x)} - see References.}
 
 }
-\references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished}
+\references{Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. In review at the AOAS (arxiv.org/abs/0912.4554).
+
+Goerg, G.M. (2011b). \dQuote{The Lambert Way to Gaussianize skewed, heavy-tailed data with the inverse of Tukey's h transformation as a special case.}. In preparation for submission (http://arxiv.org/abs/1010.2265).
+}
 \author{Georg M. Goerg}
 
 \examples{
-theta.s=c(0.1,0,1)
-mLambertW(theta.s)
-mLambertW(delta=0.1) # the same as by default: mean=0, standard deviation =1
-mLambertW(theta=c(0.1, 1,1)) # mean shifted by 1
-mLambertW(delta=0) # N(0,1)
-
-set.seed(1)
-x=rnorm(1000)
-skewness(x) # very small skewness
-mc(x) # also close to zero
+###############################
+######### mLambertW ###########
+mLambertW(beta = c(0,1), gamma = 0.1)
+mLambertW(gamma=0.1) # the same as by default: mean=0, standard deviation =1
+mLambertW(beta = c(1,1), gamma = 0.1) # mean shifted by 1
+mLambertW(gamma=0) # N(0,1)
 
 ###############################
 ######### rLambertW ###########
-y=rLambertW(n=1000, theta.s)
-mLambertW(theta.s)
+set.seed(1)
+x=rLambertW(n=1000, beta=c(0,1)) # same as rnorm(1000)
+skewness(x) # very small skewness
+mc(x) # also close to zero
+
+y = rLambertW(n=1000, beta=c(1,3), gamma = 0.1)
 skewness(y) # high positive skewness (in theory equal to 3.70)
 mc(y) # also the robust measure gives a high value
-
 
 op=par(no.readonly=TRUE)
 par(mfrow=c(2,2), mar=c(2,4,3,1))
@@ -99,15 +101,15 @@ lines(density(y))
 par(op)
 ###############################
 ######### dLambertW ###########
+beta.s = c(0,1)
+gamma.s = 0.1
 
 aux.dlambert=function(y){
-dLambertW(y, theta=theta.s)
+dLambertW(y, beta=beta.s, gamma = gamma.s, distname="normal")
 }
 
-support(theta.s)
-
 x11(width=10, height=5)
-par(mfrow=c(1,2), mar=c(2,2,2,1))
+par(mfrow=c(1,2), mar=c(3,3,3,1))
 plot(aux.dlambert, -3.5,5, ylab="", main="Density function")
 plot(dnorm, -3.5,5, add=TRUE, lty=2)
 legend("topright" , c("Lambert W - Gaussian" , "Gaussian"), lty=1:2)
@@ -117,32 +119,31 @@ abline(h=0)
 ######### pLambertW ###########
 
 aux.plambert=function(y){
-pLambertW(y, theta=theta.s)
+pLambertW(y, beta=beta.s, gamma = gamma.s, distname="normal")
 }
 
 plot(aux.plambert, -3.5,3.5, ylab="", main="Distribution function")
 plot(pnorm, -3.5,3.5, add=TRUE, lty=2)
-legend("topleft" , c("Lambert W - Gaussian" , "Gaussian"), lty=1:2)
+legend("topleft" , c("Lambert W x Gaussian" , "Gaussian"), lty=1:2)
 par(op)
 
 ######## Animation 
-delta.v = seq(-0.15,0.15, length=101) # typical, empirical range of delta
-b = support(delta.01(min(delta.v)))[2]
-a = support(delta.01(max(delta.v)))[1]
+gamma.v = seq(-0.15,0.15, length=31) # typical, empirical range of gamma
+b = support(gamma_01(min(gamma.v)))[2]*1.1
+a = support(gamma_01(max(gamma.v)))[1]*1.1
 
-for (i in 1:length(delta.v)) {
+for (ii in 1:length(gamma.v)) {
 aux.dlambert=function(y){
-#dLambertW(y, theta=delta.01(delta.v[i])) # always zero-mean, unit variance for any delta
-dLambertW(y, theta=c(delta.v[i],0,1)) # mean, and variance change with delta; only for delta=0: mean =0, sd=1
+dLambertW(y, beta = gamma_01(gamma.v[ii])[1:2], gamma = gamma.v[ii], distname="normal") # zero-mean, unit variance for all gamma
+#dLambertW(y, beta = c(0,1), gamma = gamma.v[ii], distname="normal") # mean and variance change with gamma; only for gamma=0: mean=0, sd=1
 }
 
-plot(aux.dlambert, a,b, ylab="", main="Density function")
-plot(dnorm, a,b, add=TRUE, lty=2)
-legend("topright" , c("Lambert W - Gaussian" , "Gaussian"), lty=1:2)
+plot(aux.dlambert, a,b, ylab="", lty=2, col=2, lwd=2, main="pdf", ylim = c(0,0.45))
+plot(dnorm, a,b, add=TRUE, lty=1, lwd=2)
+legend("topright" , c("Lambert W x Gaussian" , "Gaussian"), lty=2:1, lwd=2, col=2:1)
 abline(h=0)
-legend("bottom", paste("delta = ", delta.v[i]))
-
-Sys.sleep(0.1)
+legend("topleft", cex=1.3, c(as.expression(bquote(gamma == .(round(gamma.v[ii],3))))))
+Sys.sleep(0.05)
 }
 
 ###############################
@@ -151,27 +152,26 @@ Sys.sleep(0.1)
 p.v=c(0.01, 0.05, 0.5, 0.9, 0.95,0.99)
 
 qnorm(p.v)
-qLambertW(p.v, theta=c(0,0,1)) # the same as above (numerical inacurracy; improved in next version)
+qLambertW(p.v, beta = c(0,1), distname="normal", gamma = 0, delta = 0, alpha = 1) # the same as above except for numerical rounding errors; will be improved in future versions.
 
 # positively skewed data -> quantiles are higher
-qLambertW(p.v, theta=theta.s)
+qLambertW(p.v, beta = c(0,1), distname="normal", gamma = 0.1, delta = 0, alpha = 1)
 
 ###############################
 ######### qqLambertW ###########
 
-y=rLambertW(n=500, theta.s)
-x11(height=5, width=10)
+y=rLambertW(n=500, distname="normal", beta = c(0,1), gamma = 0.1)
+x11(height=6, width=9)
 par(mfrow=c(1,2), mar=c(4,4,3,1))
 qqnorm(y)
 qqline(y)
-qqLambertW(y, theta=IGMM(y)$theta)
+qqLambertW(y, beta = c(0,1), gamma = 0.1)
 par(op)
-###############################
-######### mLambertW ###########
 
-mLambertW(theta.s)
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{univar}
+\keyword{distribution}
+\keyword{datagen}

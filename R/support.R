@@ -1,18 +1,19 @@
 support <-
-function(theta) {
-delta=theta[1]
-mu=theta[2]
-sigma=theta[3]
+function(theta, gamma = NULL) {
+mu=theta[1]
+sigma=theta[2]
+if (is.null(gamma)) gamma=theta[3]
 
-if (delta == 0) O=cbind(-Inf, Inf)
+if (gamma == 0) SUP=cbind(-Inf, Inf)
 else {
 
-b=1/(-delta*exp(1))*sigma+mu
+b=1/(-gamma*exp(1))*sigma+mu
 
-if (delta >0) O=cbind(b, Inf)
-if (delta <0) O=cbind(-Inf,b)
+if (gamma >0) SUP = cbind(b, Inf)
+if (gamma <0) SUP = cbind(-Inf,b)
 }
-colnames(O) = c("a", "b")
-O
+colnames(SUP) = c("a", "b")
+rownames(SUP) = NULL
+SUP
 }
 

@@ -3,7 +3,8 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Back-transform Y to X}
 \description{
- Given the data \code{y} and the parameter vector \eqn{\theta}, this function computes the back transformed (or "input") data \eqn{\widehat{\boldsymbol x}_{\theta}}.
+
+ Given the data \code{y} and the parameter vector \eqn{\theta}, this function computes the back-transformed (or ``input'') data \eqn{\widehat{\boldsymbol x}_{\theta}}.
 }
 \usage{
 get.input(y, theta, return.u=FALSE)
@@ -16,27 +17,27 @@ get.input(y, theta, return.u=FALSE)
 }
 
 \value{
-The estimated input data vector \eqn{\widehat{\boldsymbol x}_{\theta}} (solution of the principal branch of \code{\link{W_delta}}).
+The estimated input data vector \eqn{\widehat{\boldsymbol x}_{\theta}}.
+
+For \code{gamma != 0} it uses the principal branch solution \code{\link{W_gamma}} to get a unique input. For \code{gamma = 0} the back-transformation is bijective (for any \eqn{\delta \geq 0}).
 
 If \code{return.u = TRUE} then it returns a list with 2 vectors
  \item{u}{centered and normalized input u}
  \item{x}{input data \eqn{\widehat{\boldsymbol x}_{\theta}}}
 }
-\references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished}
 \author{Georg M. Goerg}
-
-
 \examples{
 set.seed(12)
-y=rLambertW(n=1000, c(0.1,0,1))
-normfit(y)
 
-fit.gmm=IGMM(y)
+# unskew very skewed data
+y=rLambertW(n=1000, beta=c(0,1), gamma = 0.3)
+normfit(y)
+fit.gmm=IGMM(y, type="s")
 summary(fit.gmm)
 
 x=get.input(y, fit.gmm$theta)
-plot(x)
-normfit(x)
+normfit(x) # symmetric Gaussian
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

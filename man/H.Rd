@@ -16,26 +16,16 @@ H(u)
 \value{
 Returns \eqn{z = u \exp(u)} for \eqn{u \in C}. If \eqn{u} is a vector, so is \eqn{z}.
 }
-\references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished}
+\references{Corless, R. M., G. H. Gonnet, D. E. G. Hare, and D. J. Jeffrey (1993). \dQuote{On the Lambert W function}. preprint.}
 \author{Georg M. Goerg}
-
+\seealso{\code{\link{H_gamma}}}
 \examples{
 H(0)
-W(0)
-
 H(10)
-W(H(10))
 
-## at the critical point z = -1, both branches give the same inverse.
-H(-1)
-W(H(-1))
-W_1(H(-1))
-
-## going further to the left, the principal branch gives the 'wrong' solution; 
-## the non-principal must be used
-H(-10)
-W(H(-10))
-W_1(H(-10))
+plot(H, -5, 0.5, type="l", xlab="u", ylab="z")
+abline(h=0)
+abline(v=0)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

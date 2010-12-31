@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{One-sample Kolmogorov-Smirnov test for student-t distribution}
 \description{
-Performs a two-sided KS test for \eqn{H_0} that the data comes from a student-t distribution with \eqn{\nu} degrees of freedom, mean \eqn{\mu_x}, and standard deviation \eqn{\sigma_x} (not scale!). If the parameters are not specified, the ML estimates given the data are used (see \code{\link[MASS]{fitdistr}}).
+Performs a two-sided KS test for \eqn{H_0: X \sim t_{\nu}} with \eqn{\nu} degrees of freedom, mean \eqn{\mu_x}, and standard deviation \eqn{\sigma_x} (not scale!). If the parameters are not specified, the ML estimates given the data are used (see \code{\link[MASS]{fitdistr}}).
 }
 \usage{
 ks.test.t(y, theta = NULL)
@@ -11,7 +11,7 @@ ks.test.t(y, theta = NULL)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{y}{ a numeric vector of data values. }
-  \item{theta}{ parameter vector including the degrees of freedom parameter: \eqn{\theta = (\delta, \mu_x, \sigma_x, \nu)}; default: \code{theta = NULL}, thus \eqn{\theta} is estimated from \code{y}.}
+  \item{theta}{ parameter vector including the degrees of freedom parameter: \eqn{\theta = (\mu_x, \sigma_x, \nu, \gamma)}; default: \code{theta = NULL}, thus \eqn{\theta} is estimated from \code{y}.}
 }
 
 \value{
@@ -24,10 +24,11 @@ ks.test.t(y, theta = NULL)
 }
 
 \details{
-This test does not give correct p-values if the parameters are estimated from the data. Future versions will include simulation based p-values. See \code{\link[stats]{ks.test}} and the references therein (Durbin (1973)).}
+For estimated parameters of the t-distribution the p-values are slightlty off, and should be corrected. For large sample sizes this should become ignoreable however. See \code{\link[stats]{ks.test}} and the references therein (Durbin (1973)).
+}
 
 \author{Georg M. Goerg}
-\seealso{\code{\link[MASS]{fitdistr}},\code{\link[stats]{ks.test}}}
+\seealso{\code{\link[MASS]{fitdistr}}, \code{\link[stats]{ks.test}}}
 
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
