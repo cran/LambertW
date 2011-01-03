@@ -8,9 +8,9 @@ theta[2]=theta[2]*fac
 }
 
 if (length(theta)==4) {
-fac=sqrt(theta[4]/(theta[4]-2))
-theta[3]=theta[3]*fac
-theta=theta[-1]
+fac=sqrt(theta[3]/(theta[3]-2))
+theta[2]=theta[2]*fac
+theta=theta[-4]
 }
 
 fac=sqrt(theta[3]/(theta[3]-2))

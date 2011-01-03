@@ -1,40 +1,49 @@
 mLambertW <-
-function(delta = 0, theta=c(delta,0,1), distname=c("normal")) {
-if (length(delta) > 1) theta=delta; delta=theta[1]
-if (distname=="normal") {
-######## moments of lambertW - Gaussian
-mom.LambertW.U.Gauss=function(delta){
+function(beta = c(0, 1), distname = c("normal"), gamma = 0, delta = 0, alpha = 1) 
+{
+if (distname != "normal") stop("Moments calculation for other than Normal distributions are not supported yet!")
 
-m1=delta*exp((delta^2)/2)
-
-m2=exp(2*delta^2)*(1 + 4*delta^2)
-cm2=exp(delta^2)*(exp(delta^2)*(1 + 4*delta^2) - delta^2)
-
-m3=exp((9/2)*delta^2)*(3*delta)*(9*delta^2+3)
-cm3=m3-3*m1*m2+2*m1^3
-
-m4=3*exp(8*delta^2)+96*delta^2*exp(8*delta^2)+256*delta^4*exp(8*delta^2)
-cm4=m4-4*m1*m3+6*m1^2*m2^2-3*m1^4
-
-skew=cm3/cm2^(3/2)
-kurt=cm4/cm2^2
-list(mu_z=m1, sigma2_z=cm2, skew=skew, kurt=kurt)
+if (gamma != 0){
+        mom.LambertW.U.Gauss = function(gamma) {
+            m1 = gamma * exp((gamma^2)/2)
+            m2 = exp(2 * gamma^2) * (1 + 4 * gamma^2)
+            cm2 = exp(gamma^2) * (exp(gamma^2) * (1 + 4 * gamma^2) - 
+                gamma^2)
+            m3 = exp((9/2) * gamma^2) * (3 * gamma) * (9 * gamma^2 + 
+                3)
+            cm3 = m3 - 3 * m1 * m2 + 2 * m1^3
+            m4 = 3 * exp(8 * gamma^2) + 96 * gamma^2 * exp(8 * 
+                gamma^2) + 256 * gamma^4 * exp(8 * gamma^2)
+            cm4 = m4 - 4 * m1 * m3 + 6 * m1^2 * m2^2 - 3 * m1^4
+            skew = cm3/cm2^(3/2)
+            kurt = cm4/cm2^2
+            list(mu_z = m1, sigma2_z = cm2, skew = skew, kurt = kurt)
+        }
+        mu_x = beta[1]
+        sigma_x = beta[2]
+        mom.z = mom.LambertW.U.Gauss(gamma)
+        mu_y = mu_x + sigma_x * mom.z$mu_z
+        sigma2_y = sigma_x^2 * exp(gamma^2) * ((4 * gamma^2 + 
+            1) * exp(gamma^2) - gamma^2)
+        out = list(mean = mu_y, sd = sqrt(sigma2_y), 
+            skewness = mom.z$skew, kurtosis = mom.z$kurt)
+#        names(out) = c("mu", "sigma", "gamma_1", "gamma_2")
+}
+if (delta != 0){
+moments = function(n=1, delta = delta){
+if (n %% 2) return(0)
+else factorial(n) * (1-n*delta)^(-(n+1)/2)/ (2^(n/2) * factorial(n/2))
+}
+var.delta = function(delta=0){
+moments(n=2, delta=delta)
 }
 
-names(theta)=NULL
-delta=theta[1]
-mu_x=theta[2]
-sigma_x=theta[3]
-######## moments of lambertW - Gaussian
-mom.z=mom.LambertW.U.Gauss(delta)
+kurt = moments(n=4, delta=delta)/var.delta(delta)^2
 
-mu_y=mu_x+sigma_x*mom.z$mu_z
-sigma2_y=sigma_x^2*exp(delta^2)*((4*delta^2+1)*exp(delta^2)-delta^2)
+out = list(mean = beta[1], sd = beta[2]*sqrt(var.delta(delta)), skewness = 0, kurtosis= kurt)
 
-out = as.numeric(list(mu_y=mu_y, sigma_y=sqrt(sigma2_y), skew=mom.z$skew, kurt=mom.z$kurt-3))
-names(out) = c("mu", "sigma", "gamma_1", "gamma_2")
+}
+if (gamma == 0 && delta == 0) out = list(mean = beta[1], sd = beta[2], skewness = 0 , kurtosis =3)
 return(out)
-}
-else print("Moments calculation for other than Normal distributions not supported yet!")
 }
 

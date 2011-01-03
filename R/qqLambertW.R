@@ -1,27 +1,28 @@
 qqLambertW <-
-function(y, theta=IGMM(y)$theta, distname=c("normal"), plot.it = TRUE, ...) 
-{
-if (length(theta) == 3 & distname=="t") stop("You must specify a degrees of freedom parameter for student-t input.")
+function(y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), plot.it = TRUE, ...){
+
+check_LambertW_parameters(alpha = alpha, beta = beta, gamma = gamma, delta = delta, distname=distname)
 
 xlab = "Theoretical Quantiles"
 ylab = "Sample Quantiles"
 
-nu=theta[4]
-delta=theta[1]
-main = "Lambert W - Gaussian Q-Q Plot"
-if (distname=="t") {
-main = "Lambert W - t Q-Q Plot"
-}
+theta = beta2theta(beta, distname=distname, gamma = gamma, delta = delta, alpha = alpha)
 
-    y <- y[!is.na(y)]
-    if (0 == (n <- length(y))) 
-        stop("y is empty")
- p.n=ppoints(n)
- x=qLambertW(p.n, theta, distname)
-    if (plot.it) {
-   plot(sort(x), sort(y), main = main, xlab = xlab, ylab = ylab, ...)
-   abline(0,1)
+main = paste("Lambert W x", distname,"QQ plot")
+
+y <- y[!is.na(y)]
+nn = length(y)
+
+if (nn == 0) stop("y is empty")
+
+p.n=ppoints(nn)
+x=qLambertW(p.n, beta=beta, alpha = alpha, gamma = gamma, delta = delta, distname = distname)
+sorted.x = sort(x)
+sorted.y = sort(y)
+if (plot.it) {
+	plot(sorted.x, sorted.y, main = main, xlab = xlab, ylab = ylab, ...)
+   	abline(0,1)
 }
-    invisible(list(x = sort(x), y = sort(y)))
+    invisible(list(x = sorted.x, y = sorted.y))
 }
 

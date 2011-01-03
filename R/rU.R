@@ -1,0 +1,26 @@
+rU <-
+function(n = NULL, beta = NULL, distname=c("normal")){
+if (distname == "cauchy"){
+uu = rcauchy(n)
+}
+if (distname == "chisq"){
+ss = sqrt(2*beta)
+uu = rchisq(n, df = beta)/ss
+}
+if (distname == "exp"){
+uu = rexp(n)
+}
+if (distname == "normal") {
+uu = rnorm(n)
+}
+if (distname =="t"){
+ss = beta2theta(beta)[2]
+uu = rt(n, df=beta[3])/ss
+}
+if (distname == "unif") {
+uu = runif(n, -sqrt(12)/2, sqrt(12)/2)
+}
+
+return(uu)
+}
+

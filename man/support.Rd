@@ -1,28 +1,27 @@
 \name{support}
 \alias{support}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Truncated support}
+\title{Compute the truncated support for skewed Lambert W distributions}
 \description{
-Computes the theoretical support \eqn{[a,b]}, \eqn{a,b \in R \cup \pm \infty} of Y given \eqn{\theta}.
+If the input \eqn{X \sim F} has support on the entire real line \eqn{(-\infty, \infty)}, then the skewed Lambert W \eqn{\times} F distribution has truncated support \eqn{[a,b]}, \eqn{a,b \in R \cup \pm \infty} depending on \eqn{\boldsymbol \beta} and (the sign of) \eqn{\gamma}.
 }
 \usage{
-support(theta)
+support(theta, gamma = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{theta}{ parameter vector }
+  \item{theta}{ parameter vector with mean and variance (and \eqn{\gamma} as the third entry)}
+  \item{gamma}{ an optional argument to pass \eqn{\gamma} directly to the function, instead of the indirect \code{theta}.}
 }
 
 \value{
-Half-open interval on the real line (if \eqn{\delta \neq 0}). For \eqn{\delta = 0} the support is the same as for the input distribution (hence \eqn{(-\infty, \infty)} for Gaussian and student-t input).
+Half-open interval on the real line (if \eqn{\gamma \neq 0}) for input with support on the entire real line. For \eqn{\gamma = 0} the support of Y is the same as for X. Heavy-tail Lambert W RVs are not affected by truncated support (since \eqn{\delta \geq 0} by definition).
 }
-\references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished}
 \author{Georg M. Goerg}
 
 \examples{
-support(c(0,0,1)) # as delta = 0
-support(c(0.1,0,1)) # truncated on the left, as delta >0
-
+support(c(0,1,0)) # as gamma = 0
+support(c(0,1,0.1)) # truncated on the left since gamma > 0
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

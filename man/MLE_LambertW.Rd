@@ -2,36 +2,47 @@
 \alias{MLE_LambertW}
 \alias{MLE_LambertW.default}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Maximum Likelihood Estimation}
+\title{Maximum Likelihood Estimation for Lambert W x F distributions}
 \description{
-Maximum Likelihood Estimation (MLE) \eqn{\theta} for Lambert W RV for Gaussian and student-t input.
+Maximum Likelihood Estimation (MLE) for Lambert W \eqn{\times F_X(\cdot \mid \boldsymbol \beta)} distributions.
+
+For \code{type = "s"} the paramter \eqn{\gamma} is estimated and \eqn{\delta = 0} is held fixed; for \code{type = "h"} the one-dimensional \eqn{\delta} is estimated and \eqn{\gamma = 0} is held fixed; and finally for \code{type = "hh"} the 2-dimensional \eqn{\delta} is estimated and \eqn{\gamma = 0} is held fixed.
+
+By default \eqn{\alpha = 1} is fixed for any \code{type}. If you want to also estimate \eqn{\alpha} from the data pass \code{fixed_parameters = list()} to \code{MLE_LambertW}.
 }
 \usage{
-MLE_LambertW(y, distname = c("normal"), theta.0 = IGMM(y)$theta, hessian=TRUE)
-\method{MLE_LambertW}{default}(y, distname = c("normal"), theta.0 = IGMM(y)$theta, hessian=TRUE)
+MLE_LambertW(y, distname = c("normal"), type = "s", parameters.0 = list(), fixed_parameters = list(alpha = 1), hessian = TRUE, estimate_only = FALSE) 
+\method{MLE_LambertW}{default}(y, distname = c("normal"), type = "s", parameters.0 = list(), fixed_parameters = list(alpha = 1), hessian = TRUE, estimate_only = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{y}{ a numeric vector of real values. }
-  \item{distname}{ input distribution; default: \code{"normal"}, alternative \code{"t"}}
-  \item{theta.0}{ starting value for numerical optimization; default: \code{\link{IGMM}} estimate.}
-  \item{hessian}{ return the (numerically obtained) hessian matrix at the optimum?; default: \code{TRUE}}
+  \item{distname}{ input distribution; default: \code{"normal"}.}
+  \item{parameters.0}{ a list containing the starting values of \eqn{(\alpha, \boldsymbol \beta, \gamma, \delta)} for the numerical optimization; default: \code{\link{IGMM}} estimates and \eqn{\alpha = 1}.}
+  \item{hessian}{ indicator for returning the (numerically obtained) Hessian at the optimum; default: \code{TRUE}.}
+  \item{fixed_parameters}{ a list of fixed parameters in the optimization; default only \code{alpha = 1}.}
+\item{type}{ what type of distribution should be estimated? skewed Lambert W \code{"s"}; heavy-tail Lambert W \code{"h"}; heavy-tails Lambert W \code{"hh"}. }
+\item{estimate_only}{ an indicator if only the parameter estimate should be returned (or the entire output); for simulations, for example, it is not necessary to give a nicely formatted, organized output, because the only interest lies in the estimated parameters; default \code{FALSE}.}
 }
 
 \value{
-An object of class \code{LWest}:
- \item{data}{ the data}
-  \item{theta.0 }{ initial value}
+A list of class \code{LambertW_fit}:
+ \item{data}{ the data \code{y}}
+  \item{loglik}{function: log-likelihood function}
+  \item{loglik.opt}{value: log-likelihood at the optimum}
+  \item{parameters.0}{ a list containing the estimated values of \eqn{(\alpha, \boldsymbol \beta, \gamma, \delta)}}
+  \item{parameters}{ a list conatining the starting values for numerical optimization; default: \code{\link{IGMM}} estimate.}
+  \item{beta}{ estimated \eqn{\boldsymbol \beta} of the input distribution from the Lambert W framework (\eqn{\neq \widehat{\boldsymbol beta}} of the input data )}
   \item{theta}{MLE for \eqn{\theta}  }
-  \item{logLH}{log-likelihood function (argument for the \code{summary} function to numerically calculate the Hessian)}
- \item{hessian}{Hessian matrix; used to calculate standard errors} 
+  \item{type}{see Arguments above}
+ \item{hessian}{Hessian matrix; used to calculate standard errors (only if \code{hessian = TRUE}, otherwise \code{NULL})} 
 \item{call}{function call}
+ \item{distname}{character string describing the input distribution.}
  \item{message}{message from the optimization method. What kind of convergence?}
- \item{distname}{character string indicating the input distribution: \code{"t"} or \code{"normal"}.}
- \item{method}{Estimation method. Here \code{"MLE"}}
+ \item{method}{Estimation method; here \code{"MLE"}}
 
 }
-\references{Goerg, G.M. (2009). \dQuote{Lambert W Random Variables - A new class of skewed distribution functions}. Unpublished}
+
 \author{Georg M. Goerg}
 
 \examples{
@@ -41,9 +52,13 @@ attach(AA)
 X=AA[AA$sex=="f",]
 y=X$bmi
 
-fit.ml=MLE_LambertW(y)
+fit.ml=MLE_LambertW(y, type="s")    # skewed only
 summary(fit.ml)
 plot(fit.ml)
+
+fit.ml = MLE_LambertW(y, type="hh") # skewed heavy-tails (not too good fit because delta_l = 0)
+plot(fit.ml)
+
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

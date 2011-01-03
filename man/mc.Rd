@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{MedCouple Estimator}
 \description{
-A robust measure of asymmetry. Details see references.
+A robust measure of skewness. Details see references.
 }
 \usage{
 mc(x)
@@ -27,19 +27,19 @@ n.sim = 100
 
 ################# Gaussian (Symmetric) #### 
 A = cbind(0,0)
-for (i in 1:n.sim) {
+for (ii in 1:n.sim) {
 x = rnorm(100)
 A = rbind(A, c(mc(x), skewness(x)))
 }
 A = A[-1,]
 
-################# Gaussian (Symmetric) #### 
-theta.s = delta.01(0.2) # zero mean, unit variance, but positive skewness
-round(mLambertW(theta.s),5)
+################# skewed LambertW x Gaussian #### 
+theta.s = gamma_01(0.2) # zero mean, unit variance, but positive skewness
+rbind(mLambertW(beta=theta.s[1:2], gamma = theta.s[3], distname="normal"))
 
 B = cbind(0,0)
 for (i in 1:n.sim) {
-y = rLambertW(n=100, theta=theta.s)
+y = rLambertW(n=100, beta=theta.s[1:2], gamma = theta.s[3], distname="normal")
 B = rbind(B, c(mc(y), skewness(y)))
 }
 B = B[-1,]
@@ -52,9 +52,9 @@ plot(A, main="Gaussian")
 boxplot(A)
 abline(h=0)
 
-plot(B, main="Lambert W -Gaussian")
+plot(B, main="Lambert W x Gaussian")
 boxplot(B)
-abline(h=mLambertW(theta.s)[3])
+abline(h=mLambertW( beta=theta.s[1:2], gamma = theta.s[3], distname="normal")[3])
 par(op)
 
 apply(A, 2, mean)
