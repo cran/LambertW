@@ -4,20 +4,20 @@
 \title{Back-transform Y to X}
 \description{
 
- Given the data \code{y} and the parameter vector \eqn{\theta}, this function computes the back-transformed (or ``input'') data \eqn{\widehat{\boldsymbol x}_{\theta}}.
+ Given the data \code{y} and the parameter vector \eqn{\tau = (\mu_x(\boldsymbol \beta), \sigma_x(\boldsymbol \beta), \gamma, \alpha)} (or \eqn{\tau = (\mu_x(\boldsymbol \beta), \sigma_x(\boldsymbol \beta), \delta, \alpha)}), this function computes the back-transformed input data \eqn{\widehat{\boldsymbol x}_{\tau}}.
 }
 \usage{
-get.input(y, theta, return.u=FALSE)
+get.input(y, tau, return.u=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{y}{ a numeric vector of data values. }
-  \item{theta}{ parameter vector }
+  \item{tau}{ parameter vector }
   \item{return.u}{ should the normalized input be returned; default: \code{FALSE}}
 }
 
 \value{
-The estimated input data vector \eqn{\widehat{\boldsymbol x}_{\theta}}.
+The approximated input data vector \eqn{\widehat{\boldsymbol x}_{\tau}}.
 
 For \code{gamma != 0} it uses the principal branch solution \code{\link{W_gamma}} to get a unique input. For \code{gamma = 0} the back-transformation is bijective (for any \eqn{\delta \geq 0}).
 
@@ -35,7 +35,7 @@ normfit(y)
 fit.gmm=IGMM(y, type="s")
 summary(fit.gmm)
 
-x=get.input(y, fit.gmm$theta)
+x=get.input(y, fit.gmm$tau)
 normfit(x) # symmetric Gaussian
 
 }

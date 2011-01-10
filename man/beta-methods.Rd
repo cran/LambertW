@@ -1,15 +1,15 @@
 \name{beta-methods}
-\alias{beta2theta}
+\alias{beta2tau}
 \alias{beta_names}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Functions for parameter vector beta of the input distribution}
 \description{
 The parameter vector \eqn{\boldsymbol \beta} describes the input distribution \eqn{F_X(x \mid \boldsymbol \beta)}. Depending on the distribution \eqn{\boldsymbol \beta} has different length and names: for example, for a \code{"normal"} distribution \code{beta} is a vector of length \eqn{2} describing \code{"mu"} and \code{"sigma"}; for an exponential distribution \code{beta} is a vector of length \eqn{1} (i.e. a number) describing the rate \code{"lambda"}.
 
-However, any \eqn{\boldsymbol \beta} implies different mean and variance of \eqn{X}. Thus here are two functions that - depending on the input distribution - assign  \eqn{\boldsymbol \beta} its typical names given the distribution, and converts the parameter values to the implied \eqn{\theta}.
+However, any \eqn{\boldsymbol \beta} implies different mean and variance of \eqn{X}. Thus here are two functions that - depending on the input distribution - assign  \eqn{\boldsymbol \beta} its typical names given the distribution, and converts the parameter values to the implied \eqn{\tau}.
 }
 \usage{
-beta2theta(beta, distname = c("normal"), gamma = 0, delta = 0, alpha = 1)
+beta2tau(beta, distname = c("normal"), gamma = 0, delta = 0, alpha = 1)
 beta_names(distname = c("normal"))
 }
 %- maybe also 'usage' for other objects documented here.
@@ -23,15 +23,15 @@ beta_names(distname = c("normal"))
 }
 
 \value{
-The function \code{beta2theta} returns the \eqn{\theta} vector implied by \code{beta} and \code{distname}.
+The function \code{beta2tau} returns the \eqn{\tau} vector implied by \code{beta} and \code{distname}.
 
 The function \code{beta_names} returns a list of names for each component of \code{beta}.
 }
 \author{Georg M. Goerg}
 \examples{
-beta2theta(c(1,1), distname="normal") # the same as the input, as delta = gamma = 0 and alpha = 1
-beta2theta(c(1,4,1), distname="t") # problem (see message)
-beta2theta(c(1,4,3), distname="t") # no problem
+beta2tau(c(1,1), distname="normal") # the same as the input, as delta = gamma = 0 and alpha = 1
+beta2tau(c(1,4,1), distname="t") # problem (see message)
+beta2tau(c(1,4,3), distname="t") # no problem
 beta_names("normal")
 beta_names("exp")
 }

@@ -38,7 +38,7 @@ The derivative can be expressed as a function of \eqn{W(z)}:
 W'(z) = \frac{1}{(1 + W(z)) \exp(W(z)} =  \frac{W(z)}{z(1 + W(z))}, \quad z \neq 0, -1/e.
 }
 
-For this reason it is numerically often better to supply the value of \eqn{W(z)} in the function, as often these values are computed already in another step of the computation.
+For this reason it is numerically often better to supply the value of \eqn{W(z)} in the function, as often these values are computed already in a previous step of the computation.
 
 For details see the References.
 }

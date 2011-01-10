@@ -1,7 +1,7 @@
 dLambertW <-
 function (y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL) 
 {
-theta = beta2theta(beta, distname=distname, gamma=gamma, delta=delta, alpha = alpha)
+theta = beta2tau(beta, distname=distname, gamma=gamma, delta=delta, alpha = alpha)
 mu_x = theta[1]
 sigma_x = theta[2]
 

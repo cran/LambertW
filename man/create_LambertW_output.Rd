@@ -12,12 +12,12 @@ This function takes an object of class \code{LambertW_input} and creates an obje
 Please see Details and Values below for instructions.
 }
 \usage{
-create_LambertW_output(input = NULL, parameters = NULL, distname = input$distname)
+create_LambertW_output(input = NULL, theta = NULL, distname = input$distname)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{input}{ an object of class \code{LambertW_input}}
-  \item{parameters}{ a list containing (not necessarily all) parameters (\code{alpha}, \code{beta}, \code{gamma}, \code{delta}). The function \code{\link{complete_LambertW_parameters}} fills in missing standard values for the parameters. If not provided, the function will print out a warning since the transformation is the identity and so the output RV Y \eqn{\equiv} input X.}
+  \item{theta}{ a list containing (not necessarily all) parameters (\code{alpha}, \code{beta}, \code{gamma}, \code{delta}). The function \code{\link{complete_theta}} fills in missing standard values for the parameters. If not provided, the function will print out a warning since the transformation is the identity and so the output RV Y \eqn{\equiv} input X.}
  \item{distname}{ name of the input distribution \eqn{F_X(x \mid \boldsymbol \beta)}; default: \code{input\$distname} }
 }
 
@@ -53,7 +53,7 @@ Gauss_input = create_LambertW_input("normal", beta = c(1,2))
 
 # create a heavy-tailed version of a normal -> Tukey's h with h = 0.3
 params = list(delta = c(0.3)) # gamma = 0, alpha = 1 will be assigned automatically if missing; beta comes from the input
-LW.Gauss = create_LambertW_output(input = Gauss_input, parameters = params)
+LW.Gauss = create_LambertW_output(input = Gauss_input, theta = params)
 LW.Gauss
 
 op = par(no.readonly=TRUE)
@@ -78,7 +78,7 @@ normfit(LW.Gauss$rY(params)(n=100))
 t_input = create_LambertW_input("t", beta = c(2,1,3))
 t_input
 params = list(gamma = 0.05) # skew it
-LW.t = create_LambertW_output(input = t_input, parameters=params)
+LW.t = create_LambertW_output(input = t_input, theta = params)
 LW.t
 
 plot(LW.t$dY(params),-7,11, col = 2)
@@ -92,7 +92,7 @@ normfit(yy)
 ## generate a positively skewed version a Cauchy distribution
 cauchy_input = create_LambertW_input("cauchy", beta = c(0,1))
 params = list(alpha = 1, beta = cauchy_input$beta, gamma = 0.05, delta = 0) # the skewed version
-LW.cauchy = create_LambertW_output(input = cauchy_input,distname=cauchy_input$distname, parameters=params)
+LW.cauchy = create_LambertW_output(input = cauchy_input,distname=cauchy_input$distname, theta = params)
 LW.cauchy
 
 
@@ -101,19 +101,19 @@ plot(exp_input)
 
 # create a skewed exponential distribution
 params = list("gamma" = 0.2)
-LW.exp = create_LambertW_output(exp_input, parameters = params)
+LW.exp = create_LambertW_output(exp_input, theta = params)
 plot(LW.exp)
 
 # create a heavy-tail exponential distribution
 params = list("delta" = 0.2)
-LW.exp = create_LambertW_output(exp_input, parameters = params)
+LW.exp = create_LambertW_output(exp_input, theta = params)
 plot(LW.exp)
 
 # create a skewed chi-square distribution
 chi_input = create_LambertW_input("chisq", beta = 5) # a Chi^2 with 5 df
 plot(chi_input)
 params = list("gamma" = sqrt(2)*0.2)
-LW.chi = create_LambertW_output(chi_input, parameters = params)
+LW.chi = create_LambertW_output(chi_input, theta = params)
 plot(LW.chi)
 
 }

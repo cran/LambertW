@@ -2,7 +2,7 @@ pLambertW <-
 function (q, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL) 
 {
 y = q
-theta = beta2theta(beta, distname=distname, gamma=gamma, delta=delta)
+theta = beta2tau(beta, distname=distname, gamma=gamma, delta=delta)
 mu_x = theta[1]
 sigma_x = theta[2]
 

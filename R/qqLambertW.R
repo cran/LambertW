@@ -1,12 +1,12 @@
 qqLambertW <-
 function(y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), plot.it = TRUE, ...){
 
-check_LambertW_parameters(alpha = alpha, beta = beta, gamma = gamma, delta = delta, distname=distname)
+check_theta(alpha = alpha, beta = beta, gamma = gamma, delta = delta, distname=distname)
 
 xlab = "Theoretical Quantiles"
 ylab = "Sample Quantiles"
 
-theta = beta2theta(beta, distname=distname, gamma = gamma, delta = delta, alpha = alpha)
+theta = beta2tau(beta, distname=distname, gamma = gamma, delta = delta, alpha = alpha)
 
 main = paste("Lambert W x", distname,"QQ plot")
 

@@ -35,7 +35,7 @@ y = rLambertW(n=1000, beta = c(1,2), gamma = 0.1, distname="normal") ## very hig
 gamma_GMM(y) # after the first iteration
 IGMM(y)$theta # after the final iteration; conversion has been reached.
 
-IGMM(y)$THETA
+IGMM(y)$TAU
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

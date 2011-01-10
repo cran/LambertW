@@ -1,8 +1,8 @@
 Package: LambertW
 Type: Package
 Title: Gaussianize and analyze skewed, heavy-tailed data
-Version: 0.2.5
-Date: 2010-12-31
+Version: 0.2.6
+Date: 2011-01-10
 Author: Georg M. Goerg <gmg@stat.cmu.edu>
 Maintainer: Georg M. Goerg <gmg@stat.cmu.edu>
 URL: http://www.stat.cmu.edu/~gmg http://arxiv.org/abs/0912.4554
@@ -26,6 +26,6 @@ Description: The Lambert W framework is a new generalized way to
 Depends: moments, gsl, MASS, nortest, maxLik
 License: GPL (>= 2)
 LazyLoad: yes
-Packaged: 2010-12-29 20:43:15 UTC; root
+Packaged: 2011-01-11 02:43:55 UTC; root
 Repository: CRAN
-Date/Publication: 2011-01-03 12:27:59
+Date/Publication: 2011-01-11 06:41:47

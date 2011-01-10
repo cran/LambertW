@@ -1,9 +1,9 @@
 rLambertW <-
 function(n = 1000, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = "normal", return.input = FALSE, input.U = NULL){
 
-check_LambertW_parameters(alpha = alpha, gamma = gamma, delta=delta, beta=beta, distname=distname)
+check_theta(alpha = alpha, gamma = gamma, delta=delta, beta=beta, distname=distname)
 
-theta = beta2theta(beta, distname = distname, gamma = gamma, delta = delta)
+theta = beta2tau(beta, distname = distname, gamma = gamma, delta = delta)
 if (is.null(input.U)) uu  = rU(n = n, beta = beta, distname=distname)
 else uu = input.U
 

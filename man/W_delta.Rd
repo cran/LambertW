@@ -1,4 +1,4 @@
-\name{W_delta}
+\name{W_delta_alpha}
 \alias{W_delta}
 \alias{W_delta_alpha}
 \alias{W_2delta}

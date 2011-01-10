@@ -1,9 +1,9 @@
 qLambertW <-
 function(p, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL){
 
-check_LambertW_parameters(beta = beta, alpha = alpha, delta = delta, gamma = gamma, distname = distname)
+check_theta(beta = beta, alpha = alpha, delta = delta, gamma = gamma, distname = distname)
 
-theta = beta2theta(beta = beta, distname = distname)
+theta = beta2tau(beta = beta, distname = distname)
 mu_x = theta[1]
 sigma_x = theta[2]
 

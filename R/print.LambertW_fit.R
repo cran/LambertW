@@ -12,10 +12,12 @@ function(x, ...) {
     cat(x$type)
     cat("\n")
     cat("\n Parameter estimates:\n")
-    if (x$method == "IGMM") x$param.hat = x$theta
+    if (x$method == "IGMM") x$param.hat = x$tau
     print(x$param.hat)
     if (x$method == "IGMM") {
- 	cat(paste("\n Obtained after", x$iterations, "iterations."))
+	one_param = "gamma"
+        if (x$type == "h") one_param = "delta"
+ 	cat(paste("\n Obtained after", x$iterations, "iterations for mu_x and sigma_x, and \n on average",round(x$sub_iterations/x$iterations,2),"iterations to find the optimal", one_param,"in each run."))
 	}
 	cat("\n")
 }

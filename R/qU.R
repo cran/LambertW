@@ -15,7 +15,7 @@ function (p, beta = NULL, distname = c("normal"))
         qU = function(p) qnorm(p)
     }
     if (distname == "t") {
-        ss = beta2theta(beta, distname=distname)[2]
+        ss = beta2tau(beta, distname=distname)[2]
         qU = function(p) qt(p, df = beta[3])/ss
     }
     if (distname == "unif") {

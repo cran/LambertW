@@ -1,29 +1,29 @@
 create_LambertW_output <-
-function(input = NULL, parameters = NULL, distname = input$distname){
+function(input = NULL, theta = NULL, distname = input$distname){
 
-if (is.null(input) & is.null(distname)) stop("The 'input' is missing. \n  Please generate an object of class 'LambertW_input' first and then pass it on as 'create_LambertW_output(input = my_LambertW_input, parameters = ...).")
+if (is.null(input) & is.null(distname)) stop("The 'input' is missing. \n  Please generate an object of class 'LambertW_input' first and then pass it on as 'create_LambertW_output(input = my_LambertW_input, theta = ...).")
 
-if (is.null(parameters)) warning("You have not specified the parameters of the Lambert W RV transformation. \n  By default your LambertW output will be identical to the LambertW input.")
+if (is.null(theta)) warning("You have not specified the theta of the Lambert W RV transformation. \n  By default your LambertW output will be identical to the LambertW input.")
 
-parameters = complete_LambertW_parameters(parameters, input = input)
+theta = complete_theta(theta, input = input)
 
-alpha = parameters$alpha
-beta = parameters$beta
-gamma = parameters$gamma
-delta = parameters$delta
+alpha = theta$alpha
+beta = theta$beta
+gamma = theta$gamma
+delta = theta$delta
 
 if (is.null(distname) && !is.null(input)) distname = input$distname
 
 if (!is.null(input)){
 distname = input$distname
-check_LambertW_parameters(alpha = alpha, beta = beta, gamma = gamma, delta = delta, distname = distname)
+check_theta(alpha = alpha, beta = beta, gamma = gamma, delta = delta, distname = distname)
 }
 
 if (is.null(input)) {
 input = create_LambertW_input(distname = distname, beta = beta)
 }
 
-theta = input$theta
+#theta = input$theta
 
 if (gamma != 0) type = "s"
 else if (any(delta != 0)){
@@ -32,53 +32,43 @@ else if (any(delta != 0)){
 }
 else type = ""
 
-rY = function(parameters = obj$parameters) {
-parameters = complete_LambertW_parameters(parameters, input = input)
+rY = function(theta = obj$theta) {
+theta = complete_theta(theta, input = input)
 aux = function(n){
-rLambertW(beta = parameters$beta, delta = parameters$delta, gamma = parameters$gamma, alpha=parameters$alpha, input.U = input$rU(n), distname = input$distname)
+rLambertW(beta = theta$beta, delta = theta$delta, gamma = theta$gamma, alpha=theta$alpha, input.U = input$rU(n), distname = input$distname)
 }
 return(aux)
 }
-#rY(parameters)(n=10)
+#rY(theta)(n=10)
 
-#rY = function(n = NULL, parameters = obj$parameters) {
-#rLambertW(beta = parameters$beta, delta = parameters$delta, gamma = parameters$gamma, alpha=parameters$alpha, input.U = input$rU(n), distname = input$distname)
-#}
-
-
-dY = function(parameters = obj$parameters){
-parameters = complete_LambertW_parameters(parameters, input = input)
+dY = function(theta = obj$theta){
+theta = complete_theta(theta, input = input)
 aux = function(y){
-dLambertW(y, beta=parameters$beta, gamma = parameters$gamma, delta = parameters$delta, alpha=parameters$alpha, input.U = input$dU, distname = input$distname)
+dLambertW(y, beta=theta$beta, gamma = theta$gamma, delta = theta$delta, alpha=theta$alpha, input.U = input$dU, distname = input$distname)
 }
 return(aux)
 }
-#plot(dY(parameters), -1,12)
+#plot(dY(theta), -1,12)
 
-#dY = function(y, parameters = obj$parameters){
-#dLambertW(y, beta=parameters$beta, gamma = parameters$gamma, delta = parameters$delta, alpha=parameters$alpha, input.U = input$dU, distname = input$distname)
-#}
-
-
-pY = function(parameters = obj$parameters){
-parameters = complete_LambertW_parameters(parameters, input = input)
+pY = function(theta = obj$theta){
+theta = complete_theta(theta, input = input)
 aux = function(y){
-pLambertW(y, beta=parameters$beta, gamma = parameters$gamma, delta = parameters$delta, alpha=parameters$alpha, input.U = input$pU, distname = input$distname)
+pLambertW(y, beta=theta$beta, gamma = theta$gamma, delta = theta$delta, alpha=theta$alpha, input.U = input$pU, distname = input$distname)
 }
 return(aux)
 }
-#plot(pY(parameters), -1,12)
+#plot(pY(theta), -1,12)
 
-qY = function(parameters = obj$parameters){
-parameters = complete_LambertW_parameters(parameters, input = input)
+qY = function(theta = obj$theta){
+theta = complete_theta(theta, input = input)
 aux = function(p){
-qLambertW(p, beta=parameters$beta, gamma = parameters$gamma, delta = parameters$delta, alpha=parameters$alpha, input.U = input$qU, distname = input$distname)
+qLambertW(p, beta=theta$beta, gamma = theta$gamma, delta = theta$delta, alpha=theta$alpha, input.U = input$qU, distname = input$distname)
 }
 return(aux)
 }
 
 
-obj = NULL
+obj = list()
 obj$call = match.call()
 obj$type = type
 obj$dY = dY
@@ -86,8 +76,8 @@ obj$pY = pY
 obj$rY = rY
 obj$qY = qY
 obj$beta = input$beta
-obj$parameters = parameters
 obj$theta = theta
+obj$tau = beta2tau(beta = input$beta, distname=input$distname, gamma = theta["gamma"], delta = theta["delta"], alpha = theta["alpha"])
 obj$input_distname = input$distname
 obj$distname = paste("Lambert W x", input$distname)
 

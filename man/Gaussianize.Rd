@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Gaussianizing matrix-like objects}
 \description{
-'Gaussianize' is probably the most useful function in this package. It works the same way as the \code{\link[base]{scale}} method, but instead of just centering and scaling the data, it actually ``Gaussianizes'' the data. See Goerg (2011b) and Examples.
+'Gaussianize' is probably the most useful function in this package. It works the same way as the \code{\link[base]{scale}} function in the R \code{base} package, but instead of just centering and scaling the data, it actually ``Gaussianizes'' the data. See Goerg (2011b) and Examples.
 }
 \usage{
 Gaussianize(y, type = "h", method = "MLE")
