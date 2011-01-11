@@ -10,14 +10,14 @@ This function creates an object of class \code{LambertW_input} for standard dist
 See Details and Values below for instructions.
 }
 \usage{
-create_LambertW_input(distname = NULL, beta = NULL, beta2theta = NULL, dU = NULL, 
+create_LambertW_input(distname = NULL, beta = NULL, beta2tau = NULL, dU = NULL, 
     pU = NULL, rU = NULL, qU = NULL) 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{distname}{ name of the input distribution \eqn{F_X(x \mid \boldsymbol \beta)}; default: \code{NULL}.}
   \item{beta}{ parameter vector \eqn{\boldsymbol \beta} of the input distribution \eqn{F_X(x \mid \boldsymbol \beta)}}
-  \item{beta2theta}{ function to convert \eqn{\boldsymbol \beta}  to \eqn{\boldsymbol \theta} for distribution \code{distname}.}
+  \item{beta2tau}{ function to convert \eqn{\boldsymbol \beta}  to \eqn{\tau} for distribution \code{distname}.}
   \item{dU}{ function: probability density function (pdf) of the (zero-mean and) unit variance U version of \eqn{X \sim  F_X(x \mid \boldsymbol \beta)} (see References for details).}
   \item{pU}{ function: cumulative distribution function (cdf) of the (zero-mean and) unit variance U}
   \item{rU}{ function: random number generator for the (zero-mean and) unit variance U}
@@ -36,8 +36,8 @@ If \code{"distname"} is not one of the already implemented (see \code{\link{Lamb
 A list of class \code{LambertW_input}; the values of an \code{LambertW_input} object are (for the most part) functions themselves (see Examples):
  \item{distname}{ name of the distribution \eqn{F_X(x \mid \boldsymbol \beta)}}
   \item{beta}{ parameter vector \eqn{\boldsymbol \beta} of the input distribution}
-  \item{beta2theta}{ function to convert \eqn{\boldsymbol \beta} to the \eqn{\theta} }
-  \item{theta}{theta vector}
+  \item{beta2tau}{ function to convert \eqn{\boldsymbol \beta} to the \eqn{\tau} }
+  \item{tau}{tau vector}
  \item{dU}{ pdf of U}
  \item{pU}{ cdf of U}
  \item{qU}{ quantile function for U}

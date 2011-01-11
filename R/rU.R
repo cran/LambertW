@@ -4,8 +4,8 @@ if (distname == "cauchy"){
 uu = rcauchy(n)
 }
 if (distname == "chisq"){
-ss = sqrt(2*beta)
-uu = rchisq(n, df = beta)/ss
+sigma_x = sqrt(2*beta)
+uu = rchisq(n, df = beta)/sigma_x
 }
 if (distname == "exp"){
 uu = rexp(n)
@@ -14,7 +14,7 @@ if (distname == "normal") {
 uu = rnorm(n)
 }
 if (distname =="t"){
-ss = beta2theta(beta)[2]
+ss = beta2tau(beta)[2]
 uu = rt(n, df=beta[3])/ss
 }
 if (distname == "unif") {

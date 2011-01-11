@@ -25,7 +25,7 @@
  # create a heavy-tailed version deta = 0.3 of a Gaussian -> Tukey's h with h = 0.3
 Gauss_input = create_LambertW_input("normal", beta = c(1,2))
 params = list(delta = c(0.3))
-LW.Gauss = create_LambertW_output(input = Gauss_input, parameters = params)
+LW.Gauss = create_LambertW_output(input = Gauss_input, theta = params)
 LW.Gauss # print 
 plot(LW.Gauss)
 }

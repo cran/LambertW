@@ -4,14 +4,14 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Iterative Generalized Method of Moments -- IGMM}
 \description{
-An iterative methods of moments estimator finds this \eqn{\theta = (\mu_x, \sigma_x, \gamma, 0)} (or \eqn{\theta = (\mu_x, \sigma_x,0, \delta)}) which minimizes the distance between the sample and theoretical skewness (or kurtosis) of \eqn{\boldsymbol x} and X. 
+An iterative methods of moments estimator finds this \eqn{\tau = (\mu_x, \sigma_x, \gamma, 0)} (or \eqn{\tau = (\mu_x, \sigma_x,0, \delta)}) which minimizes the distance between the sample and theoretical skewness (or kurtosis) of \eqn{\boldsymbol x} and X. 
 
 For details of the Algorithm see the References.
 }
 \usage{
-IGMM(y, skewness_x = 0, type="s", kurtosis_x = 3, theta.0 = c(median(y), sd(y), (skewness(y) - 
+IGMM(y, skewness_x = 0, type="s", kurtosis_x = 3, tau.0 = c(median(y), sd(y), (skewness(y) - 
     skewness_x)/6, max(0, (kurtosis(y)-3)/100)), robust = FALSE, tol = .Machine$double.eps^0.5, location_family = TRUE)
-\method{IGMM}{default}(y, skewness_x = 0, type="s", kurtosis_x = 3, theta.0 = c(median(y), sd(y), (skewness(y) - 
+\method{IGMM}{default}(y, skewness_x = 0, type="s", kurtosis_x = 3, tau.0 = c(median(y), sd(y), (skewness(y) - 
     skewness_x)/6, max(0, (kurtosis(y)-3)/100)), robust = FALSE, tol = .Machine$double.eps^0.5, location_family = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -20,7 +20,7 @@ IGMM(y, skewness_x = 0, type="s", kurtosis_x = 3, theta.0 = c(median(y), sd(y), 
   \item{skewness_x}{ theoretical skewness of input X; default \code{0}}
   \item{type}{ what type of distribution should be estimated? skewed Lambert W (\code{"s"}) or heavy-tail Lambert W (\code{"h"}) (the skewed Lambert W distribution (\code{"hh"}) is not implemented yet). }
   \item{kurtosis_x}{ theoretical kurtosis of input X; default \code{3} (Gaussian)}
-  \item{theta.0}{ starting values for IGMM algorithm; default: \code{(median(y), sd(y), (skewness(y)-skewness_x)/6, max(0, (kurtosis(y)-3)/100))}}
+  \item{tau.0}{ starting values for IGMM algorithm; default: \code{(median(y), sd(y), (skewness(y)-skewness_x)/6, max(0, (kurtosis(y)-3)/100))}}
 \item{robust}{ indicator if robust estimation of the sample skewness (see \code{\link{mc}}) should be used; default: \code{FALSE} (only for \code{type = "s"})}
   \item{tol}{ a positive scalar giving the tolerance at which the distance is considered close enough to zero to terminate the algorithm; default: \code{.Machine$double.eps^0.5} }
   \item{location_family}{is the underlying input distribution \eqn{F_X(x \mid \boldsymbol \beta)} from a location family (for example, Gaussian input); default: \code{TRUE}. If \code{FALSE}, then \eqn{\theta_1 \equiv 0} throughout the optimization, for example for exponential input.}
@@ -28,13 +28,16 @@ IGMM(y, skewness_x = 0, type="s", kurtosis_x = 3, theta.0 = c(median(y), sd(y), 
 
 \value{
 A list of class \code{LambertW_fit}:
+  \item{tol}{tolerance level; see Arguments for a detailed description}
   \item{data}{ data \code{y}}
   \item{n}{ number of observations}
-\item{theta.0}{ starting value for \eqn{\theta} }
-  \item{theta}{ IGMM estimate for \eqn{\theta} }
-  \item{THETA}{the entire iteration sequence of \eqn{\theta^{(k)}}}
-  \item{sub_iterations}{number of iterations performed in the sub-algorithm only.}
-  \item{iterations}{number of iterations}
+  \item{type}{type of Lambert W distribution; see Arguments for a detailed description}
+  \item{tau.0}{ starting value for \eqn{\theta} }
+  \item{tau}{ IGMM estimate for \eqn{\theta} }
+  \item{TAU}{entire iteration sequence of \eqn{\tau^{(k)}}}
+  \item{sub_iterations}{number of iterations only performed in GMM algorithm to find optimal \eqn{\gamma} (or \eqn{\delta})}
+  \item{iterations}{number of iterations performed by the IGMM algorithm to update \eqn{\mu_x} and \eqn{\sigma_x}. See References for detals.}
+  \item{theta}{a list containing \eqn{\gamma} or \eqn{\delta} of IGMM.}
   \item{hessian}{ Hessian matrix (obtained from simulations; see References)}
   \item{call}{function call}
   \item{distname}{ a character string stating the theoretical skewness (or kurtosis) of the input distribution. Same information as \code{skewness_x} (or \code{kurtosis_x})}

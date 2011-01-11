@@ -29,7 +29,7 @@ set.seed(2)
 y = rLambertW(n=1000, beta=c(1,2), delta = 1) ## very heavy-tails (like a Cauchy)
 
 delta_GMM(y) # after the first iteration
-IGMM(y, type="h")$THETA # all iterations
+IGMM(y, type="h")$TAU # all iterations
 ## note the fast settling down to a neighborhood of the final solution
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
