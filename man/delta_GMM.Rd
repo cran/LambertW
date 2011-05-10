@@ -6,14 +6,14 @@
 This function minimizes the Euclidean distance between the theoretical kurtosis \eqn{\gamma_2(X)}, and the sample kurtosis of the back-transformed data \eqn{W_{\delta}(\boldsymbol z)} as a function of \eqn{\delta} (see References). Note that only an interative application of this function will give a good estimate of \eqn{\delta} \eqn{\rightarrow} see \code{\link{IGMM}}.
   }
 \usage{
-delta_GMM(z, kurtosis_x = 3,delta.0 = max(0, (kurtosis(z) - kurtosis_x)/100),  tol=.Machine$double.eps^0.5)
+delta_GMM(z, kurtosis_x = 3,delta.0 = delta_Taylor(z),  tol=.Machine$double.eps^0.25)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{z}{ a numeric vector of data values.}
   \item{kurtosis_x}{ theoretical kurtosis of the input X; default: \code{3} (\eqn{X \sim} Gaussian) }
-  \item{delta.0}{ starting value for optimization; default: \code{max(0, (kurtosis(z) - kurtosis_x)/100)} }
- \item{tol}{ a positive scalar giving the tolerance at which the distance is considered close enough to zero to terminate the algorithm; default: \code{.Machine$double.eps^0.5} }
+  \item{delta.0}{ starting value for optimization; default: \code{\link{delta_Taylor}}.}
+ \item{tol}{ a positive scalar giving the tolerance at which the distance is considered close enough to zero to terminate the algorithm; default: \code{.Machine$double.eps^0.25} }
 }
 
 \value{

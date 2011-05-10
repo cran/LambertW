@@ -17,12 +17,12 @@ Implemented distributions (\code{distname = ...}) are:  \code{"cauchy"}, \code{"
 \code{mLambertW} computes the first 4 central moments of a Lambert W \eqn{\times} Gaussian.
 }
 \usage{
-dLambertW(y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL)
-pLambertW(q, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL) 
-qLambertW(p, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL)
-rLambertW(n = 1000, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = "normal", return.input = FALSE, input.U = NULL)
-mLambertW(beta = c(0, 1), distname = c("normal"), gamma = 0, delta = 0, alpha = 1)
-qqLambertW(y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), plot.it = TRUE, ...)
+dLambertW(y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL, theta = NULL)
+pLambertW(q, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL, theta = NULL) 
+qLambertW(p, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL, theta = NULL)
+rLambertW(n = 1000, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = "normal", return.input = FALSE, input.U = NULL, theta = NULL)
+mLambertW(beta = c(0, 1), distname = c("normal"), gamma = 0, delta = 0, alpha = 1, theta = NULL)
+qqLambertW(y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), plot.it = TRUE, theta = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -34,6 +34,7 @@ qqLambertW(y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("norm
   \item{gamma}{ skewness parameter; default: \code{0} }
   \item{delta}{ heavy-tail parameter (= Tukey's h in case of a normal distribution); default: \code{0} }
   \item{alpha}{ exponent; default: \code{1} }
+    \item{theta}{ an optional argument to pass on in case parameters are available as a list. If \code{theta} is supplied, don't supply parameters \code{alpha}, \code{beta}, \code{gamma}, \code{delta} before; they are ignored. Instead \code{theta$alpha}, etc is used. }
 \item{return.input}{ indicator for returning the simulated input x that gets transformed to the actual observations \code{y}; default: \code{FALSE}. Warning: if \code{TRUE} then the output is not a vector anymore, but a list containing the input \code{x} and the output \code{y}.}
   \item{plot.it}{ Should the QQ plot be displayed or only the (sorted) theoretical and empirical quantiles be returned? default: \code{TRUE}.}
   \item{input.U}{ you can supply your own version of U (either a vector of simulated values or a function defining the pdf/cdf/quanitle function of U); default: \code{NULL}.}
@@ -64,7 +65,7 @@ By default \code{rLambertW} returns a sampled Lambert W \eqn{\times} \eqn{F_X(x 
   \item{y}{Lambert W random sample (given by \code{x} and the functional relation \eqn{y = func(x)} - see References.}
 
 }
-\references{Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. In review at the AOAS (arxiv.org/abs/0912.4554).
+\references{Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. Forthcoming in the Annals of Applied Statistics (arxiv.org/abs/0912.4554).
 
 Goerg, G.M. (2011b). \dQuote{The Lambert Way to Gaussianize skewed, heavy-tailed data with the inverse of Tukey's h transformation as a special case.}. In preparation for submission (http://arxiv.org/abs/1010.2265).
 }

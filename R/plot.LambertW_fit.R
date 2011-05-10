@@ -28,7 +28,7 @@ if (any(x$type == c("h", "hh"))) return(dLambertW(xx, beta = x$beta, delta = x$t
 }
 
 aux.compare = function(xx){
-if (x$distname == "exp") beta_y = suppressWarnings(fitdistr(y, x$distname)$est)
+if (x$distname == "exp") beta_y = suppressWarnings(fitdistr(y, "exponential")$est)
 else if (x$distname == "chisq") beta_y = mean(y)
 else beta_y = suppressWarnings(fitdistr(y, x$distname)$est)
 

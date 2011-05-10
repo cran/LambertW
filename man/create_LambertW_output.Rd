@@ -82,7 +82,7 @@ LW.t = create_LambertW_output(input = t_input, theta = params)
 LW.t
 
 plot(LW.t$dY(params),-7,11, col = 2)
-plot(t_input$dX, -7,11, add=TRUE, col=1)
+plot(t_input$dX(), -7,11, add=TRUE, col=1)
 abline(v = params$beta[1])
 
 # draw samples from the skewed t_3

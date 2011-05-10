@@ -1,7 +1,17 @@
 mLambertW <-
-function(beta = c(0, 1), distname = c("normal"), gamma = 0, delta = 0, alpha = 1) 
+function(beta = c(0, 1), distname = c("normal"), gamma = 0, delta = 0, alpha = 1, theta = NULL) 
 {
 if (distname != "normal") stop("Moments calculation for other than Normal distributions are not supported yet!")
+
+  if (!is.null(theta)){
+    theta = complete_theta(theta)
+    
+    alpha = theta$alpha
+    beta = theta$beta
+    gamma = theta$gamma
+    delta = theta$delta
+  }
+
 
 if (gamma != 0){
         mom.LambertW.U.Gauss = function(gamma) {

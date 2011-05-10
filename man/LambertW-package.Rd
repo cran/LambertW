@@ -26,7 +26,7 @@ Comments, suggestions, code improvements/accelerations, implementation of new in
 Author and maintainer: Georg M. Goerg <gmg@stat.cmu.edu>
 }
 \references{
-Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. In review at the AOAS (http://arxiv.org/abs/0912.4554).
+Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. Forthcoming in the Annals of Applied Statistics (http://arxiv.org/abs/0912.4554).
 
 Goerg, G.M. (2011b). \dQuote{The Lambert Way to Gaussianize skewed, heavy-tailed data with the inverse of Tukey's h transformation as a special case.}. In preparation for submission (http://arxiv.org/abs/1010.2265).
 }

@@ -53,10 +53,15 @@ A list of class \code{LambertW_input}; the values of an \code{LambertW_input} ob
 \examples{
 Gauss_input = create_LambertW_input("normal", beta = c(2,1))
 
-plot(Gauss_input$dX, -2,6)
-plot(Gauss_input$pX, -3,6)
-integrate(Gauss_input$dX, -10,10)
-Gauss_input$rX(n = 100) # generate 100 samples from a N(2,1)
+Gauss_input$dX # this returns a function itself
+Gauss_input$dX()(1) # evaluate the pdf of a N(2,1) at x = 1
+
+plot(Gauss_input$dX(), -2,6) # by default it will take the beta from the LambertW_input object
+plot(Gauss_input$dX(beta = c(3,4)), -2,6) # change the beta to c(3,4)
+
+plot(Gauss_input$pX(), -3,6)
+integrate(Gauss_input$dX(), -10,10)
+Gauss_input$rX()(n = 100) # generate 100 samples from a N(2,1)
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

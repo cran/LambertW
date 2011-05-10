@@ -10,9 +10,9 @@ For details of the Algorithm see the References.
 }
 \usage{
 IGMM(y, skewness_x = 0, type="s", kurtosis_x = 3, tau.0 = c(median(y), sd(y), (skewness(y) - 
-    skewness_x)/6, max(0, (kurtosis(y)-3)/100)), robust = FALSE, tol = .Machine$double.eps^0.5, location_family = TRUE)
+    skewness_x)/6, delta_Taylor(y)), robust = FALSE, tol = .Machine$double.eps^0.25, location_family = TRUE)
 \method{IGMM}{default}(y, skewness_x = 0, type="s", kurtosis_x = 3, tau.0 = c(median(y), sd(y), (skewness(y) - 
-    skewness_x)/6, max(0, (kurtosis(y)-3)/100)), robust = FALSE, tol = .Machine$double.eps^0.5, location_family = TRUE)
+    skewness_x)/6, delta_Taylor(y)), robust = FALSE, tol = .Machine$double.eps^0.25, location_family = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -20,9 +20,9 @@ IGMM(y, skewness_x = 0, type="s", kurtosis_x = 3, tau.0 = c(median(y), sd(y), (s
   \item{skewness_x}{ theoretical skewness of input X; default \code{0}}
   \item{type}{ what type of distribution should be estimated? skewed Lambert W (\code{"s"}) or heavy-tail Lambert W (\code{"h"}) (the skewed Lambert W distribution (\code{"hh"}) is not implemented yet). }
   \item{kurtosis_x}{ theoretical kurtosis of input X; default \code{3} (Gaussian)}
-  \item{tau.0}{ starting values for IGMM algorithm; default: \code{(median(y), sd(y), (skewness(y)-skewness_x)/6, max(0, (kurtosis(y)-3)/100))}}
+  \item{tau.0}{ starting values for IGMM algorithm; default: \code{(median(y), sd(y), (skewness(y)-skewness_x)/6, delta_Taylor(y))}. See also \code{\link{delta_Taylor}}.}
 \item{robust}{ indicator if robust estimation of the sample skewness (see \code{\link{mc}}) should be used; default: \code{FALSE} (only for \code{type = "s"})}
-  \item{tol}{ a positive scalar giving the tolerance at which the distance is considered close enough to zero to terminate the algorithm; default: \code{.Machine$double.eps^0.5} }
+  \item{tol}{ a positive scalar giving the tolerance at which the distance is considered close enough to zero to terminate the algorithm; default: \code{.Machine$double.eps^0.25} }
   \item{location_family}{is the underlying input distribution \eqn{F_X(x \mid \boldsymbol \beta)} from a location family (for example, Gaussian input); default: \code{TRUE}. If \code{FALSE}, then \eqn{\theta_1 \equiv 0} throughout the optimization, for example for exponential input.}
 }
 
@@ -48,7 +48,7 @@ A list of class \code{LambertW_fit}:
   \item{method}{Estimation method; here: \code{"IGMM"}}
 }
 
-\references{Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. In review at the AOAS (arxiv.org/abs/0912.4554).}
+\references{Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. Forthcoming in the Annals of Applied Statistics (arxiv.org/abs/0912.4554).}
 
 \author{Georg M. Goerg}
 
