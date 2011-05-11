@@ -1,6 +1,6 @@
 IGMM.default <-
 function (y, skewness_x = 0, type="s", kurtosis_x = 3, tau.0 = c(median(y), sd(y), (skewness(y) - 
-    skewness_x)/6, max(0, (kurtosis(y)-3)/100)), robust = FALSE, tol = .Machine$double.eps^0.5, location_family = TRUE)
+    skewness_x)/6, delta_Taylor(y)), robust = FALSE, tol = .Machine$double.eps^0.25, location_family = TRUE)
 {
      #if (is.null(tau.0)) tau.0 = c(median(y), sd(y), (skewness(y)-skewness_x)/6, max(0, (kurtosis(y)-3)/100)))
 
@@ -28,7 +28,7 @@ if (type =="s") {
 	zz = (y - mu.hat)/sigma.hat
 
 	DEL = gamma_GMM(zz, gamma.0 = TAU[kk+1,3], skewness_x = skewness_x, robust, tol=tol)
-        gamma.hat = DEL$gamma
+  gamma.hat = DEL$gamma
 	
 	uu = W_gamma(zz, gamma.hat)
     	xx = uu*sigma.hat + mu.hat
@@ -37,8 +37,12 @@ if (type =="s") {
 	iter = iter + DEL$iterations
 	kk = kk+1
     }
+
+theta$gamma = gamma_GMM((y - TAU[nrow(TAU),1])/TAU[nrow(TAU),2], gamma.0 = TAU[kk+1,3], skewness_x = skewness_x, robust, tol=tol)$gamma
+
+TAU = rbind(TAU, c(TAU[nrow(TAU),1], TAU[nrow(TAU),2], theta$gamma))
 se = c(1, sqrt(1/2), 0.4)/sqrt(length(y))
-theta$gamma = TAU[nrow(TAU),3]
+#theta$gamma = TAU[nrow(TAU),3]
 }
 
 # for heavy-tail versions
@@ -64,12 +68,14 @@ if (type == "h"){
 	iter = iter + DEL$iterations
 	kk = kk+1
     }
-se = c(1, sqrt(1/2), 0.4)/sqrt(length(y))
-theta$delta = TAU[nrow(TAU),3]
+se = c(1, sqrt(1/2), 1)/sqrt(length(y))
+#theta$delta = TAU[nrow(TAU),3]
+theta$delta = delta_GMM((y - TAU[nrow(TAU),1])/TAU[nrow(TAU),2],delta.0 = TAU[nrow(TAU),3], kurtosis_x = kurtosis_x, tol=tol)$delta
+TAU = rbind(TAU, c(TAU[nrow(TAU),1], TAU[nrow(TAU),2], theta$delta))
 }
 
 if (type == "hh"){
-print("Not implemented yet.")
+  print("Not implemented yet.")
 }
 
     TAU = TAU[-1,]
@@ -78,7 +84,7 @@ print("Not implemented yet.")
     out$tau.0 = tau.0
     out$tau = TAU[nrow(TAU), ]
     out$TAU = TAU
-    out$sub_iterations = kk-1
+    out$sub_iterations = kk
     out$iterations = iter
     out$theta = theta
     out$hessian = diag(-1/se^2)

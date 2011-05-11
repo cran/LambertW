@@ -31,7 +31,7 @@ Since the zero-mean, unit-variance (or only unit-variance) version U is one of t
 }
 
 \references{
-Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. In review at the AOAS (http://arxiv.org/abs/0912.4554).
+Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. Forthcoming in the Annals of Applied Statistics (http://arxiv.org/abs/0912.4554).
 }
 \author{Georg M. Goerg}
 

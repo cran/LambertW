@@ -46,7 +46,7 @@ Displays the output (class \code{LambertW_fit}) of the \code{\link{MLE_LambertW}
   \item{p_1n}{Probability that one or more of the n observation was caused by input lying on the non-principal branch; see \code{\link{p_1}}; only for \code{type = "s"}.} 
   \item{symmetry_pval}{the p-value for the test of identical left and right tail paramters by the Wald test (see \code{\link{skewness_test}}); only for \code{type = "hh"}.} 
 }
-\references{Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. In review at the AOAS (arxiv.org/abs/0912.4554).}
+\references{Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. Forthcoming in the Annals of Applied Statistics (arxiv.org/abs/0912.4554).}
 \author{Georg M. Goerg}
 \examples{
 data(AA)

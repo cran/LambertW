@@ -44,7 +44,7 @@ Note that \eqn{1 - (1-p_{-1}(\gamma, n=1))^N} reduces to the original definition
 \eqn{p_{-1}} for \code{n} observations (in practice very small given empirical evidence).
 Numerical problems can occur for \eqn{\gamma < 0.03} (always returns \code{0} due to rounding errors).
 }
-\references{Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. In review at the AOAS (arxiv.org/abs/0912.4554))}
+\references{Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. Forthcoming in the Annals of Applied Statistics (arxiv.org/abs/0912.4554))}
 \author{Georg M. Goerg}
 
 

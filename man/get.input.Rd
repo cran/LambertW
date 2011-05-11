@@ -3,15 +3,14 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Back-transform Y to X}
 \description{
-
- Given the data \code{y} and the parameter vector \eqn{\tau = (\mu_x(\boldsymbol \beta), \sigma_x(\boldsymbol \beta), \gamma, \alpha)} (or \eqn{\tau = (\mu_x(\boldsymbol \beta), \sigma_x(\boldsymbol \beta), \delta, \alpha)}), this function computes the back-transformed input data \eqn{\widehat{\boldsymbol x}_{\tau}}.
+Given the data \code{y} and the parameter vector \eqn{\tau = (\mu_x(\boldsymbol \beta), \sigma_x(\boldsymbol \beta), \gamma, \alpha)} (or \eqn{\tau = (\mu_x(\boldsymbol \beta), \sigma_x(\boldsymbol \beta), \delta, \alpha)}), this function computes the back-transformed input data \eqn{\widehat{\boldsymbol x}_{\tau}}.
 }
 \usage{
 get.input(y, tau, return.u=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{y}{ a numeric vector of data values. }
+  \item{y}{ a numeric vector of data values or an object of class \code{LambertW_fit}. }
   \item{tau}{ parameter vector }
   \item{return.u}{ should the normalized input be returned; default: \code{FALSE}}
 }
@@ -36,6 +35,8 @@ fit.gmm=IGMM(y, type="s")
 summary(fit.gmm)
 
 x=get.input(y, fit.gmm$tau)
+# the same as
+x = get.input(fit.gmm)
 normfit(x) # symmetric Gaussian
 
 }

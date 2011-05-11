@@ -1,7 +1,5 @@
 gamma_GMM <-
-function (z, skewness_x = 0,gamma.0 = (skewness(z) - skewness_x)/6, robust = FALSE, tol=.Machine$double.eps^0.5) 
-{
- 
+function (z, skewness_x = 0,gamma.0 = (skewness(z) - skewness_x)/6, robust = FALSE, tol=.Machine$double.eps^0.25) {
     obj.f = function(gamma) {
         u.d = W_gamma(z, gamma)
         if (!robust) 

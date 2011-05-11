@@ -8,7 +8,7 @@ This function minimizes the Euclidean distance between the theoretical skewness 
 A robust measure of the asymmetry can also be used (see MedCouple estimator: \code{\link{mc}}).
   }
 \usage{
-gamma_GMM(z, skewness_x = 0,gamma.0 = (skewness(z) - skewness_x)/6, robust = FALSE, tol=.Machine$double.eps^0.5) 
+gamma_GMM(z, skewness_x = 0,gamma.0 = (skewness(z) - skewness_x)/6, robust = FALSE, tol=.Machine$double.eps^0.25) 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,7 +24,7 @@ A list with two elements:
 \item{gamma}{ optimal \eqn{\gamma} for data \eqn{z} }
 \item{iterations}{number of iterations}
 }
-\references{Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. In review at the AOAS (arxiv.org/abs/0912.4554).}
+\references{Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Generalized Skewed Distributions with Applications to Risk Estimation}. Forthcoming in the Annals of Applied Statistics (arxiv.org/abs/0912.4554).}
 \author{Georg M. Goerg}
 \seealso{\code{\link{delta_GMM}} for the heavy-tail version of this function; \code{\link{mc}} for a robust measure of asymmetry; \code{\link{IGMM}} for an iterative method to estimate all parameters accurately}
 
