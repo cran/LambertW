@@ -37,21 +37,24 @@ if (estimate_only) hessian = FALSE
 	
     lb = bounds_theta(type=type, distname=distname, beta = theta.0$beta, fixed_theta = fixed_theta)$lowerbound
     ub = bounds_theta(type=type, distname=distname, beta = theta.0$beta, fixed_theta = fixed_theta)$upperbound	
-
-    fit = nlminb(param.0, min.LambertW_logLH, lower = lb, upper=ub)
+    #print(lb)
+    fit = nlminb(param.0, min.LambertW_logLH, lower = lb, upper=ub, control = list(trace = 0))
+    #print(param.0)
+    #fit = constrOptim(param.0, min.LambertW_logLH, grad = NULL, ui=diag(length(param.0)), ci=lb)
+    #fit = nlminb(param.0, min.LambertW_logLH, lower = lb, upper=ub, control = list(trace = 1))
 
     if (hessian) fit$hessian = numericNHessian(LambertW_logLH, t0 = fit$par)
 
-    param.hat = fit$par
-    names(param.hat) = names(param.0)
+    params.hat = fit$par
+    names(params.hat) = names(param.0)
 
-    if (estimate_only) return(param.hat)
+    if (estimate_only) return(params.hat)
 
-    beta.hat = param.hat[1:length(theta.0$beta)]
-    if (type == "hh") delta.hat = param.hat[c("delta_l", "delta_r")]
-    if (type == "h")  delta.hat = param.hat["delta"]
-    if (type == "s")  gamma.hat = param.hat["gamma"]
-    if (is.null(fixed_theta$alpha)) alpha.hat = param.hat["alpha"]
+    beta.hat = params.hat[1:length(theta.0$beta)]
+    if (type == "hh") delta.hat = params.hat[c("delta_l", "delta_r")]
+    if (type == "h")  delta.hat = params.hat["delta"]
+    if (type == "s")  gamma.hat = params.hat["gamma"]
+    if (is.null(fixed_theta$alpha)) alpha.hat = params.hat["alpha"]
     parameters.hat = NULL
     if (is.null(fixed_theta$alpha)) parameters.hat$alpha = alpha.hat
     parameters.hat$beta = beta.hat
@@ -69,9 +72,9 @@ if (estimate_only) hessian = FALSE
     est = NULL
     est$data = y
     est$loglik = LambertW_logLH
-    est$loglik.opt = LambertW_logLH(param.hat)
+    est$loglik.opt = LambertW_logLH(params.hat)
     est$param.0 = param.0
-    est$param.hat = param.hat
+    est$params.hat = params.hat
     est$theta.0 = theta.0
     est$theta = parameters.hat
     est$beta = beta.hat

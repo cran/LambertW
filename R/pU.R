@@ -11,11 +11,14 @@ function (u, beta = NULL, distname = c("normal"))
     if (distname == "exp") {
         FU = function(u) pexp(u)
     }
+    if (distname == "gamma"){
+       FU = function(u) pgamma(u, shape = beta[1], rate = sqrt(beta[1]))
+    }
     if (distname == "normal") {
         FU = function(u) pnorm(u)
     }
     if (distname == "t") {
-	ss = beta2tau(beta, distname=distname)[2]
+	     ss = beta2tau(beta, distname=distname)[2]
         FU = function(u) pt(u*ss, df = beta[3])
     }
     if (distname == "unif") {

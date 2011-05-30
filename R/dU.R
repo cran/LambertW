@@ -12,7 +12,7 @@ function (u, beta = NULL, distname = c("normal"))
         fU = function(u) dexp(u)
     }
     if (distname == "gamma") {
-        fU = function(u) dgamma(u, shape = 1, rate = 1)
+        fU = function(u) dgamma(u, shape = beta[1], rate = sqrt(beta[1]))
     }
     #if (distname == "laplace"){
 #	fU = function(u) dlaplace(u, 0, 1/sqrt(2))

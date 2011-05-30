@@ -3,8 +3,10 @@
 \alias{complete_theta}
 \alias{starting_theta}
 \alias{bounds_theta}
+\alias{restrict_theta}
+\alias{theta2tau}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Checks if parameters describe a well-defined distribution}
+\title{Checks/completes/restricts/bounds/finds starting values for theta}
 \description{
 \code{check_theta} checks if parameters \eqn{\alpha, \beta, \gamma, \delta} describe a well-defined Lambert W distribution. Prints out a warning if they do not, or if number of parameters given is too large/small for the specified distribution.
 
@@ -13,12 +15,18 @@
 \code{starting_theta} provides starting parameters for \eqn{\alpha}, \eqn{\boldsymbol \beta}, \eqn{\gamma}, and \eqn{\delta} to be used in ML (\code{\link{MLE_LambertW}}) estimation. These values are obtained by first finding the input \eqn{\widehat{\boldsymbol x}_{\widehat{\theta}}} generating the output \eqn{\boldsymbol y} by \code{\link{IGMM}}, and then getting the MLE of \eqn{\boldsymbol \beta} for this input data \eqn{\widehat{\boldsymbol x}_{\widehat{\theta}} \sim F_X(x \mid \boldsymbol \beta)}.
 
 \code{bounds_theta} returns lower and upper bounds for \eqn{\theta} which are necessary to specify for \code{\link{MLE_LambertW}} estimation.
+
+\code{restrict_theta} restricts \eqn{\theta} to transform the bounded search space to an unrestricted search space (by \eqn{\log}-transformation). Thus by the \eqn{\log} transformation we can convert the bounded optimization problem to an unbounded one, optimize on this space, and then go back again.
+
+\code{theta2tau} converts \eqn{\theta} to the implied parameter vector \eqn{\tau}. See also \code{\link{beta2tau}}.
 }
 \usage{
 check_theta(alpha = 1, beta = NULL, gamma = 0, delta=0, distname = NULL)
 complete_theta(theta = list(beta = c(0,1)), input = NULL)
 starting_theta(y, type = "h", distname="normal", fixed_theta = list(alpha = 1))
 bounds_theta(distname = "normal", beta = NULL, type = "s", fixed_theta = list(alpha = 1))
+restrict_theta(theta, distname = "normal", type = "h", inverse = FALSE)
+theta2tau(theta = list(beta = c(0,1)), distname = "normal")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -32,6 +40,7 @@ bounds_theta(distname = "normal", beta = NULL, type = "s", fixed_theta = list(al
   \item{y}{ a numeric vector of real values. }
   \item{type}{ type of distribution to be estimated: skewed Lambert W \code{"s"}; one-parameter heavy-tail Lambert W \code{"h"} or two-parameter heavy-tail Lambert W \code{"hh"} distribution. }
   \item{fixed_theta}{ a list of fixed parameters in the optimization; default only \code{alpha = 1}}
+  \item{inverse}{should the transformation be undone, i.e.\ use \eqn{\exp} instead of \eqn{log}. Default: \code{TRUE}.}
 }
 
 \value{
@@ -82,6 +91,11 @@ summary(MLE_LambertW(y, distname="normal", type="h")) # quite close
 
 ###
 bounds_theta(type="hh", distname="normal", beta = c(0,1), fixed_theta = list())
+
+### 
+theta_restr = restrict_theta(list(beta = c(-1,0.1), delta = c(0.2,0.2)))
+theta_restr
+restrict_theta(theta_restr, inverse = TRUE) # returns again the beta and delta from above
 
 }
 

@@ -1,12 +1,12 @@
 summary.LambertW_fit <-
 function(object, ...) {
-  if (object$method == "IGMM") object$param.hat = object$tau
+  if (object$method == "IGMM") object$params.hat = object$tau
   
   se=suppressWarnings(sqrt(-diag(solve(object$hessian))))
   
-  tval = object$param.hat/se
+  tval = object$params.hat/se
   
-  TAB = cbind(Esimate = object$param.hat, StdErr = se, t.value = tval, 
+  TAB = cbind(Esimate = object$params.hat, StdErr = se, t.value = tval, 
   p.value = 2*(1-pnorm(abs(tval))))
   dimnames(TAB) = list(names(tval), c(" Estimate", " Std. Error", " t value", "Pr(>|t|)"))
   
