@@ -12,8 +12,8 @@ function(x, ...) {
     cat(x$type)
     cat("\n")
     cat("\n Parameter estimates:\n")
-    if (x$method == "IGMM") x$param.hat = x$tau
-    print(x$param.hat)
+    if (x$method == "IGMM") x$params.hat = x$tau
+    print(x$params.hat)
     if (x$method == "IGMM") {
 	  one_param = "gamma"
         if (x$type == "h") one_param = "delta"

@@ -11,6 +11,9 @@ function (p, beta = NULL, distname = c("normal"))
     if (distname == "exp") {
         qU = function(p) qexp(p)
     }
+    if (distname == "gamma"){
+      qU = function(p) pgamma(p, shape = beta[1], rate = sqrt(1/beta[1])) 
+    }
     if (distname == "normal") {
         qU = function(p) qnorm(p)
     }

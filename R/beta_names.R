@@ -8,7 +8,7 @@ if (distname == "exp") parameter.names =c("rate lambda")
 if (distname == "F") parameter.names =c("df1","df2")
 if (distname == "laplace") parameter.names = c("location", "scale")
 if (distname == "normal") parameter.names = c("mu", "sigma")
-if (distname == "t") parameter.names =c("ncp", "s", "df")
+if (distname == "t") parameter.names =c("location", "scale", "df")
 if (distname == "unif") parameter.names = c("min", "max")
 
 return(parameter.names)

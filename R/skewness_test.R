@@ -4,7 +4,7 @@ function(obj, method = "Wald"){
 if (class(obj) != "LambertW_fit") obj = MLE_LambertW(obj, type="hh", distname="normal")
 
 hessian = obj$hessian
-theta.hat = obj$param.hat
+theta.hat = obj$params.hat
 KK = length(theta.hat)
 var.theta.hat = -solve(hessian)
 VV = var.theta.hat*length(obj$data)
