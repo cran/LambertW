@@ -101,4 +101,3 @@ function(x, a = NULL, b = NULL,...){
   par(op)
 
 }
-

@@ -6,8 +6,7 @@ function (distname = NULL, beta = NULL, beta2tau = NULL, dU = NULL, pU = NULL, r
         pU_temp = function(u) pnorm(u)
 	      qU_temp = function(p) qnorm(p)
         beta2tau_temp = function(beta) c(beta[1], beta[2], 0, 0, 1)
-    }
-    else{
+    } else {
       dU_temp = function(u) dU(u, beta = beta, distname = distname)
       rU_temp = function(u) rU(u, beta = beta, distname = distname)
       pU_temp = function(u) pU(u, beta = beta, distname = distname)
@@ -75,4 +74,3 @@ function (distname = NULL, beta = NULL, beta2tau = NULL, dU = NULL, pU = NULL, r
     class(obj) = "LambertW_input"
     invisible(obj)
 }
-

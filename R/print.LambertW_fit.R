@@ -16,9 +16,9 @@ function(x, ...) {
     print(x$params.hat)
     if (x$method == "IGMM") {
 	  one_param = "gamma"
-        if (x$type == "h") one_param = "delta"
- 	 cat(paste("\n Obtained after", x$iterations, "iterations for mu_x and sigma_x, and \n on average",round(x$sub_iterations/x$iterations,2),"iterations to find the optimal", one_param,"in each run."))
+    if (x$type == "h") one_param = "delta"
+    if (x$type == "hh") one_param = "pair (delta_l, delta_r)"
+ 	 cat(paste("\n Obtained after", x$iterations, "iterations for mu_x and sigma_x, and \n on average",round(x$sub_iterations/x$iterations ,2),"iterations to find the optimal", one_param,"in each run."))
 	  }
 	  cat("\n")
 }
-

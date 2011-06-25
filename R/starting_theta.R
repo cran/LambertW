@@ -10,11 +10,11 @@ supported_by_fitdistr = c("beta", "cauchy", "chi-squared", "exponential", "f", "
 
 if (location_family) {
 	if (type == "s") tau_gmm = IGMM(y, type = "s", skewness_x = 0)$tau
-	if (any(type == c("h", "hh"))) tau_gmm = IGMM(y, type = "h", kurtosis_x = 3)$tau
+	if (any(type == c("h", "hh"))) tau_gmm = IGMM(y, type = "h", kurtosis_x = 3, restricted = TRUE)$tau
 	}
 else { # here I take the exponential distribution as a reference for a non-location_family distribution
-	if (type == "s") tau_gmm = IGMM(y, type = "s", skewness_x = 2, tau.0 = c(0, mean(y), 0, 0), location_family = FALSE)$tau
-	if (any(type == c("h", "hh"))) tau_gmm = IGMM(y, type = "h", kurtosis_x = 9, tau.0 = c(0, mean(y), 0, 0), location_family = FALSE)$tau
+	if (type == "s") tau_gmm = IGMM(y, type = "s", skewness_x = 2, tau.0 = c(0, mean(y), 0, 0), location_family = FALSE, restricted = TRUE)$tau
+	if (any(type == c("h", "hh"))) tau_gmm = IGMM(y, type = "h", kurtosis_x = 9, tau.0 = c(0, mean(y), 0, 0), location_family = FALSE, restricted = TRUE)$tau
 }
 
 x_input = get.input(y, tau_gmm)
@@ -55,4 +55,3 @@ if (is.null(fixed_theta$alpha)) {
 }
 return(theta.0)
 }
-

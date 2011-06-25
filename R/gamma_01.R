@@ -11,4 +11,3 @@ function(gamma, mu_y=0, sigma_y=1){
   }
   c(mu_x, sqrt(sigma2_x), gamma)
 }
-

@@ -36,4 +36,3 @@ function(x, a = NULL, b = NULL,...){
   plot(obj$pX(),a,b, lwd=1, main = obj$distname_with_beta, ylab="cdf", xlab = "x", ylim = y.lim_p)
   par(op)
 }
-

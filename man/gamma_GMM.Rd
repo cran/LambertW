@@ -8,7 +8,7 @@ This function minimizes the Euclidean distance between the theoretical skewness 
 A robust measure of the asymmetry can also be used (see MedCouple estimator: \code{\link{mc}}).
   }
 \usage{
-gamma_GMM(z, skewness_x = 0,gamma.0 = (skewness(z) - skewness_x)/6, robust = FALSE, tol=.Machine$double.eps^0.25) 
+gamma_GMM(z, skewness_x = 0,gamma.0 = gamma_Taylor(z), robust = FALSE, tol=.Machine$double.eps^0.25, restricted = FALSE) 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,6 +17,7 @@ gamma_GMM(z, skewness_x = 0,gamma.0 = (skewness(z) - skewness_x)/6, robust = FAL
   \item{skewness_x}{ theoretical skewness of the input \eqn{X}. default: \code{0} }
   \item{robust}{ indicator if robust estimation of the sample skewness (\code{\link{mc}}) should be used; default: \code{FALSE} }
  \item{tol}{ a positive scalar giving the tolerance at which the distance is considered close enough to zero to terminate the algorithm; default: \code{.Machine$double.eps^0.5} }
+ \item{restricted}{indicator if the estimate for \eqn{\gamma} should be restricted to the positive reals; default: \code{FALSE}}
 }
 
 \value{

@@ -32,4 +32,3 @@ function(y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal
   }
       invisible(list(x = sorted.x, y = sorted.y))
 }
-

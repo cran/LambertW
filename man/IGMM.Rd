@@ -9,21 +9,20 @@ An iterative methods of moments estimator finds this \eqn{\tau = (\mu_x, \sigma_
 For details of the Algorithm see the References.
 }
 \usage{
-IGMM(y, skewness_x = 0, type="s", kurtosis_x = 3, tau.0 = c(median(y), sd(y), (skewness(y) - 
-    skewness_x)/6, delta_Taylor(y)), robust = FALSE, tol = .Machine$double.eps^0.25, location_family = TRUE)
-\method{IGMM}{default}(y, skewness_x = 0, type="s", kurtosis_x = 3, tau.0 = c(median(y), sd(y), (skewness(y) - 
-    skewness_x)/6, delta_Taylor(y)), robust = FALSE, tol = .Machine$double.eps^0.25, location_family = TRUE)
+IGMM(y,type="s", skewness_x = 0,  kurtosis_x = 3, tau.0 = c(median(y), sd(y), gamma_Taylor(y), delta_Taylor(y)), robust = FALSE, tol = .Machine$double.eps^0.25, location_family = TRUE, restricted = NULL)
+\method{IGMM}{default}(y, type="s", skewness_x = 0, kurtosis_x = 3, tau.0 = c(median(y), sd(y), gamma_Taylor(y), delta_Taylor(y)), robust = FALSE, tol = .Machine$double.eps^0.25, location_family = TRUE, restricted = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{y}{ a numeric vector of real values. }
   \item{skewness_x}{ theoretical skewness of input X; default \code{0}}
-  \item{type}{ what type of distribution should be estimated? skewed Lambert W (\code{"s"}) or heavy-tail Lambert W (\code{"h"}) (the skewed Lambert W distribution (\code{"hh"}) is not implemented yet). }
+\item{type}{ what type of distribution should be estimated? skewed Lambert W \code{"s"}; heavy-tail Lambert W \code{"h"}; heavy-tails Lambert W \code{"hh"}. }
   \item{kurtosis_x}{ theoretical kurtosis of input X; default \code{3} (Gaussian)}
-  \item{tau.0}{ starting values for IGMM algorithm; default: \code{(median(y), sd(y), (skewness(y)-skewness_x)/6, delta_Taylor(y))}. See also \code{\link{delta_Taylor}}.}
+  \item{tau.0}{ starting values for IGMM algorithm; default: \code{(median(y), sd(y), gamma_Taylor(y), delta_Taylor(y))}. The standard deviation estimate gets changed inside \code{IGMM} to an improved initial estimate (given the estimate for \eqn{\gamma} and/or \eqn{\delta}. See also \code{\link{gamma_Taylor}} and \code{\link{delta_Taylor}}.}
 \item{robust}{ indicator if robust estimation of the sample skewness (see \code{\link{mc}}) should be used; default: \code{FALSE} (only for \code{type = "s"})}
   \item{tol}{ a positive scalar giving the tolerance at which the distance is considered close enough to zero to terminate the algorithm; default: \code{.Machine$double.eps^0.25} }
   \item{location_family}{is the underlying input distribution \eqn{F_X(x \mid \boldsymbol \beta)} from a location family (for example, Gaussian input); default: \code{TRUE}. If \code{FALSE}, then \eqn{\theta_1 \equiv 0} throughout the optimization, for example for exponential input.}
+ \item{restricted}{indicator if the estimate for \eqn{\gamma} or \eqn{\delta} should be restricted to the positive reals. If it is set to \code{NULL} (default)  then it will be set internally to \code{TRUE} for heavy-tail(s) Lambert W x F distributions (\code{type = "h"} or \code{"hh"}; for skewed Lambert W x F (\code{type = "s"}) it will be set to \code{FALSE}, unless it is not a scale family \code{location_family = FALSE}: in this case it is set to \code{TRUE}.}
 }
 
 \value{

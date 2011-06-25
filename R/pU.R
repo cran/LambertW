@@ -27,4 +27,3 @@ function (u, beta = NULL, distname = c("normal"))
 
     return(FU(u))
 }
-

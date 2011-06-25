@@ -9,4 +9,3 @@ out[!ind.0] = delta^(-0.5) * value[!ind.0]^(-0.5) * value[!ind.0] / (z[!ind.0]*(
 out[!ind.0] = sign(z[!ind.0]) * out[!ind.0]
 return(out)
 }
-

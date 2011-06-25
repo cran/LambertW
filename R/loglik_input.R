@@ -18,4 +18,3 @@ function(beta = NULL, x = NULL, distname = "normal", f_X = NULL, logf_X = functi
   loglik = sum(logf_X(xx = x, beta = beta))
   return(loglik)
 }
-

@@ -29,6 +29,9 @@ Ignoring higher order terms and using the empirical estimate on the LHS we can s
 \widehat{\delta}_{Taylor} = \frac{1}{66} \cdot \left( \sqrt{66 \widehat{\gamma_2(\mathbf{y})} - 162}-6 \right),
 }
 where \eqn{\widehat{\gamma_2(\mathbf{y})}} is the empirical kurtosis of the data \eqn{\mathbf{y}}. 
+
+Since the kurtosis is only defined for \eqn{\delta < 1/4}, the output of \code{delta_Taylor} is upper bounded by \eqn{1/4}.
+
 }
 \author{Georg M. Goerg}
 \seealso{\code{\link{IGMM}} for an iterative method to estimate all parameters jointly.}

@@ -26,4 +26,3 @@ function(n = NULL, beta = NULL, distname=c("normal")){
    
    return(uu)
 }
-

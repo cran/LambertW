@@ -34,4 +34,3 @@ RVAL <- list(statistic = statistic, p.value = pval, method = method, data.name =
 class(RVAL) <- "htest"
 return(RVAL)
 }
-

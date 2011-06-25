@@ -27,4 +27,3 @@ function (p, beta = NULL, distname = c("normal"))
 
     return(qU(p))
 }
-

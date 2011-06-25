@@ -29,4 +29,3 @@ function (u, beta = NULL, distname = c("normal"))
     }
     return(fU(u))
 }
-

@@ -65,4 +65,3 @@ function (y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("norma
   names(g) = NULL
   g
 }
-

@@ -10,7 +10,7 @@ function(object, ...) {
   p.value = 2*(1-pnorm(abs(tval))))
   dimnames(TAB) = list(names(tval), c(" Estimate", " Std. Error", " t value", "Pr(>|t|)"))
   
-  res=NULL
+  res=list()
   res$call = object$call
   res$method = object$method
   res$data = object$data
@@ -22,9 +22,12 @@ function(object, ...) {
   res$n = length(object$data)
   res$support = support(object$tau)
   res$data.range = range(object$data)
+  res$theta = object$theta
+  if (object$method == "IGMM") res$tau = object$tau
+  if (object$method == "MLE") res$tau = theta2tau(object$theta, distname = object$distname)
   if (object$method == "MLE" && object$type == "s") {
-  res$p_1 = p_1(gamma=object$theta$gamma, distname=object$distname, beta=object$theta$beta, n=1)
-  res$p_1n = p_1(gamma=object$theta$gamma, distname=object$distname, beta=object$theta$beta, n=res$n)
+    res$p_1 = p_1(gamma=object$theta$gamma, distname=object$distname, beta=object$theta$beta, n=1)
+    res$p_1n = p_1(gamma=object$theta$gamma, distname=object$distname, beta=object$theta$beta, n=res$n)
   }
   else res$p_1 = res$p_1n = NA
   if (object$type == "hh"){
@@ -33,4 +36,3 @@ function(object, ...) {
   class(res)= "summary.LambertW_fit"
   res
 }
-
