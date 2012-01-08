@@ -95,4 +95,3 @@ function(data, volatility=FALSE, plot.it=TRUE, pch = 1, legend = TRUE) {
   AD=ad.test(data)
   list(sw=SW, sf=SF,ad=AD)
 }
-

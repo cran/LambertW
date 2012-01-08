@@ -89,4 +89,3 @@ if (estimate_only) hessian = FALSE
     class(est) = "LambertW_fit"
     return(est)
 }
-

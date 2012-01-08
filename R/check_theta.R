@@ -6,4 +6,3 @@ function(alpha = 1, beta = NULL, gamma = 0, delta = 0, distname = NULL){
    if (distname == "t" && (length(beta) != 3 || beta[2] <0 || beta[3] <0) ) warning("You must specify a degrees of freedom parameter for student-t input. \n  Check if the scale or the degree of freedom parameter is less than 0." )
    if (distname == "exp" && (length(beta) != 1 || beta[1] <= 0)) warning("beta for an exponential distribution must be a one number and positive.")
 }
-

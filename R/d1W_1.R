@@ -5,4 +5,3 @@ ind.not0 = (abs(z) != 0)
 out[ind.not0] = W_1_z[ind.not0]/(W_1_z[ind.not0] + 1)/z[ind.not0]
 return(out)
 }
-

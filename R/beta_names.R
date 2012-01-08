@@ -13,4 +13,3 @@ if (distname == "unif") parameter.names = c("min", "max")
 
 return(parameter.names)
 }
-

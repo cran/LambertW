@@ -6,4 +6,3 @@ function(theta = list(beta = c(0,1)), input = NULL){
    if (is.null(theta$delta)) theta$delta = 0
    return(theta)
 }
-

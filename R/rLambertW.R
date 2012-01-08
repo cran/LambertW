@@ -30,4 +30,3 @@ function(n = 1000, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = "n
   if (return.input) return( list(x = xx, y = yy) )
   else return(yy)
 }
-

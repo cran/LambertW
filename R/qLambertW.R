@@ -75,4 +75,3 @@ function(p, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal
   
   return(round(sapply(p, aux),10))
 }
-

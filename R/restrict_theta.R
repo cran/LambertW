@@ -20,4 +20,3 @@ function(theta, distname = "normal", type = "h", inverse = FALSE){
     }    
     return(theta)
 }
-

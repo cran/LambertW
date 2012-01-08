@@ -22,6 +22,7 @@ loglik_input(beta = NULL, x = NULL, distname = "normal", f_X = NULL, logf_X = fu
 loglik_penalty(theta, y = NULL, type = "h", distname = "normal")
 theta2params(theta)
 params2theta(params, distname="normal", type ="h")
+loglik_LambertW(theta, y = NULL, distname = "normal", type = "h", return.neg.value = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -34,6 +35,7 @@ params2theta(params, distname="normal", type ="h")
     \item{theta}{ the parameter vector in form of a list containing \code{beta}, \code{gamma}, \code{delta} etc. }
   \item{type}{ what type of transformation? skewed Lambert W \code{"s"}; heavy-tail Lambert W \code{"h"}; heavy-tails Lambert W \code{"hh"}. }
   \item{params}{a vector containg the parameter values of \eqn{\theta} in an unlisted way.}
+    \item{return.neg.value}{ an indicator to return only the negative log-likelihood of the data (which is useful for optimization routines); otherwise it returns the list of input, penalty, and their sum = full likelihood. Default: \code{FALSE}.}
 }
 \details{
 See the references for the detailed expressions of log-likelihood and penalty terms.

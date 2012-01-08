@@ -92,4 +92,3 @@ function(input = NULL, theta = NULL, distname = input$distname){
   class(obj) = "LambertW_output"
   invisible(obj)
 }
-

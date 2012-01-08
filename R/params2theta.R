@@ -20,4 +20,3 @@ function(params, distname="normal", type ="h"){
   names(theta$beta) = beta_names(distname = distname)
   return(theta)  
   }
-

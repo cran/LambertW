@@ -67,4 +67,3 @@ function(beta, distname=c("normal"), gamma = 0, delta = 0, alpha = 1){
   
   return(tau)
 }
-

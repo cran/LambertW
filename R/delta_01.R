@@ -9,4 +9,3 @@ else factorial(n) * (1-n*delta)^(-(n+1)/2)/ (2^(n/2) * factorial(n/2))
 
 c(0, sqrt(1/(moments(n=2, delta))),0,delta)
 }
-

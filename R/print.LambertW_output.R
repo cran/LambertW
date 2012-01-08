@@ -33,4 +33,3 @@ if (x$type =="hh") pre_text = "heavy-tail (two parameters)"
     cat("\n")
     }
 }
-

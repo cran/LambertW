@@ -12,4 +12,3 @@ out = sign(z) * first.term * second.term
 out[is.na(out)] = 1
 return(out)
 }
-

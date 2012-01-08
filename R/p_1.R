@@ -10,4 +10,3 @@ if (is.na(out)) out=0
 }
 out
 }
-

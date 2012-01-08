@@ -8,4 +8,3 @@ function(theta){
    #names(params)[1:length(theta$beta)] = beta_names(distname = distname)
    return(params)
 }
-

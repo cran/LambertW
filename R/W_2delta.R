@@ -6,4 +6,3 @@ u[z < 0] = W_delta(z[z < 0], delta = delta[1])
 u[z > 0] = W_delta(z[z > 0], delta = delta[2])
 invisible(u)
 }
-

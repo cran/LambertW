@@ -7,4 +7,3 @@ u[z < 0] = W_delta_alpha(z[z < 0], delta = delta[1], alpha = alpha[1])
 u[z > 0] = W_delta_alpha(z[z > 0], delta = delta[2], alpha = alpha[2])
 invisible(u)
 }
-

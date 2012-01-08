@@ -17,4 +17,3 @@ Z.pos=z[z>0]
 B=outer(Z.neg, Z.pos, h)
 median(B)
 }
-

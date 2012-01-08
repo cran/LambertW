@@ -16,4 +16,3 @@ colnames(SUP) = c("a", "b")
 rownames(SUP) = NULL
 SUP
 }
-
