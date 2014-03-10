@@ -6,7 +6,8 @@
 This function minimizes the Euclidean distance between the theoretical kurtosis \eqn{\gamma_2(X)}, and the sample kurtosis of the back-transformed data \eqn{W_{\delta}(\boldsymbol z)} as a function of \eqn{\delta} (see References). Note that only an interative application of this function will give a good estimate of \eqn{\delta} \eqn{\rightarrow} see \code{\link{IGMM}}.
   }
 \usage{
-delta_GMM(z, kurtosis_x = 3, skewness_x = 0, type ="h", delta.0 = delta_Taylor(z), tol=.Machine$double.eps^0.25, restricted = TRUE, bounds = c(-5,10))
+delta_GMM(z, kurtosis_x = 3, skewness_x = 0, type ="h", delta.0 = delta_Taylor(z), 
+tol=.Machine$double.eps^0.25, restricted = TRUE, bounds = c(-5,10))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -30,7 +31,7 @@ A list with two elements:
 
 \examples{
 set.seed(2)
-y = rLambertW(n=1000, beta=c(1,2), delta = 1) ## very heavy-tails (like a Cauchy)
+y = rLambertW(n=1000, beta=c(1,2), delta = 1) # very heavy-tails (like Cauchy)
 
 delta_GMM(y) # after the first iteration
 IGMM(y, type="h")$TAU # all iterations

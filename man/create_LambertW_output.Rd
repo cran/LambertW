@@ -52,7 +52,9 @@ An object of class \code{LambertW_output}; the values of an \code{LambertW_outpu
 Gauss_input = create_LambertW_input("normal", beta = c(1,2))
 
 # create a heavy-tailed version of a normal -> Tukey's h with h = 0.3
-params = list(delta = c(0.3)) # gamma = 0, alpha = 1 will be assigned automatically if missing; beta comes from the input
+# gamma = 0, alpha = 1 will be assigned automatically if missing; 
+# beta comes from the input
+params = list(delta = c(0.3))
 LW.Gauss = create_LambertW_output(input = Gauss_input, theta = params)
 LW.Gauss
 
@@ -60,13 +62,16 @@ op = par(no.readonly=TRUE)
 par(mfrow=c(2,1), mar=c(3,3,2,1))
 plot(LW.Gauss$dY(params),-7,10, col="red")
 plot(LW.Gauss$dY(), -7, 10, col="blue") # same in blue; 
-# actual information here: parameter for the specified model is not necessary to give again as input to the returned functions
+# actual information here: parameter for the specified model is 
+# not necessary to give again as input to the returned functions
 
 
 params.0 = params # compare to the input case (i.e. set delta = 0)
 params.0$delta = 0
 
-plot(LW.Gauss$dY(params.0), -7,10, add=TRUE, col=1) # to evaluate the RV at a different parameter value, it is necessary to provide the new parameter in the function
+# to evaluate the RV at a different parameter value, 
+# it is necessary to provide the new parameter in the function
+plot(LW.Gauss$dY(params.0), -7,10, add=TRUE, col=1)
 par(op)
 
 plot(LW.Gauss$pY(params), -7,10, col="red")
@@ -74,7 +79,8 @@ plot(LW.Gauss$pY(params.0), -7,10, add=TRUE, col=1)
 
 normfit(LW.Gauss$rY(params)(n=100))
 
-## generate a positively skewed version of the decentralized scaled t_3 distribution 
+## generate a positively skewed version of the 
+## decentralized scaled t_3 distribution 
 t_input = create_LambertW_input("t", beta = c(2,1,3))
 t_input
 params = list(gamma = 0.05) # skew it
@@ -91,8 +97,10 @@ normfit(yy)
 
 ## generate a positively skewed version a Cauchy distribution
 cauchy_input = create_LambertW_input("cauchy", beta = c(0,1))
-params = list(alpha = 1, beta = cauchy_input$beta, gamma = 0.05, delta = 0) # the skewed version
-LW.cauchy = create_LambertW_output(input = cauchy_input,distname=cauchy_input$distname, theta = params)
+params = list(alpha = 1, beta = cauchy_input$beta, 
+              gamma = 0.05, delta = 0) # the skewed version
+LW.cauchy = create_LambertW_output(input = cauchy_input,
+                                   distname=cauchy_input$distname, theta = params)
 LW.cauchy
 
 

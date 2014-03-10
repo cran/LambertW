@@ -17,12 +17,19 @@ Implemented distributions (\code{distname = ...}) are:  \code{"cauchy"}, \code{"
 \code{mLambertW} computes the first 4 central moments of a Lambert W \eqn{\times} Gaussian.
 }
 \usage{
-dLambertW(y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL, theta = NULL)
-pLambertW(q, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL, theta = NULL) 
-qLambertW(p, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL, theta = NULL)
-rLambertW(n = 1000, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = "normal", return.input = FALSE, input.U = NULL, theta = NULL)
-mLambertW(beta = c(0, 1), distname = c("normal"), gamma = 0, delta = 0, alpha = 1, theta = NULL)
-qqLambertW(y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), plot.it = TRUE, theta = NULL, ...)
+dLambertW(y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, 
+          distname = c("normal"), input.U = NULL, theta = NULL)
+pLambertW(q, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, 
+          distname = c("normal"), input.U = NULL, theta = NULL) 
+qLambertW(p, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, 
+          distname = c("normal"), input.U = NULL, theta = NULL)
+rLambertW(n = 1000, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, 
+          distname = "normal", return.input = FALSE, input.U = NULL, 
+          theta = NULL)
+mLambertW(beta = c(0, 1), distname = c("normal"), gamma = 0, 
+          delta = 0, alpha = 1, theta = NULL)
+qqLambertW(y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, 
+           distname = c("normal"), plot.it = TRUE, theta = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -75,7 +82,7 @@ Goerg, G.M. (2011b). \dQuote{The Lambert Way to Gaussianize skewed, heavy-tailed
 ###############################
 ######### mLambertW ###########
 mLambertW(beta = c(0,1), gamma = 0.1)
-mLambertW(gamma=0.1) # the same as by default: mean=0, standard deviation =1
+mLambertW(gamma=0.1) # the same as by default: mean=0, std dev=1
 mLambertW(beta = c(1,1), gamma = 0.1) # mean shifted by 1
 mLambertW(gamma=0) # N(0,1)
 
@@ -109,7 +116,7 @@ aux.dlambert=function(y){
 dLambertW(y, beta=beta.s, gamma = gamma.s, distname="normal")
 }
 
-x11(width=10, height=5)
+dev.new(width=10, height=5)
 par(mfrow=c(1,2), mar=c(3,3,3,1))
 plot(aux.dlambert, -3.5,5, ylab="", main="Density function")
 plot(dnorm, -3.5,5, add=TRUE, lty=2)
@@ -135,16 +142,22 @@ a = support(gamma_01(max(gamma.v)))[1]*1.1
 
 for (ii in 1:length(gamma.v)) {
 aux.dlambert=function(y){
-dLambertW(y, beta = gamma_01(gamma.v[ii])[1:2], gamma = gamma.v[ii], distname="normal") # zero-mean, unit variance for all gamma
-#dLambertW(y, beta = c(0,1), gamma = gamma.v[ii], distname="normal") # mean and variance change with gamma; only for gamma=0: mean=0, sd=1
+ # zero-mean, unit variance for all gamma
+dLambertW(y, beta = gamma_01(gamma.v[ii])[1:2], gamma = gamma.v[ii], 
+          distname="normal")
+# mean and variance change with gamma; only for gamma=0: mean=0, sd=1
+#dLambertW(y, beta = c(0,1), gamma = gamma.v[ii], 
+#           distname="normal") 
 }
 
-plot(aux.dlambert, a,b, ylab="", lty=2, col=2, lwd=2, main="pdf", ylim = c(0,0.45))
+plot(aux.dlambert, a,b, ylab="", lty=2, col=2, lwd=2, main="pdf", 
+    ylim = c(0,0.45))
 plot(dnorm, a,b, add=TRUE, lty=1, lwd=2)
-legend("topright" , c("Lambert W x Gaussian" , "Gaussian"), lty=2:1, lwd=2, col=2:1)
+legend("topright" , c("Lambert W x Gaussian" , "Gaussian"), 
+        lty=2:1, lwd=2, col=2:1)
 abline(h=0)
-legend("topleft", cex=1.3, c(as.expression(bquote(gamma == .(round(gamma.v[ii],3))))))
-Sys.sleep(0.05)
+legend("topleft", cex=1.3, 
+       c(as.expression(bquote(gamma == .(round(gamma.v[ii],3))))))
 }
 
 ###############################
@@ -153,16 +166,20 @@ Sys.sleep(0.05)
 p.v=c(0.01, 0.05, 0.5, 0.9, 0.95,0.99)
 
 qnorm(p.v)
-qLambertW(p.v, beta = c(0,1), distname="normal", gamma = 0, delta = 0, alpha = 1) # the same as above except for numerical rounding errors; will be improved in future versions.
+# the same as above except for numerical rounding errors
+# To be improved in future versions
+qLambertW(p.v, beta = c(0,1), distname="normal", 
+          gamma = 0, delta = 0, alpha = 1) 
 
 # positively skewed data -> quantiles are higher
-qLambertW(p.v, beta = c(0,1), distname="normal", gamma = 0.1, delta = 0, alpha = 1)
+qLambertW(p.v, beta = c(0,1), distname="normal", 
+          gamma = 0.1, delta = 0, alpha = 1)
 
 ###############################
 ######### qqLambertW ###########
 
 y=rLambertW(n=500, distname="normal", beta = c(0,1), gamma = 0.1)
-x11(height=6, width=9)
+dev.new(height=6, width=9)
 par(mfrow=c(1,2), mar=c(4,4,3,1))
 qqnorm(y)
 qqline(y)

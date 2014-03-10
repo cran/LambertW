@@ -26,7 +26,9 @@ The 3-dimensional vector (\eqn{\mu_x(\delta)}, \eqn{\sigma_x(\delta)}, \eqn{\del
 
 \examples{
 delta_01(0)	# for delta = 0, input == output, therefore (0,1,0)
-delta_01(0.1)  	# delta > 0 (heavy-tails skewed): since Y is symmetric for all delta: mean = 0; however, sd must be smaller now 
+# delta > 0 (heavy-tails skewed): since Y is symmetric for all delta: mean = 0; 
+# however, sd must be smaller now 
+delta_01(0.1)  	
 delta_01(1/3) # only moments up to order 2 exist
 delta_01(1) # variance does not exist anymore for this delta, thus NaN
 }

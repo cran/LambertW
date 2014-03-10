@@ -8,7 +8,9 @@ This function minimizes the Euclidean distance between the theoretical skewness 
 A robust measure of the asymmetry can also be used (see MedCouple estimator: \code{\link{mc}}).
   }
 \usage{
-gamma_GMM(z, skewness_x = 0,gamma.0 = gamma_Taylor(z), robust = FALSE, tol=.Machine$double.eps^0.25, restricted = FALSE) 
+gamma_GMM(z, skewness_x = 0,gamma.0 = gamma_Taylor(z), 
+          robust = FALSE, tol=.Machine$double.eps^0.25, 
+          restricted = FALSE) 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -31,7 +33,8 @@ A list with two elements:
 
 \examples{
 set.seed(1)
-y = rLambertW(n=1000, beta = c(1,2), gamma = 0.1, distname="normal") ## very highly skewed
+## very highly skewed
+y = rLambertW(n=1000, beta = c(1,2), gamma = 0.1, distname="normal") 
 
 gamma_GMM(y) # after the first iteration
 IGMM(y)$theta # after the final iteration; conversion has been reached.

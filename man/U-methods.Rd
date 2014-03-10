@@ -37,9 +37,11 @@ Goerg, G.M. (2011a). \dQuote{Lambert W Random Variables - A New Family of Genera
 
 \examples{
 # a zero-mean, unit variance version of the t_3 distribution.
-plot(seq(-4, 4, length = 100),dU(seq(-4, 4, length = 100), beta = c(1,1,3), distname = "t"), type="l")
-# the cdf of the unit-variance version of an exp(3) -> just an exp(1)
-plot(seq(0, 4, length = 100),pU(seq(0, 4, length = 100), beta = 3, distname = "exp"), type="l") 
+plot(seq(-4, 4, length = 100),dU(seq(-4, 4, length = 100), 
+     beta = c(1,1,3), distname = "t"), type="l")
+# cdf of the unit-variance version of an exp(3) -> just an exp(1)
+plot(seq(0, 4, length = 100),pU(seq(0, 4, length = 100), 
+     beta = 3, distname = "exp"), type="l") 
 
 # all have variance 1
 var(rU(n = 1000, distname = "chisq", beta = 2))

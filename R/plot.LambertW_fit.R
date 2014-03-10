@@ -90,7 +90,7 @@ if (x$type == "s"){
 }
 
 if (QQ) {
-	x11()
+  dev.new()
 	if (x$type == "s") qqLambertW(y, beta = x$beta, gamma = x$theta$gamma, distname=x$distname)
 	if (any(x$type == c("h", "hh"))) qqLambertW(y, beta = x$beta, delta = x$theta$delta, distname=x$distname)
 }

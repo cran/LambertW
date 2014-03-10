@@ -12,8 +12,12 @@ For \code{type = "s"} the paramter \eqn{\gamma} is estimated and \eqn{\delta = 0
 By default \eqn{\alpha = 1} is fixed for any \code{type}. If you want to also estimate \eqn{\alpha} from the data pass \code{fixed_theta = list()} to \code{MLE_LambertW}.
 }
 \usage{
-MLE_LambertW(y, distname = c("normal"), type = "s", theta.0 = list(), fixed_theta = list(alpha = 1), hessian = TRUE, estimate_only = FALSE) 
-\method{MLE_LambertW}{default}(y, distname = c("normal"), type = "s", theta.0 = list(), fixed_theta = list(alpha = 1), hessian = TRUE, estimate_only = FALSE)
+MLE_LambertW(y, distname = c("normal"), type = "s", 
+             theta.0 = list(), fixed_theta = list(alpha = 1), 
+             hessian = TRUE, estimate_only = FALSE) 
+\method{MLE_LambertW}{default}(y, distname = c("normal"), 
+                 type = "s", theta.0 = list(), fixed_theta = list(alpha = 1),
+                 hessian = TRUE, estimate_only = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -57,7 +61,8 @@ fit.ml=MLE_LambertW(y, type="s")    # skewed only
 summary(fit.ml)
 plot(fit.ml)
 
-fit.ml = MLE_LambertW(y, type="hh") # skewed heavy-tails (not too good fit because delta_l = 0)
+# skewed heavy-tails (not too good as delta_l = 0)
+fit.ml = MLE_LambertW(y, type="hh") 
 plot(fit.ml)
 
 }

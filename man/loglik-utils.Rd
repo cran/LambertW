@@ -18,11 +18,13 @@ The log-likelihood of Lambert W \eqn{\times} \eqn{F} RVs in most cases decompose
 \code{theta2params} and \code{params2theta} are internal functions that are used to simplify the conversion between the list-type \code{theta} and the vector-style argument of all optimization routines (which all require a vector-type argument of the function to be optimized).
 }
 \usage{
-loglik_input(beta = NULL, x = NULL, distname = "normal", f_X = NULL, logf_X = function(x) log(f_X(x)))
+loglik_input(beta = NULL, x = NULL, distname = "normal", f_X = NULL, 
+logf_X = function(x) log(f_X(x)))
 loglik_penalty(theta, y = NULL, type = "h", distname = "normal")
 theta2params(theta)
 params2theta(params, distname="normal", type ="h")
-loglik_LambertW(theta, y = NULL, distname = "normal", type = "h", return.neg.value = FALSE)
+loglik_LambertW(theta, y = NULL, distname = "normal", type = "h", 
+return.neg.value = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -64,16 +66,23 @@ Goerg, G.M. (2011b). \dQuote{The Lambert Way to Gaussianize skewed, heavy-tailed
 ###
 set.seed(1)
 yy = rLambertW(n = 1000, beta = c(0,1), delta = 0.2)
-loglik_penalty(list(beta = c(1,1), delta = c(0.2,0.2)), y = yy, type = "hh", distname = "normal")
-loglik_penalty(list(beta = c(1,1), delta = c(0.2), gamma = 0.03), y = yy, type = "h", distname = "normal") # here such a decomposition doesn't exist; thus NA
+loglik_penalty(list(beta = c(1,1), delta = c(0.2,0.2)), y = yy, 
+              type = "hh", distname = "normal")
+# here such a decomposition doesn't exist; thus NA
+loglik_penalty(list(beta = c(1,1), delta = c(0.2), gamma = 0.03), y = yy, 
+               type = "h", distname = "normal") 
 
 ### computing the Gaussian log-likelihood
 loglik_input(beta = c(0,1), x = yy, distname = "normal") # built-in version
 
-loglik_input(beta = c(0,1), x = yy, distname = "user", logf_X = function(xx, beta = beta) dnorm(xx, mean = beta[1], sd = beta[2], log = TRUE)) # or defining it yourself
+ # or defe it yourself
+loglik_input(beta = c(0,1), x = yy, distname = "user", 
+             logf_X = function(xx, beta = beta) 
+                   dnorm(xx, mean = beta[1], sd = beta[2], log = TRUE))
 
 ### loglik_LambertW
-loglik_LambertW(theta = list(beta = c(1,1), delta = c(0.09,0.07)), y = yy, type = "hh", distname ="normal") # all three
+loglik_LambertW(theta = list(beta = c(1,1), delta = c(0.09,0.07)), 
+                y = yy, type = "hh", distname ="normal") # all three
 
 }
 

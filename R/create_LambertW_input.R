@@ -8,9 +8,9 @@ function (distname = NULL, beta = NULL, beta2tau = NULL, dU = NULL, pU = NULL, r
         beta2tau_temp = function(beta) c(beta[1], beta[2], 0, 0, 1)
     } else {
       dU_temp = function(u) dU(u, beta = beta, distname = distname)
-      rU_temp = function(u) rU(u, beta = beta, distname = distname)
+      rU_temp = function(n) rU(n, beta = beta, distname = distname)
       pU_temp = function(u) pU(u, beta = beta, distname = distname)
-      qU_temp = function(u) qU(u, beta = beta, distname = distname)
+      qU_temp = function(p) qU(p, beta = beta, distname = distname)
       beta2tau_temp = function(beta) beta2tau(beta = beta, distname = distname)
     }
 

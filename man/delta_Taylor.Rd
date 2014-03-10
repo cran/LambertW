@@ -39,12 +39,18 @@ Since the kurtosis is only defined for \eqn{\delta < 1/4}, the output of \code{d
 \examples{
 set.seed(2)
 
-y = rLambertW(n=1000, beta=c(0,1), delta = 0.2) ## a little heavy-tailed (kurtosis does exist)
-delta_Taylor(y) # initial estimate is good because true delta = 0.2 close to 0, and empirical kurtosis well-defined.
+# a little heavy-tailed (kurtosis does exist)
+y = rLambertW(n=1000, beta=c(0,1), delta = 0.2)
+# initial estimate is good because true delta = 0.2 close to 0 
+# and empirical kurtosis well-defined
+delta_Taylor(y)
 delta_GMM(y) # best estimate
 
-y = rLambertW(n=1000, beta=c(0,1), delta = 1) ## very heavy-tails (like a Cauchy)
-delta_Taylor(y) # initial estimate very bad, because delta = 1 far from 0, and empirical kurtosis not well defined
+# very heavy-tails (like Cauchy)
+y = rLambertW(n=1000, beta=c(0,1), delta = 1) 
+# initial estimate very bad, because delta = 1 far from 0,
+# and empirical kurtosis not well defined
+delta_Taylor(y) 
 delta_GMM(y) # best estimate
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

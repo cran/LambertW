@@ -24,15 +24,10 @@ function(x, a = NULL, b = NULL,...){
   y.lim_d = c(0,min(1,y.lim_d[2]))
   }
   
-  
-  op = par(no.readonly=TRUE)
-  dev.off()
-  x11(height=4, width = 9)
   par(mfrow=c(1,2), mar=c(4,4,3,1))
   # pdf plot
   plot(obj$dX(),a,b, lwd=1, main = obj$distname_with_beta, ylab="pdf", xlab = "x", ylim = y.lim_d)
   abline(v = tau[1], lty=2)
   # cdf plot
   plot(obj$pX(),a,b, lwd=1, main = obj$distname_with_beta, ylab="cdf", xlab = "x", ylim = y.lim_p)
-  par(op)
 }

@@ -45,9 +45,6 @@ function(x, a = NULL, b = NULL,...){
     y.lim_d = c(0,min(1,y.lim_d[2]))
   }
   
-  op = par(no.readonly=TRUE)
-  dev.off()
-  x11(height=5, width = 9)
   par(mfrow=c(1,2), mar=c(4.5,4,3,1))
   # pdf plot
   plot(obj$dY(obj$theta),a,b, lwd=2, lty=2, col=2, main = obj$distname_with_beta, ylab="pdf", xlab = "y", 
@@ -98,6 +95,6 @@ function(x, a = NULL, b = NULL,...){
   
   #legend("bottomright", c(as.expression(bquote(gamma == .(round(obj$theta$gamma,3)))),
   #as.expression(bquote(delta == .(round(obj$theta$delta,3))))))
-  par(op)
+
 
 }

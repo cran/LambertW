@@ -26,7 +26,9 @@ The 3-dimensional vector (\eqn{\mu_x(\gamma)}, \eqn{\sigma_x(\gamma)},\eqn{\gamm
 
 \examples{
 gamma_01(0)	# for gamma = 0, input == output, therefore (0,1,0)
-gamma_01(0.1)  	# gamma>0 (positively skewed): input mean must be slightly negative to get a zero-mean output
+# gamma>0 (positively skewed): input mean must be slightly negative 
+# to get a zero-mean output
+gamma_01(0.1) 
 gamma_01(1)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

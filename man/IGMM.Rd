@@ -9,8 +9,14 @@ An iterative methods of moments estimator finds this \eqn{\tau = (\mu_x, \sigma_
 For details of the Algorithm see the References.
 }
 \usage{
-IGMM(y,type="s", skewness_x = 0,  kurtosis_x = 3, tau.0 = c(median(y), sd(y), gamma_Taylor(y), delta_Taylor(y)), robust = FALSE, tol = .Machine$double.eps^0.25, location_family = TRUE, restricted = NULL)
-\method{IGMM}{default}(y, type="s", skewness_x = 0, kurtosis_x = 3, tau.0 = c(median(y), sd(y), gamma_Taylor(y), delta_Taylor(y)), robust = FALSE, tol = .Machine$double.eps^0.25, location_family = TRUE, restricted = NULL)
+IGMM(y,type="s", skewness_x = 0,  kurtosis_x = 3, 
+     tau.0 = c(median(y), sd(y), gamma_Taylor(y), delta_Taylor(y)), 
+     robust = FALSE, tol = .Machine$double.eps^0.25, 
+     location_family = TRUE, restricted = NULL)
+\method{IGMM}{default}(y, type="s", skewness_x = 0, kurtosis_x = 3, 
+       tau.0 = c(median(y), sd(y), gamma_Taylor(y), delta_Taylor(y)), 
+       robust = FALSE, tol = .Machine$double.eps^0.25, 
+       location_family = TRUE, restricted = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

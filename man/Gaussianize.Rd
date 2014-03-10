@@ -36,7 +36,10 @@ start_from = 20
 y_cum_avg = (cumsum(y1)/(1:length(y1)))[-c(1:start_from)]
 x_cum_avg = (cumsum(x1)/(1:length(x1)))[-c(1:start_from)]
 
-plot(c((start_from+1): length(y1)),y_cum_avg, type="l" , lwd = 2, main="Central limit theoreom in practice", xlab = "n", ylab="Cumulative sample average", ylim = c(min(y_cum_avg, x_cum_avg), max(y_cum_avg, x_cum_avg)))
+plot(c((start_from+1): length(y1)),y_cum_avg, type="l" , lwd = 2, 
+     main="Central limit theoreom in practice", xlab = "n", 
+     ylab="Cumulative sample average", 
+      ylim = c(min(y_cum_avg, x_cum_avg), max(y_cum_avg, x_cum_avg)))
 lines(c((start_from+1): length(y1)), x_cum_avg, col=2, lwd=2)
 abline(h = 0)
 

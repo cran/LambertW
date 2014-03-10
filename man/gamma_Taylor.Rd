@@ -40,7 +40,9 @@ As the Taylor approximation is only good in a neighborhood of \eqn{\gamma = 0}, 
 set.seed(2)
 
 yy = rLambertW(n=1000, beta=c(0,1), gamma = 0.1) ## a little skewness
-gamma_Taylor(yy) # initial estimate is good because true delta = 0.2 close to 0, and empirical kurtosis well-defined.
+# initial estimate is good because true delta = 0.2 close to 0, 
+# and empirical kurtosis well-defined.
+gamma_Taylor(yy) 
 gamma_GMM(yy) # best estimate
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

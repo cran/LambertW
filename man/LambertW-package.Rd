@@ -45,7 +45,9 @@ fit.gmm=IGMM(y, type="s")
 summary(fit.gmm) # gamma is significant and positive
 plot(fit.gmm)
 # Comparison of estimated theoretical and sample moments
-TAB = rbind(rbind(mLambertW(beta = fit.gmm$tau[1:2], gamma = fit.gmm$tau["gamma"], distname="normal")), cbind(mean(y), sd(y), skewness(y), kurtosis(y)))
+TAB = rbind(rbind(mLambertW(beta = fit.gmm$tau[1:2], 
+                  gamma = fit.gmm$tau["gamma"], distname="normal")), 
+           cbind(mean(y), sd(y), skewness(y), kurtosis(y)))
 rownames(TAB) = c("Theoretical (IGMM)", "Sample")
 TAB
 
@@ -72,8 +74,10 @@ fit.SMI=IGMM(R[,"SMI"], type="s")
 summary(fit.SMI) ## negative but small gamma
 
 x = get.input(R[,"SMI"], fit.SMI$tau)
-normfit(x, vol = TRUE) # symmetric, but still not normal -> try a skewed Lambert W x t distribution
+normfit(x, vol = TRUE) # symmetric, but still not normal 
+# -> try a skewed Lambert W x t distribution
 
+\dontrun{
 ## MLE for skewed Lambert W x t
 fitMLt.SMI = MLE_LambertW(R[,"SMI"], distname = "t", type="s")
 summary(fitMLt.SMI)
@@ -93,7 +97,7 @@ summary(fitMLhh.SMI)
 plot(fitMLhh.SMI)
 x = get.input(R[,"SMI"], tau = fitMLhh.SMI$tau)
 normfit(x) # Gaussianized the returns
-
+}
 
 }
 

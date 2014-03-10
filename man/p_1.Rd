@@ -54,13 +54,19 @@ p_1(0) # this probability is identical to 0
 p_1(0.01) # in theory not identical to 0; but machine precision too low
 p_1(0.05) # extremely small
 p_1(0.1) # not 0, but very small; gamma = 0.1 typical value for sample data
-p_1(1.5) # 1 out of 4 samples is a non-principal input; however, gamma=1.5 is not common in practice
+
+# 1 out of 4 samples is a non-principal input
+# however, gamma=1.5 is not common in practice
+p_1(1.5)
 
 # for n=100 observations
 p_1(0, n=100) # this probability is identical to 0
 p_1(0.1, n=100) # still small
 p_1(0.3, n=100) # a bit more likely
-p_1(1.5, n=100) # we can be almost 100% sure (rounding errors) that at least one of the y_i observations was caused by 			# an input in the non-principal branch
+# we can be almost 100% sure (rounding errors) that at least one of 
+# the y_i observations was caused by an input 
+# in the non-principal branch
+p_1(1.5, n=100) 
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

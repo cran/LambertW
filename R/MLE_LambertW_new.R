@@ -45,6 +45,8 @@ function(y = NULL, distname = "normal", type = "s",
       return(-loglik_LambertW(theta = theta, y = yy, type = type, 
           distname = distname)$loglik_LambertW)
   }
+  
+
   if (optimization == "nlm") {
     fit = suppressWarnings(nlm(f = aux_loglik, p = out$params.0, 
                                yy = yy, type = type, distname = distname, 
