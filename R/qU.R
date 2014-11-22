@@ -1,29 +1,46 @@
-qU <-
-function (p, beta = NULL, distname = c("normal")) 
-{
-    if (distname == "cauchy"){
-    	qU = function(p) qcauchy(p)
-	}
-    if (distname == "chisq") {
-	ss = sqrt(2 * beta)
-        qU = function(p) qchisq(p, df = beta)/ss
-    }
-    if (distname == "exp") {
-        qU = function(p) qexp(p)
-    }
-    if (distname == "gamma"){
-      qU = function(p) pgamma(p, shape = beta[1], rate = sqrt(1/beta[1])) 
-    }
-    if (distname == "normal") {
-        qU = function(p) qnorm(p)
-    }
-    if (distname == "t") {
-        ss = beta2tau(beta, distname=distname)[2]
-        qU = function(p) qt(p, df = beta[3])/ss
-    }
-    if (distname == "unif") {
-        qU = function(p) qunif(p, -sqrt(12)/2, sqrt(12)/2)
-    }
+#' @rdname U-utils
+#' @export
+qU <- function(p, beta, distname) {
 
-    return(qU(p))
-}
+  check_distname(distname)
+  names(beta) <- get_beta_names(distname)
+  check_beta(beta, distname = distname)
+  
+  sigma.x <- beta2tau(beta, distname)["sigma_x"]
+  switch(distname,
+         cauchy = {
+           qU <- function(p) qcauchy(p)
+         },
+         chisq = {
+           qU <- function(p) qchisq(p, df = beta) / sigma.x
+         },
+         exp = {
+           qU <- function(p) qexp(p)
+         },
+         "f" = {
+           qU <- function(p) qf(p, beta[1], beta[2]) / sigma.x
+         },
+         gamma = {
+           qU <- function(p) qgamma(p, shape = beta["shape"], scale = beta["scale"]) / sigma.x
+         },
+         laplace = {
+           #TODO
+         },
+         normal = {
+           qU <- function(p) qnorm(p)
+         },
+         t = {
+           if (beta["df"] <= 2) {
+             stop("'df' of t-distribution for location-scale Lambert W x t distributions must be ",
+                  " larger than 2.")
+           }
+           ss <- sigma.x / beta["scale"]
+           names(ss) <- NULL
+           qU <- function(p) qt(p, df = beta["df"]) / ss
+         }, 
+         unif = {
+           qU <- function(p) qunif(p, -sqrt(3), sqrt(3))
+         }
+  )  
+  return(qU(p))
+} 

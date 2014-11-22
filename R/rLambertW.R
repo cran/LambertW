@@ -1,32 +1,57 @@
-rLambertW <-
-function(n = 1000, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = "normal", return.input = FALSE, input.U = NULL, theta = NULL){
-  if (!is.null(theta)){
-    theta = complete_theta(theta)
-    
-    alpha = theta$alpha
-    beta = theta$beta
-    gamma = theta$gamma
-    delta = theta$delta
-  }
-
-  check_theta(alpha = alpha, gamma = gamma, delta=delta, beta=beta, distname=distname)
+#' @rdname LambertW-utils
+#' @export
+rLambertW <- function(n, distname, theta = NULL, beta = NULL, gamma = 0, delta = 0, alpha = 1, 
+                      return.x = FALSE, input.u = NULL, tau = NULL) {
   
-  tau = beta2tau(beta, distname = distname, gamma = gamma, delta = delta)
-  if (is.null(input.U)) uu  = rU(n = n, beta = beta, distname=distname)
-  else uu = input.U
+  stopifnot(n > 0)
   
-  xx = uu * tau[2] + tau[1]
-  zz = uu
-  if (any(delta != 0)){
-  	if (length(delta) == 1) delta = c(delta, delta)
-  	zz[uu<0] = uu[uu<0] * exp(1/2*delta[1] * (uu[uu<0]^2)^alpha)
-  	zz[uu>=0] = uu[uu>=0] * exp(1/2*delta[2] * (uu[uu>=0]^2)^alpha)
+  if (is.null(theta)) {
+    theta <- list(beta = beta, alpha = alpha, gamma = gamma, delta = delta)
+  } 
+  theta <- complete_theta(theta)
+  
+  if (is.null(input.u)) {
+    check_distname(distname)
+    check_theta(theta = theta, distname = distname)
+    tau <- theta2tau(theta = theta, distname = distname)
+    uu <- rU(n = n, beta = theta$beta, distname = distname)
+  } else {
+    if (is.numeric(input.u)) {
+      uu <- input.u
+    } else if (is.function(input.u)) {
+      uu <- input.u(n = n, beta = theta$beta)
+    } else {
+      stop("'input.u' must be either numeric (simulated U values); or a function 
+           that draws a random sample from U.")
+    }
+    if (is.null(tau)) {
+      stop("You must provide a 'tau' argument if 'input.u' is not NULL.")
+    }
   }
-  if (gamma != 0){
-  zz = uu * exp(gamma * uu)
+  check_tau(tau)
+  
+  type.tmp <- tau2type(tau)
+  xx <- uu * tau["mu_x"] + tau["sigma_x"]
+  
+  if (all(tau[grepl("delta", names(tau))] == 0) && all(tau[grepl("alpha", names(tau))] == 1) && 
+        tau["gamma"] == 0) {
+    zz <- uu
+  } else if (type.tmp == "h") {
+      zz <- G_delta_alpha(uu, delta = tau["delta"], alpha = tau["alpha"])
+  } else if (type.tmp == "hh") {
+      zz <- G_2delta_2alpha(uu, delta = tau[grepl("delta", names(tau))], 
+                            alpha = tau[grepl("alpha", names(tau))])
+  } else if (type.tmp == "s") {
+    zz <- H_gamma(uu, tau["gamma"])
+  } else {
+    stop("Something went wrong with the type of the distribution.")
   }
-  yy = zz * tau[2] + tau[1]
-  names(yy) = NULL
-  if (return.input) return( list(x = xx, y = yy) )
-  else return(yy)
-}
+  
+  yy <- zz * tau["sigma_x"] + tau["mu_x"]
+  names(yy) <- NULL
+  if (return.x) {
+    return(list(x = xx, y = yy)) 
+  } else {
+    return(yy)
+  }
+} 

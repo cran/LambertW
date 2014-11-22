@@ -1,36 +1,58 @@
-loglik_LambertW <-
-function(theta, y = NULL, distname = "normal", 
-                                type = "h", return.neg.value = FALSE) {
-  yy = y
-  theta = complete_theta(theta)
-  if (any(type == c("h", "hh"))) {
-    tau = beta2tau(theta$beta, delta = theta$delta, distname = distname)
+#' @rdname loglik-LambertW-utils
+#' @description
+#' \code{loglik_LambertW} computes the log-likelihood of \eqn{\theta}
+#' for a Lambert W \eqn{\times} F distribution given observations \code{y}.
+#' 
+#' @param return.negative logical; if \code{TRUE} it returns the
+#' negative log-likelihood as a scalar (which is useful for numerical \emph{minization}
+#' algorithms that do \emph{maximum} likelihood estimation); otherwise it returns a 
+#' list of input log-likelihood, penalty, and their sum = full likelihood. Default: \code{FALSE}.
+#' @param flattened.theta.names vector of strings with names of flattened \code{theta};
+#' this is necessary for optimization functions since they drop the names of a vector, 
+#' but all functions in this package use names to address specific elements of 
+#' (the flattened) \code{theta}.
+#' @export
+loglik_LambertW <- function(theta, y, distname, type, 
+                            return.negative = FALSE,
+                            flattened.theta.names = names(theta)) {
+  
+  stopifnot(is.numeric(y))
+  check_distname(distname)
+  
+  if (is.numeric(theta)) {
+    names(theta) <- flattened.theta.names
+    theta <- unflatten_theta(theta, distname = distname, type = type) 
   }
-  if (type == "s") { 
-    tau = beta2tau(theta$beta, gamma = theta$gamma, distname = distname)
-  }
-  zz = (yy - tau[1])/tau[2]
-  if (any(type == c("h", "hh"))) {
-    uu = W_2delta(zz, delta = theta$delta)
+  tau <- theta2tau(theta, distname = distname)
+
+  yy <- y
+  xx <- get_input(yy, tau = tau)
+  
+  dist.family <- get_distname_family(distname)
+  is.non.negative <- FALSE
+  if (!dist.family$location && dist.family$scale) {
+    is.non.negative <- TRUE
   }
   if (type == "s") {
-    uu = W_gamma(zz, gamma = theta$gamma)
+    if (is.non.negative) {
+      out <- list(loglik.input = loglik_input(beta = theta$beta, x = xx, distname = distname),
+                  loglik.penalty = loglik_penalty(tau = tau, y = yy, type = type, 
+                                                  is.non.negative = is.non.negative))
+      out$loglik.LambertW <- out$loglik.input + out$loglik.penalty
+    } else {
+      out <- list(loglik.input = NA,
+                  loglik.penalty = NA,
+                  loglik.LambertW = sum(log(dLambertW(yy, distname = distname, theta = theta))))
+    }
+  } else if (type %in% c("h", "hh")) {
+    out <- list(loglik.input = loglik_input(beta = theta$beta, x = xx, distname = distname),
+                loglik.penalty = loglik_penalty(tau = tau, y = yy, type = type,
+                                                is.non.negative = is.non.negative))
+    out$loglik.LambertW <- out$loglik.input + out$loglik.penalty
   }
-  xx = uu * tau[2] + tau[1]
-  out = list()
-  if (any(distname == c("t", "normal", "cauchy", "unif")) &
-      type == "s" &
-      theta$gamma != 0) {
-        out$loglik_input = NA
-        out$loglik_penalty = NA
-        out$loglik = sum(log(dLambertW(yy, distname = distname, theta = theta)))
-  } else {
-    out$loglik_input = loglik_input(beta = theta$beta, x = xx, distname = distname)
-    out$loglik_penalty = loglik_penalty(theta = theta, y = y, distname = distname, type = type)
-    out$loglik_LambertW = out$loglik_input + out$loglik_penalty
-  }
-  if (return.neg.value) {
-    return(-out$loglik_LambertW)
+  
+  if (return.negative) {
+    return(-out$loglik.LambertW)
   } else {
     return(out)
   }

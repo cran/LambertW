@@ -1,31 +1,42 @@
-dU <-
-function (u, beta = NULL, distname = c("normal")) 
-{
-    if (distname == "cauchy") {
-        fU = function(u) dcauchy(u)
-    }
-    if (distname == "chisq") {
-	sigma_x = sqrt(2 * beta)
-        fU = function(u) dchisq(u*sigma_x, df = beta)*sigma_x
-    }
-    if (distname == "exp") {
-        fU = function(u) dexp(u)
-    }
-    if (distname == "gamma") {
-        fU = function(u) dgamma(u, shape = beta[1], rate = sqrt(beta[1]))
-    }
-    #if (distname == "laplace"){
-#	fU = function(u) dlaplace(u, 0, 1/sqrt(2))
- #   }
-    if (distname == "normal") {
-        fU = function(u) dnorm(u)
-    }
-    if (distname == "t") {
-        sigma_x = sqrt(beta[3]/(beta[3]-2))
-        fU = function(u) dt(u*sigma_x, df = beta[3])*sigma_x
-    }
-    if (distname == "unif") {
-        fU = function(u) dunif(u, -sqrt(12)/2, sqrt(12)/2)
-    }
-    return(fU(u))
-}
+#' @rdname U-utils
+#' @export
+dU <- function(u, beta, distname) {
+  check_distname(distname)
+  names(beta) <- get_beta_names(distname)
+  check_beta(beta, distname)
+  
+  sigma.x <- beta2tau(beta, distname)["sigma_x"]
+  
+  switch(distname,
+         cauchy = {
+           fU <- function(u) dcauchy(u)
+         }, 
+         chisq = {
+           fU <- function(u) dchisq(u * sigma.x, df = beta) * sigma.x
+         },
+         exp = {
+           fU <- function(u) dexp(u, rate = 1)
+         },
+         "f" = {
+           fU <- function(u) df(u * sigma.x, beta[1], beta[2]) * sigma.x
+         },
+         gamma = {
+           fU <- function(u) dgamma(u * sigma.x, shape = beta["shape"], 
+                                    scale = beta["scale"]) * sigma.x
+         },
+         # laplace = {
+         #   fU = function(u) dlaplace(u, 0, 1/sqrt(2))
+         # },
+         normal = {
+           fU <- function(u) dnorm(u)
+         },
+         t = {
+           ss <- sigma.x / beta["scale"]
+           names(ss) <- NULL
+           fU <- function(u) dt(u * ss, df = beta["df"]) * ss
+         },
+         unif = {
+           fU <- function(u) dunif(u, -sqrt(3), sqrt(3))
+         })
+  return(fU(u))
+} 

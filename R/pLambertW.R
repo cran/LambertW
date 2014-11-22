@@ -1,70 +1,90 @@
-pLambertW <-
-function (q, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL, theta = NULL) 
-{
-  if (!is.null(theta)){
-    theta = complete_theta(theta)
-    
-    alpha = theta$alpha
-    beta = theta$beta
-    gamma = theta$gamma
-    delta = theta$delta
-  }  
+#' @rdname LambertW-utils
+#' @param lower.tail logical; if \code{TRUE}, probabilities are given as log(p).
+#' @export
+pLambertW <- function(q, distname, theta = NULL, beta = NULL, gamma = 0, delta = 0, alpha = 1, 
+                      input.u = NULL, tau = NULL, log = FALSE,
+                      lower.tail = FALSE) {
   
+  if (is.null(theta)) {
+    theta <- list(beta = beta, alpha = alpha, gamma = gamma, delta = delta)
+  } 
+  theta <- complete_theta(theta)
   
-  y = q
-  tau = beta2tau(beta, distname=distname, gamma=gamma, delta=delta)
-  mu_x = tau[1]
-  sigma_x = tau[2]
+  if (is.null(input.u)) {
+    check_distname(distname)
+    check_theta(theta = theta, distname = distname)
+    tau <- theta2tau(theta = theta, distname = distname)
+    FU <- function(u) pU(u, beta = theta$beta, distname = distname) 
+  } else {
+    FU <- input.u
+    if (is.null(tau)) {
+      stop("You must provide a 'tau' argument if 'input.u' is not NULL.")
+    }
+  }
+  y <- q
   
+  FX <- function(x) {
+    return(FU((x - tau["mu_x"])/tau["sigma_x"]))
+  }
   
-  if (is.null(input.U)) F_U = function(u) pU(u, beta=beta, distname=distname)
-  else F_U = input.U
+  type.tmp <- tau2type(tau)
+  if (all(tau[grepl("delta", names(tau))] == 0) && all(tau[grepl("alpha", names(tau))] == 1) && 
+        tau["gamma"] == 0) {
+    cum.probs <- FX(y)
+  } else {
+    # begin of else
+    G <- rep(NA, length(y))
+    z <- (y - tau["mu_x"])/tau["sigma_x"]
+    names(z) <- NULL
+    ## the heavy-tail version (if theta$delta != 0)
+    if (type.tmp == "h") {
+      u <- W_delta_alpha(z, delta = tau["delta"], alpha = tau["alpha"])
+      G <- FU(u)
+    } else if (type.tmp == "hh") {
+      ind.pos <- (z > 0)
+      theta.l <- list(beta = theta$beta, gamma = 0, 
+                      delta = tau["delta_l"], alpha = tau["alpha_l"])
+      theta.r <- list(beta = theta$beta, gamma = 0, 
+                      delta = tau["delta_r"], alpha = tau["alpha_r"])
+      G[!ind.pos] <- pLambertW(y[!ind.pos], theta = theta.r, distname = distname)
+      G[ind.pos] <- pLambertW(y[ind.pos], theta = theta.l, distname = distname)
+
+    } else if (type.tmp == "s") {
+      gamma.negative <- FALSE
+      if (tau["gamma"] < 0) {
+        y <- -y
+        tau["gamma"] <- -tau["gamma"]
+        tau["mu_x"] <- -tau["mu_x"]
+        gamma.negative <- TRUE
+      }
+      z <- (y - tau["mu_x"])/tau["sigma_x"]
+      names(z) <- NULL
+      r_0 <- W_gamma(z, gamma = tau["gamma"], branch = 0)
+      r_1 <- W_gamma(z, gamma = tau["gamma"], branch = -1)
+      x_0 <- r_0 * tau["sigma_x"] + tau["mu_x"]
+      x_1 <- r_1 * tau["sigma_x"] + tau["mu_x"]
+      
+      G_0 <- FX(x_0)
+      G_1 <- FX(x_0) - FX(x_1)
+      # G = G_0 * as.numeric(z >= 0) + G_1 * as.numeric(z < 0)
+      G[z >= 0] <- G_0[z >= 0]
+      G[z < 0] <- G_1[z < 0]
+      G[is.na((G < -1))] <- 0
+      if (gamma.negative) {
+        G <- 1 - G
+      }
+    }
+    cum.probs <- G
+  }  # end of else 
+  names(cum.probs) <- NULL
   
-  F_X = function(x) F_U((x - mu_x)/sigma_x)
+  if (lower.tail) {
+    cum.probs <- 1 - cum.probs
+  }
   
-  if (length(delta) == 1 && delta == 0 && gamma == 0) return(F_X(y))
-  else { # begin of else
-  G = rep(NA, length(y))
-  z = (y - mu_x)/sigma_x
-  names(z) = NULL
-  ## the heavy-tail version (if delta != 0)
-  if (any(delta !=0)){
-  	if (length(delta) == 1){
-  		u = W_delta_alpha(z, delta=delta, alpha = alpha)
-  		G = F_U(u)
-  	}
-  	if (length(delta) == 2){
-  		ind.pos = (z > 0)
-  		if (length(alpha) == 1) alpha = c(alpha, alpha)
-  		G[ind.pos] = pLambertW(y[ind.pos], beta=beta, gamma = 0, delta=delta[2], alpha = alpha[2], distname=distname)
-  		G[!ind.pos] = pLambertW(y[!ind.pos], beta=beta, gamma = 0, delta=delta[1], alpha = alpha[1], distname=distname)	
-  	}
-  } # end of "if (any(delta !=0))"
-  if (any(gamma != 0)){
-  gamma_negative = FALSE
-  	if (gamma < 0) {
-          	y = -y
-          	gamma = -gamma
-          	mu_x = -mu_x
-  		gamma_negative = TRUE
-      	}
-  	z = (y - mu_x)/sigma_x
-  	names(z) = NULL
-  	r_0 = W_gamma(z, gamma = gamma)
-      	r_1 = W_gamma_1(z, gamma = gamma)
-      	x_0 = r_0 * sigma_x + mu_x
-      	x_1 = r_1 * sigma_x + mu_x
-  
-        G_0 = F_X(x_0)
-        G_1 = F_X(x_0) - F_X(x_1)
-        #G = G_0 * as.numeric(z >= 0) + G_1 * as.numeric(z < 0)
-  	G[z>=0] = G_0[z>=0] 
-  	G[z<0] = G_1[z<0]
-        G[is.na((G < -1))] = 0
-  	if (gamma_negative) G = 1 - G
-  } # end of "if (any(gamma != 0))"
-  
-  } # end of else 
-  names(G) = NULL
-  return(G)
-}
+  if (log) {
+    return(log(cum.probs))
+  } else {
+    return(cum.probs)
+  }
+} 

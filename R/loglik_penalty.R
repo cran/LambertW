@@ -1,46 +1,59 @@
-loglik_penalty <-
-function (theta, y = NULL, type = "h", distname = "normal") 
-{
-  yy = y
-  theta = complete_theta(theta)
-  if (any(type == c("h", "hh"))) {
-    tau = beta2tau(theta$beta, delta = theta$delta, distname = distname)
-  }
-  if (type == "s") {
-    tau = beta2tau(theta$beta, gamma = theta$gamma, distname = distname)
-  }
-  zz = (yy - tau[1])/tau[2]
-  if (type == "h") {
-    if (length(theta$delta) > 1) {
-      stop("'delta' must have length 1. For asymmetric model use 'type = 'hh' '.")
-    }
-    if (theta$delta == 0) {
-      return(0)
-    }
-    uu = W_delta((yy - tau[1])/tau[2], delta = theta$delta)
-    #penalty = sum(log(uu/zz) - log(1 + theta$delta * uu^2))
-    penalty = sum(-theta$delta/2 * uu^2 - log(1 + theta$delta * uu^2))
-  }
-  if (type == "hh") {
-    if (all(theta$delta == 0)){
-      return(0)
-    }
-    uu = W_2delta((yy - tau[1])/tau[2], delta = theta$delta)
-    ind = uu < 0
-    penalty = sum(-theta$delta[1]/2 * uu[ind]^2) + 
-              sum(-theta$delta[2]/2 * uu[!ind]^2) - 
-              sum(log(1 + theta$delta[1] * uu[ind]^2)) -
-              sum(log(1 + theta$delta[2] * uu[!ind]^2))
-  }
-  if (type == "s") {
-    if (theta$gamma == 0) {
-      return(0)
-    }
-    if (any(distname == c("exp", "chisq", "gamma", "F"))) {
-      penalty = sum(log(d1W(theta$gamma * zz)))
-    } else {
-      penalty = NA
-    }
-  }
+#' @rdname loglik-LambertW-utils
+#' @description
+#' \code{loglik_penalty} computes the penalty for transforming the data back to
+#' the input. Note that this penalty is independent of the distribution 
+#' specified by \code{distname}; it only depends on \eqn{\tau}.
+#' 
+#' If \code{type = "s"} then the penalty term exists if the distribution 
+#' \code{is.non.negative = TRUE} and \code{gamma >= 0}; otherwise, it returns \code{NA}.
+#' @param is.non.negative logical; tell the penalty function if the data is from 
+#' a non-negative distribution; 
+#' by default it sets it to \code{TRUE} if the distribution is not a location but a scale family. 
+#'  If \code{TRUE}, the penalty can be computed; otherwise, it returns \code{NA}.
+#' 
+#' @export
+loglik_penalty <- function(tau, y, type = c("h", "hh", "s"),
+                           distname = NULL,
+                           is.non.negative = get_distname_family(distname)$scale && 
+                             !get_distname_family(distname)$location) {
+  
+  stopifnot(is.numeric(y))
+  type <- match.arg(type)
+  yy <- y
+    
+  tau <- complete_tau(tau)
+  zz <- (yy - tau["mu_x"]) / tau["sigma_x"]
+  switch(type,
+         h = {
+           if (tau["delta"] == 0) {
+             penalty <- 0
+           } else {
+             uu <- W_delta(zz, delta = tau["delta"])
+             # penalty = sum(log(uu/zz) - log(1 + tau["delta * uu^2))
+             penalty <- sum(-tau["delta"]/2 * uu^2 - log(1 + tau["delta"] * uu^2))
+           }
+         },
+         hh = {
+           if (all(tau[grepl("delta", names(tau))] == 0)) {
+             penalty <- 0
+           } else {
+             uu <- W_2delta(zz, delta = tau[c("delta_l", "delta_r")])
+             ind <- (uu < 0)
+             penalty <- sum(-tau["delta_l"]/2 * uu[ind]^2) + sum(-tau["delta_r"]/2 * uu[!ind]^2) - 
+               sum(log(1 + tau["delta_l"] * uu[ind]^2)) - sum(log(1 + tau["delta_r"] * uu[!ind]^2))
+           }
+         },
+         s = {
+           if (tau["gamma"] == 0) {
+             penalty <- 0
+           } else {
+             if (is.non.negative) {
+               penalty <- sum(log(deriv_W(tau["gamma"] * zz, branch = 0)))
+             } else {
+               penalty <- NA
+             }
+           }
+         })
+
   return(penalty)
-}
+} 

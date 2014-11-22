@@ -1,67 +1,74 @@
-dLambertW <-
-function (y, beta = c(0,1), gamma = 0, delta = 0, alpha = 1, distname = c("normal"), input.U = NULL, theta = NULL) 
-{
-  if (!is.null(theta)){
-    theta = complete_theta(theta)
-    
-    alpha = theta$alpha
-    beta = theta$beta
-    gamma = theta$gamma
-    delta = theta$delta
+#' @rdname LambertW-utils
+#' @export
+dLambertW <- function(y, distname = NULL, theta = NULL, beta = NULL, gamma = 0, delta = 0, 
+                      alpha = 1, input.u = NULL, tau = NULL, log = FALSE) {
+  
+  if (is.null(theta)) {
+    theta <- list(beta = beta, alpha = alpha, gamma = gamma, delta = delta)
+  } 
+  theta <- complete_theta(theta)
+  
+  if (is.null(input.u)) {
+    check_distname(distname)
+    check_theta(theta = theta, distname = distname)
+    tau <- theta2tau(theta = theta, distname = distname)
+    fU <- function(u) dU(u, beta = theta$beta, distname = distname) 
+  } else {
+    fU <- input.u
+    if (is.null(tau)) {
+      stop("You must provide a 'tau' argument if 'input.u' is not NULL.")
+    }
   }
-  tau = beta2tau(beta, distname=distname, gamma=gamma, delta=delta, alpha = alpha)
-  mu_x = tau[1]
-  sigma_x = tau[2]
   
-  if (is.null(input.U)) f_U = function(u) dU(u, beta=beta, distname=distname)
-  else f_U = input.U
+  fX <- function(x) fU((x - tau["mu_x"])/tau["sigma_x"])/tau["sigma_x"]
   
-  f_X = function(x) f_U((x - mu_x)/sigma_x)/sigma_x
-  
-  if (all(delta == 0) && gamma == 0) {
-  g = f_X(y)
-  names(g) = NULL
-  g
-  }
-  else { # begin of else
-  g = rep(NA, length(y))
-  z = (y - mu_x)/sigma_x
-  names(z) = NULL
-  ## the heavy-tail version (if delta != 0)
-  if (any(delta !=0)){
-  	if (length(delta) == 1){
-  		#u = W_delta(z, delta=delta, sign=TRUE)
-  		u = W_delta_alpha(z, delta=delta, alpha = alpha)
-  		#g = f_U(u) * d1W_delta(z, delta=delta) * sigma_x
-  		#g = 1/sigma_x * sign(z) * f_U(sign(z) * u) * u / (z*(1 + delta*u^2)) #d1W_delta(z, delta=delta) * sigma_x
-  		g = 1/sigma_x * f_U(u) * d1W_delta_alpha(z, delta=delta, alpha=alpha)
-  	}
-  	if (length(delta) == 2){
-  		ind.pos = (z > 0)
-  		if (length(alpha) == 1) alpha = c(alpha, alpha)
-  		g[ind.pos] = dLambertW(y[ind.pos], beta=beta, gamma = 0, delta=delta[2], alpha = alpha[2], distname=distname)
-  		g[!ind.pos] = dLambertW(y[!ind.pos], beta=beta, gamma = 0, delta=delta[1], alpha = alpha[1], distname=distname)	
-  	}
-  } # end of "if (any(delta !=0))"
-  if (any(gamma != 0)){
-  if (gamma < 0) {
-          y = -y
-          gamma = -gamma
-          mu_x = -mu_x
+  type.tmp <- tau2type(tau)
+  if (all(tau[grepl("delta", names(tau))] == 0) && all(tau[grepl("alpha", names(tau))] == 1) && 
+        tau["gamma"] == 0) {
+    gg <- fX(y)
+  } else {
+    gg <- rep(NA, length(y))
+    zz <- (y - tau["mu_x"])/tau["sigma_x"]
+    names(zz) <- NULL
+    ## the heavy-tail version (if delta != 0)
+    if (type.tmp == "h") {
+      uu <- W_delta_alpha(zz, delta = tau["delta"], alpha = tau["alpha"])
+      # g = fU(u) * deriv_W_delta(z, delta=delta) * tau["sigma_x"] g = 1/tau["sigma_x"] * sign(z) *
+      # fU(sign(z) * u) * u / (z*(1 + delta*u^2)) #deriv_W_delta(z, delta=delta) *
+      # tau["sigma_x"]
+      gg <- 1/tau["sigma_x"] * fU(uu) * deriv_W_delta_alpha(zz, delta = tau["delta"], 
+                                                            alpha = tau["alpha"])
+    } else if (type.tmp == "hh") {
+      ind.pos <- (zz > 0)
+      theta.l <- list(beta = theta$beta, gamma = 0, 
+                      delta = tau["delta_l"], alpha = tau["alpha_l"])
+      theta.r <- list(beta = theta$beta, gamma = 0, 
+                      delta = tau["delta_r"], alpha = tau["alpha_r"])
+      gg[!ind.pos] <- dLambertW(y[!ind.pos], theta = theta.l, distname = distname)
+      gg[ind.pos] <- dLambertW(y[ind.pos], theta = theta.r, distname = distname)
+    } else if (type.tmp == "s") {
+      if (tau["gamma"] < 0) {
+        # revert data and signs of gamma and mu_x so that we only have to implement the gamma > 0 case
+        y <- -y
+        tau["gamma"] <- -tau["gamma"]
+        tau["mu_x"] <- -tau["mu_x"]
       }
-  	z = (y - mu_x)/sigma_x
-  	names(z) = NULL
-  	r_0 = W_gamma(z, gamma = gamma)
-      	r_1 = W_gamma_1(z, gamma = gamma)
-      	x_0 = r_0 * sigma_x + mu_x
-      	x_1 = r_1 * sigma_x + mu_x
-        g_0 = f_X(x_0) * d1W(gamma * z)
-        g_1 = f_X(x_0) * d1W(gamma * z) - f_X(x_1) * d1W_1(gamma * z)
-        g = g_0 * as.numeric(z >= 0) + g_1 * as.numeric(z < 0)
-        g[is.na((g < -1))] = 0
-  } # end of "if (any(gamma != 0))"
-  
+      zz <- (y - tau["mu_x"])/tau["sigma_x"]
+      names(zz) <- NULL
+      r_0 <- W_gamma(zz, gamma = tau["gamma"], branch = 0)
+      r_1 <- W_gamma(zz, gamma = tau["gamma"], branch = -1)
+      x_0 <- r_0 * tau["sigma_x"] + tau["mu_x"]
+      x_1 <- r_1 * tau["sigma_x"] + tau["mu_x"]
+      g_0 <- fX(x_0) * deriv_W(tau["gamma"] * zz)
+      g_1 <- fX(x_0) * deriv_W(tau["gamma"] * zz) - fX(x_1) * deriv_W(tau["gamma"] * zz, branch = -1)
+      gg <- g_0 * as.numeric(zz >= 0) + g_1 * as.numeric(zz < 0)
+      gg[is.na(gg < -1)] <- 0
+    }
   } # end of else 
-  names(g) = NULL
-  g
+  names(gg) <- NULL
+  if (log) {
+    return(log(gg))
+  } else {
+    return(gg)
+  } 
 }

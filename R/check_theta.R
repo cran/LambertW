@@ -1,8 +1,48 @@
-check_theta <-
-function(alpha = 1, beta = NULL, gamma = 0, delta = 0, distname = NULL){
-   if (any(gamma != 0) && any(delta != 0)) warning("Both parameters are set to non-zero values. \n  Either gamma (skewness) or delta (heavy-tails) must be set to 0.")
-   if (any(gamma != 0) && any(alpha != 1)) warning("Alpha == 1 for skewed Lambert W distributions (gamma !=0). If gamma != 0, then alpha = 1 (default value).")
-   if (distname =="normal" && (length(beta) != 2 || beta[2] < 0)) warning("beta for a Normal distribution must be a vector of length 2, where the second entry is positive.")
-   if (distname == "t" && (length(beta) != 3 || beta[2] <0 || beta[3] <0) ) warning("You must specify a degrees of freedom parameter for student-t input. \n  Check if the scale or the degree of freedom parameter is less than 0." )
-   if (distname == "exp" && (length(beta) != 1 || beta[1] <= 0)) warning("beta for an exponential distribution must be a one number and positive.")
-}
+#' @rdname theta-utils
+#' @description 
+#' \code{check_theta} checks if \eqn{\theta = (\alpha, \boldsymbol \beta, \gamma, \delta)}
+#' describes a well-defined Lambert W distribution.
+#' @return
+#' \code{check_theta} throws an error if list \code{theta} does not
+#' define a proper Lambert W \eqn{\times} F distribution; 
+#' does nothing otherwise.
+#' @seealso
+#' \code{\link{check_beta}}
+#' @export
+check_theta <- function(theta, distname)  {
+
+  check_beta(theta$beta, distname = distname)
+  
+  if ("gamma" %in% names(theta)) {
+    stopifnot(length(theta$gamma) == 1)
+  } else { # add 'gamma' = 0 so checks below work
+    theta$gamma <- 0
+  }
+  # check that alpha and delta are of same length; either 1 (for type 'h') or 
+  # both (!) are vectors of length 2 (for type 'hh')
+  if (!is.null(theta$delta) && !is.null(theta$alpha)) {
+    if (length(theta$delta) != length(theta$alpha)) {
+      print(paste("'delta':", theta$delta))
+      print(paste("'alpha':", theta$alpha))
+      stop("'delta' and 'alpha' have different length")
+    }
+  }
+  
+  
+  if (theta$gamma != 0.0) {
+    if (any(theta$delta != 0.0)) {
+      stop(paste0("Both parameters are non-zero.",
+                  "\n Either gamma = 0 (skewness) or delta = 0 (heavy-tails)."))
+    } 
+    if (!is.null(theta$alpha)) {
+      if (any(theta$alpha != 1)) {
+        stop("Alpha = ", unlist(theta$alpha), " and gamma = ", theta$gamma, ".",
+             " For type ='s' skewed Lambert W distributions alpha == 1 or not present.")
+      }
+      if (any(theta$alpha <= 0)) {
+        stop("'alpha' must be non-negative.")
+      }
+
+    }
+  }
+  }

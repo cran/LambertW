@@ -1,24 +1,36 @@
-print.LambertW_fit <-
-function(x, ...) {
-    cat("Call: ")
-    print(x$call)
-    cat("Estimation method: ")
-    cat(x$method)
-    cat("\n")
-    cat("Input distribution: ")
-    cat(x$distname)
-    cat("\n")
-    cat("Lambert W type ('h' same tails; 'hh' different tails; 's' skewed): ")
-    cat(x$type)
-    cat("\n")
-    cat("\n Parameter estimates:\n")
-    if (x$method == "IGMM") x$params.hat = x$tau
-    print(x$params.hat)
-    if (x$method == "IGMM") {
-	  one_param = "gamma"
-    if (x$type == "h") one_param = "delta"
-    if (x$type == "hh") one_param = "pair (delta_l, delta_r)"
- 	 cat(paste("\n Obtained after", x$iterations, "iterations for mu_x and sigma_x, and \n on average",round(x$sub_iterations/x$iterations ,2),"iterations to find the optimal", one_param,"in each run."))
-	  }
-	  cat("\n")
-}
+#' @rdname LambertW_fit-methods
+#' @description
+#' \code{print.LambertW_fit} prints only very basic information about
+#' \eqn{\widehat{\theta}} (to prevent an overload of data/information in the
+#' console when executing an estimator).
+#' @export
+print.LambertW_fit <- function(x, ...) {
+  cat("Call: ")
+  print(x$call)
+  cat("Estimation method: ", x$method, "\n")
+  cat("Input distribution: ", x$distname, "\n")
+  cat("Lambert W type ('h' same tails; 'hh' different tails; 's' skewed): ", 
+      x$type, "\n")
+  cat("\n Parameter estimates:\n")
+  if (x$method == "IGMM") {
+    x$params.hat <- x$tau
+  }
+  print(x$params.hat)
+  if (x$method == "IGMM") {
+    param.txt <- "gamma"
+    if (x$type == "h") {
+      param.txt <- "delta"
+    } else if (x$type == "hh") {
+      param.txt <- "pair (delta_l, delta_r)"
+    }
+    if (is.na(x$sub.iterations)) {
+      cat(paste("\n Obtained after", x$iterations, 
+                "iterations for mu_x and sigma_x, and \n on average", 
+                round(x$sub.iterations/x$iterations, 2), 
+                "iterations to find the optimal", param.txt, "in each run."))
+    } else {
+      cat(paste("\n Obtained after", x$iterations, "iterations."))
+    }
+  }
+  cat("\n")
+} 

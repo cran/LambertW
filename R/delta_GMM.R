@@ -1,43 +1,129 @@
-delta_GMM <-
-function (z, kurtosis_x = 3, skewness_x = 0, type ="h", delta.0 = delta_Taylor(z), tol=.Machine$double.eps^0.25, restricted = TRUE, bounds = c(-5,10)){   
-  if (restricted == TRUE) bounds[1] = 0
-  
-  if (type == "h"){
-    obj.f = function(delta){
-      u.g = W_delta(z, delta = delta)
-      k4 = kurtosis(u.g)
-      #k4 = mean(u.g^4)
-    	(k4 - kurtosis_x)^2
-    }
-    lb = bounds[1]
-    ub = bounds[2]
-    fit = nlminb(delta.0, obj.f, lower = lb, upper = ub, control=list(abs.tol=tol, trace = 0) )
-  }
-  if (type == "hh"){
-    obj.f = function(delta){
-      #print(paste("deltaGMM tries", delta))
-      u.g = W_2delta(z, delta = delta)
+#' @title Estimate optimal delta
+#' 
+#' @description
+#' This function minimizes the Euclidean distance between the theoretical
+#' kurtosis of a heavy-tail(s) Lambert W x Gaussian random variable and the sample 
+#' kurtosis of the back-transformed
+#' data \eqn{W_{\delta}(\boldsymbol z)} as a function of \eqn{\delta} (see
+#' References). Note that only an iterative application of this function will
+#' give a good estimate of \eqn{\delta} (see \code{\link{IGMM}}).
+#' 
+#' @param z a numeric vector of data values.
+#' @inheritParams common-arguments
+#' @param kurtosis.x theoretical kurtosis of the input X; default: \code{3}
+#' (\eqn{X \sim} Gaussian).
+#' @param skewness.x theoretical skewness of the input X. Only used if \code{type = "hh"}; 
+#' default: \code{0} (\eqn{X \sim} symmetric).
+#' @param delta.init starting value for optimization; default: \code{\link{delta_Taylor}}.
+#' @param tol a positive scalar giving the tolerance at which the distance is
+#' considered close enough to zero to terminate the algorithm; default:
+#' \code{.Machine$double.eps^0.25}.
+#' @param not.negative logical; if \code{TRUE} the estimate for \eqn{\delta} is
+#' restricted to the non-negative reals. Default: \code{FALSE}.
+#' @param optim.fct which R optimization function should be used. Either \code{'optimize'} 
+#' (only for \code{type = 'h'} and if \code{not.negative = FALSE}) or \code{'nlm'}.  
+#' Performance-wise there is no big difference.
+#' @param lower,upper lower and upper bound for optimization if \code{optim.fct = 'optimize'}
+#' and \code{not.negative = FALSE}. Default: \code{-1} and \code{3} 
+#' (this covers most real-world heavy-tail scenarios).
+#' @return 
+#' A list with two elements: 
+#' \item{delta}{ optimal \eqn{\delta} for data \eqn{z}, } 
+#' \item{iterations}{number of iterations (\code{NA} for \code{'optimize'}).}
+#' 
+#' @seealso \code{\link{gamma_GMM}} for the skewed version of this function;
+#' \code{\link{IGMM}} to estimate all parameters jointly.
+#' @keywords optimize
+#' @export
+#' @examples
+#' 
+#' # very heavy-tailed (like a Cauchy)
+#' y <- rLambertW(n = 1000, theta = list(beta = c(1, 2), delta = 1), 
+#'                distname = "normal")
+#' delta_GMM(y) # after the first iteration
+#' 
 
-      k4 = kurtosis(u.g)
-      s3 = skewness(u.g)
-    	(k4 - kurtosis_x)^2 + (s3 - skewness_x)^2
-    }
-    delta.0 = c(delta.0*1.2, delta.0*0.8)
-    if (skewness(z) > 0) delta.0 = delta.0[2:1]
-    
-    lb = rep(bounds[1],2)
-    ub = rep(bounds[2],2)
-    fit = nlminb(delta.0, obj.f, lower = lb, upper = ub, control=list(abs.tol=tol, trace = 0) )
- 
-  }
-  #fit = nlm(p = delta.0, f = obj.f, gradtol = tol)
-  #fit$par = fit$est
-  #if (restricted == TRUE) fit$par = exp(fit$par)
-  delta.hat = fit$par
-  names(delta.hat) = NULL
+delta_GMM <- function(z, type = c("h", "hh"),
+                      kurtosis.x = 3, skewness.x = 0, 
+                      delta.init = delta_Taylor(z), 
+                      tol = .Machine$double.eps^0.25, 
+                      not.negative = FALSE,
+                      optim.fct = c("nlm", "optimize"),
+                      lower = -1, upper = 3) {
   
-  out = list()
-  out$delta = round(delta.hat, 6)
-  out$iterations = fit$iterations
+  stopifnot(is.numeric(kurtosis.x),
+            is.numeric(skewness.x),
+            length(skewness.x) == 1,
+            length(kurtosis.x) == 1,
+            kurtosis.x > 0,
+            length(delta.init) <= 2,
+            tol > 0)
+  
+  optim.fct <- match.arg(optim.fct)
+  type <- match.arg(type)
+
+  if (type == "h") {
+    .obj_fct <- function(delta) {
+      if (not.negative) {
+        # convert delta to > 0
+        delta <- exp(delta)
+      }
+      u.g <- W_delta(z, delta = delta)
+      if (any(is.na(u.g))) {
+        return(lp_norm(kurtosis.x, 2))
+      } else {
+        empirical.kurtosis <- kurtosis(u.g)
+        return(lp_norm(empirical.kurtosis - kurtosis.x, 2))
+      }
+    }
+  } else if (type == "hh") {
+    .obj_fct <- function(delta) {
+      if (not.negative) {
+        # convert delta to > 0
+        delta <- exp(delta)
+      }
+      u.g <- W_2delta(z, delta = delta)
+      if (any(is.na(u.g))) {
+        return(lp_norm(kurtosis.x, 2) + lp_norm(skewness.x * 2, 2))
+      } else {
+        empirical.kurtosis <- kurtosis(u.g)
+        empirical.skewness <- skewness(u.g)
+        return(lp_norm(empirical.kurtosis - kurtosis.x, 2) + 
+                 lp_norm(empirical.skewness - skewness.x, 2))
+      }
+    }
+    if (length(delta.init) == 1) {
+      delta.init <- c(delta.init * 1.1, delta.init * 0.9)
+    }
+    if (skewness(z) > 0) {
+      # revert lower and upper delta if skewness is positive
+      delta.init <- rev(delta.init)
+    }
+  }
+  if (not.negative) {
+    # add 0.01 so delta.init = 0 (or c(0, 0)) can be a possible value for initial value (delta_Taylor)
+    delta.init <- log(delta.init + 0.01) 
+  }
+  
+  out <- list()
+  # use optimzie only if non.negative is false
+  if (length(delta.init) == 1 && optim.fct == "optimize" && !not.negative) {
+      fit <- optimize(f = .obj_fct, interval = c(lower, upper), tol = tol)
+      delta.hat <- fit$minimum
+      out[["iterations"]] <- NA
+  } else {
+    fit <- nlm(f = .obj_fct, p = delta.init, print.level = 0, steptol = tol)
+    delta.hat <- fit$estimate
+    out[["iterations"]] <- fit$iterations
+  }
+  
+  if (not.negative) {
+    delta.hat <- exp(delta.hat)
+    # round it to 6 digits, so that values like 1e-9 become 0
+    if (lp_norm(delta.hat, 1) < 1e-7)
+    delta.hat <- round(delta.hat, 6)
+  }
+  names(delta.hat) <- NULL
+  out[["delta"]] <- delta.hat
   return(out)
-}
+} 

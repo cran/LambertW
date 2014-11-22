@@ -1,97 +1,174 @@
-normfit <-
-function(data, volatility=FALSE, plot.it=TRUE, pch = 1, legend = TRUE) {
-  # various normality tests (both graphical and statistical)
-  # Input: Either a data-vector or a model (will use the residuals of the model)
-  # Testing vector 'x': normfit(x)
-  # Testing residuals of model 'mod': normfit(mod) or directely as normfit(mod$res)
-  if (!is.numeric(data)) data=data$res
+#' @title Visual and statistical Gaussianity check
+#' 
+#' @description
+#' Graphical and statistical check if data is Gaussian (3 common Normality
+#' tests, QQ-plots, histograms, etc).
+#' 
+#' \code{normfit} does not show the autocorrelation function (ACF) estimate for
+#' lag \eqn{0}, since it always equals \eqn{1}. Thus removing it does not 
+#' lose any information, but greatly improves the y-axis scale for higher order lags
+#'  (which are usually very small compared to 1).
+#' 
+#' @param data a numeric vector of data values.
+#' @param plot Should visual checks (histogram, densities, qqplot, ACF) be plotted?
+#' Default \code{TRUE}; otherwise only hypothesis test results are returned.
+#' @param show.volatility logical; if \code{TRUE} the squared (centered) data 
+#' and its ACF are also shown. Useful for time series data to see if squares exhibit
+#' dependence (for financial data they typically do); default: \code{FALSE}.
+#' @param pch a vector of plotting characters or symbols; default \code{pch = 1}.
+#' @param add.legend logical; if \code{TRUE} (default) a legend is placed in 
+#' histogram/density plot.
+#' @param seed optional; if sample size > 5,000, then some normality tests
+#' fail to run.  In this case it uses a subsample of size 5,000.  For replicability,
+#' one can pass a seed.  By default it is a random seed.
+#' @return 
+#' A list with results of 3 normality tests (each of class \code{htest}) and the seed
+#' used for subsampling:
+#' \item{anderson.darling}{Anderson Darling (if \pkg{nortest} package is available),} 
+#' \item{shapiro.francia}{Shapiro-Francia (if \pkg{nortest} package is available),}
+#' \item{shapiro.wilk}{Shapiro-Wilk,}
+#' \item{seed}{seed for subsampling (only used if sample size > 5,000).}
+#' 
+#' @seealso 
+#' \code{\link[stats]{shapiro.test}} in the \pkg{stats} package; 
+#' \code{\link[nortest]{ad.test}}, \code{\link[nortest]{sf.test}} in the \pkg{nortest} package.
+#' @references 
+#' Thode Jr., H.C. (2002): \dQuote{Testing for Normality}. Marcel
+#' Dekker, New York.
+#' @keywords htest hplot
+#' @export
+#' @examples
+#' 
+#' y <- rLambertW(n = 1000, theta = list(beta = c(3, 4), gamma = 0.3),
+#'                distname = "normal")
+#' normfit(y)
+#' 
+#' x <- rnorm(n = 1000)
+#' normfit(x)
+#' 
+#' # mixture of exponential and normal
+#' normfit(c(rexp(100), rnorm(100, mean = -5)))
+#' 
+normfit <- function(data, show.volatility = FALSE, plot = TRUE, pch = 1, 
+                    add.legend = TRUE, seed = sample(1e6, 1)) {
+  if (!is.numeric(data)) {
+    data <- data$res
+  }
   
-  data.label = deparse(substitute(data))
+  stopifnot(is.numeric(unlist(data)))
   
-  if (plot.it) {
-    T=length(data)
-    h=hist(data, plot=FALSE)
-    mu=mean(data)
-    sigma=sd(data)
-    range.data=c(min(data)-0.1*abs(min(data)),max(data)+0.1*abs(max(data)))
-    x=seq(range.data[1], range.data[2], length=(2*T))
-    y=dnorm(x,mu,sigma)
-    
-    title=""
-    if (volatility) {
-      mfrow=c(3,2)
-      data = ts(data)
+  data.label <- deparse(substitute(data))
+  num.samples <- length(data)
+  
+  ## show visual checks for Normality
+  if (plot) {
+    title <- ""
+    if (show.volatility) {
+      layout.dim <- c(3, 2)
+      data <- ts(data)
+    } else {
+      layout.dim <- c(2, 2)
     }
-    else mfrow=c(2,2)
-    par(mfrow=mfrow, mar=c(4.5,4,1.5,1))
     
-    
+    num.plots <- prod(layout.dim)
+    #layout(matrix(seq_len(num.plots), nrow = layout.dim[1]))
+    par(mfrow = layout.dim, mar = c(4.5, 4.5, 2, 0.5))
     plot(data, pch = pch, ylab = data.label)
     
     #########
-    hist_dens=function(y) {
-  
-      aux.compare=function(X) {
-      dnorm(X, mean=mean(y), sd=sd(y))
+    .hist_and_density <- function(yy) {
+      .PdfNorm <- function(xx) {
+        dnorm(xx, mean = mu.y, sd = sd.y)
       }
       
-      x_l=range(y)[1]-0.25*abs(range(y)[1])
-      x_u=range(y)[2]+0.25*abs(range(y)[2])
+      yy.range <- range(yy)
+      yy.range.length <- yy.range[2] - yy.range[1]
+      x.lower <- yy.range[1] - 0.05 * abs(yy.range[1])
+      x.upper <- yy.range[2] + 0.05 * abs(yy.range[2])
       
-      COL=c(1,2)
-      LWD=c(2,2)
-      LTY=c(1,2)
+      mu.y <- mean(yy)
+      sd.y <- sd(yy)
+      num.breaks <- ceiling(yy.range.length/(3.96 * sd.y * num.samples^(-1/3)))
       
-      n=length(y)
-      BS = ceiling((range(y)[2]-range(y)[1])/(3.96 * sd(y)*n^(-1/3)))
+      COL <- c("kernel" = 1, "normal" =  2)
+      LWD <- c("kernel" = 2, "normal" = 2)
+      LTY <- c("kernel" = 1, "normal" = 2)
+            
+      hist.est <- hist(x = yy, breaks = num.breaks, plot = FALSE)
+      pdf.kde <- density(yy)$y
+      pdf.para <- .PdfNorm(seq(x.lower, x.upper, length = 100))
       
-      H=hist(x=y, breaks=BS, plot=FALSE)
-      D.np=density(y)$y
-      D.p=aux.compare(seq(x_l, x_u, length=100))
+      hist(yy, num.breaks, xlim = c(x.lower, x.upper), 
+           ylim = range(pdf.kde, pdf.para, hist.est$intensities) * 1.2, 
+           prob = TRUE, density = 10, col = "darkgray", main = "Density estimates", 
+           ylab = "", xlab = data.label)
+      lines(density(yy), 
+            lwd = LWD["kernel"], col = COL["kernel"], lty = LTY["kernel"])
+      plot(.PdfNorm, x.lower, x.upper, add = TRUE, 
+           lty = LTY["normal"], col = COL["normal"], lwd = LWD["normal"])
       
-      hist(y, BS, xlim=c(x_l, x_u), ylim=range(D.np, D.p, H$intensities)*1.1, prob=TRUE, density=10, col="darkgray", main="Density estimates", ylab="", xlab = data.label)
-      lines(density(y), lwd=LWD[1], main=paste("Density Estimates"))
-      plot(aux.compare, x_l,x_u,  add=TRUE, lty=LTY[2], col=COL[2], lwd=LWD[2])
-      
-      
-      if (legend){
-      
-      if (skewness(y) >= 0) {
-      legend.pos = "right"
-      }
-      if (skewness(y) < 0) {
-      legend.pos = "left" 
-      }
-      
-      
-      legend(paste("top", legend.pos, sep=""), c(paste("mean:", round(mean(y), 2)),paste("sd:   ", round(sd(y), 2)),paste("skew:", round(skewness(y), 2)), paste("kurt:  ", round(kurtosis(y), 2))) )
-      legend(legend.pos, c("Kernel","Gaussian"), lty=LTY, col=COL, lwd=LWD)
-      #legend(legend.pos, c("Kernel",paste("N(", round(mean(y), 2),",",round(var(y), 2) ,")", sep="")), lty=LTY, col=COL, lwd=LWD)
+      if (add.legend) {
+        legend.pos <- ifelse(skewness(yy) >= 0, "topright", "topleft")
+        legend2.pos <- ifelse(skewness(yy) >= 0, "topleft", "topright")
+        
+        legend(legend.pos, 
+               c(paste("skewness:", round(skewness(yy), 2)), 
+                 paste("kurtosis:  ", round(kurtosis(yy), 2))),
+               box.lty = 0)
+        legend(legend2.pos, c(paste0("N(", round(mu.y, 2), ",", round(sd.y, 2), ")"),
+                              "Kernel"), 
+               lty = LTY[c("normal", "kernel")], col = COL[c("normal", "kernel")], 
+               lwd = LWD[c("normal", "kernel")], box.lty = 0)
       }
     }
     ########
-    acf(data)
-    hist_dens(data)
+    .acf_no_zero <- function(x, ...) {
+      acf.tmp <- acf(x, plot = FALSE, ...)
+      CI.vals <- c(-1, 1) * qnorm(1 - 0.05/2) / sqrt(length(x))
+      acf(x, ylim = range(acf.tmp$acf[-1], CI.vals) * 1.1, 
+          xlim = c(1.25, length(acf.tmp$acf) - 1), ...)
+      abline(h = CI.vals, lty = 2, col = "blue")
+    }
+    
+    .acf_no_zero(data)
+    .hist_and_density(data)
     qqnorm(data)
     qqline(data)
     
-    if (volatility) {
-    plot(data**2)
-    acf(data**2)
+    if (show.volatility) {
+      data.centered <- scale(data, center = TRUE, scale = FALSE)
+      if (is.ts(data)) {
+        data.centered <- ts(data.centered)
+      }
+      plot(data.centered^2, ylab = paste0("Squared (centered) ", deparse(substitute(x))))
+      .acf_no_zero(data.centered^2)
     }
-    par(mfrow=c(1,1))
   }
   
-  if (length(data) < 5001){
-    SW=shapiro.test(data)
-    SF=sf.test(data)
-  }
-  else {
-    print("Shapiro-Wilk and Shapiro-Francia are not available for sample size > 5000.")
-    SW = NA
-    SF = NA
-  }
+  # initialize output with NA
+  out <- list(seed = seed,
+              shapiro.wilk = NA,
+              shapiro.francia = NA,
+              anderson.darling = NA)
   
-  AD=ad.test(data)
-  list(sw=SW, sf=SF,ad=AD)
-}
+  if (require(nortest)) {
+    # Run the normality hypothesis tests; Anderson-Darling does not have a restriction on
+    # sample size.
+    out[["anderson.darling"]] <- ad.test(data)
+  }
+  # only update tests if the 'nortest' package is available; otherwise return 'NA'
+  if (num.samples > 5000) {
+    cat("Shaprio-Wilk and Shapiro-Francia tests can not be computed for sample size > 5000.\n", 
+        "Use random subsample of size 5000 instead.\n")
+    set.seed(seed)
+    data.test <- sample(data, size = 5000)
+  } else {
+    data.test <- data
+  }
+  if (require(nortest)) {
+    out[["shapiro.francia"]] <- sf.test(data.test)
+  }
+  out[["shapiro.wilk"]] <- shapiro.test(data.test)
+  
+  return(out)
+} 
