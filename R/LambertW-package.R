@@ -60,14 +60,16 @@
 #' 
 #' Goerg, G.M. (2014). \dQuote{The Lambert Way to Gaussianize heavy-tailed data 
 #' with the inverse of Tukey's h transformation as a special case.}
-#' In press (\url{http://arxiv.org/abs/1010.2265}).
+#'  The Scientific World Journal: Probability and Statistics with 
+#' Applications in Finance and Economics. Available at
+#'  \url{http://www.hindawi.com/journals/tswj/aa/909231/}.
 #' @keywords package
 #' @import MASS moments
 #' @examples
 #' # Replicate parts of the analysis in Goerg (2011)
 #' data(AA)
 #' y <- AA[AA$sex=="f", "bmi"]
-#' normfit(y)
+#' test_normality(y)
 #' 
 #' fit.gmm <- IGMM(y, type = "s")
 #' summary(fit.gmm) # gamma is significant and positive
@@ -84,7 +86,7 @@
 #' TAB
 #' 
 #' x <- get_input(y, fit.gmm$tau)
-#' normfit(x) # input is normal -> fit a Lambert W x Gaussian by MLE
+#' test_normality(x) # input is normal -> fit a Lambert W x Gaussian by MLE
 #' 
 #' fit.ml <- MLE_LambertW(y, type = "s", distname = "normal", hessian = TRUE)
 #' summary(fit.ml)

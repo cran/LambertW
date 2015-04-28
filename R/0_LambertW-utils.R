@@ -88,7 +88,9 @@
 #' 
 #' Goerg, G.M. (2014). \dQuote{The Lambert Way to Gaussianize heavy-tailed data 
 #' with the inverse of Tukey's h transformation as a special case}. 
-#' In press (\url{http://arxiv.org/abs/1010.2265}).
+#'  The Scientific World Journal: Probability and Statistics with 
+#' Applications in Finance and Economics. Available at
+#'  \url{http://www.hindawi.com/journals/tswj/aa/909231/}.
 #' @keywords univar distribution datagen
 #' @examples
 #' 

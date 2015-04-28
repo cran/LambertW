@@ -61,7 +61,7 @@
 #' curve(LW.Gauss$p(x, params), -7, 10, col="red")
 #' curve(LW.Gauss$p(x, params.0), -7, 10, add=TRUE, col=1)
 #' 
-#' normfit(LW.Gauss$r(n=100), add.legend = FALSE)
+#' test_normality(LW.Gauss$r(n=100), add.legend = FALSE)
 #' 
 #' ## generate a positively skewed version of a shifted, scaled t_3
 #' t.input <- create_LambertW_input("t", beta = c(2, 1, 3))
@@ -76,7 +76,7 @@
 #' 
 #' # draw samples from the skewed t_3
 #' yy <- LW.t$r(n=100)
-#' normfit(yy)
+#' test_normality(yy)
 #' 
 #' ### create a skewed exponential distribution
 #' exp.input <- create_LambertW_input("exp", beta = 1)

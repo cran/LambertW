@@ -77,6 +77,17 @@ support <- function(...) {
   get_support(...)
 }
 
+
+#' @rdname deprecated-functions
+#' @export
+normfit <- function(...) {
+  
+  warning("DEPRECATED: Please use test_normality() (or 'test_norm()') ",
+          "instead of normfit().")
+  test_normality(...)
+}
+
+
 #' @rdname deprecated-functions
 #' @export
 theta2params <- function(...) {

@@ -68,7 +68,9 @@
 #' 
 #' Goerg, G.M. (2014). \dQuote{The Lambert Way to Gaussianize
 #' heavy-tailed data with the inverse of Tukey's h transformation as a
-#' special case}. In press (\url{http://arxiv.org/abs/1010.2265}).
+#' special case}. The Scientific World Journal: Probability and Statistics with 
+#' Applications in Finance and Economics. Available at
+#'  \url{http://www.hindawi.com/journals/tswj/aa/909231/}.
 #' @keywords univar multivariate
 #' @export
 #' @examples
@@ -77,7 +79,7 @@
 #' y1 <- rcauchy(n = 100)
 #' out <- Gaussianize(y1, return.tau.mat = TRUE)
 #' x1 <- get_input(y1, c(out$tau.mat[, 1]))  # same as out$input
-#' normfit(out$input) # Gaussianized a Cauchy!
+#' test_normality(out$input) # Gaussianized a Cauchy!
 #' 
 #' kStartFrom <- 20
 #' y.cum.avg <- (cumsum(y1)/seq_along(y1))[-seq_len(kStartFrom)]
@@ -156,7 +158,9 @@ Gaussianize <- function(data = NULL, type = c("h", "hh", "s"),
   if (is.null(ncol(data))) {
     data <- as.matrix(data)
   }
-  
+  if (is.null(colnames(data))) {
+    colnames(data) <- paste0("Y", seq_len(ncol(data)))
+  }
   # do the back-transformation; don't Gaussianize but do the inverse
   if (inverse) {
     if (verbose) {

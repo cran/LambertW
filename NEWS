@@ -8,6 +8,29 @@
 * always: add more distributions by default
 * eventually convert the Lambert W toolkit to reference classes, rather than S3 classes
 
+## v0.5.1
+
+### New
+
+### Bug fixes
+- `data` input to `Gaussianize()` does not have to have `colnames`; will 
+  be assigned by default if `colnames(data)` is `NULL`
+- fixed bug in `mLambertW` which ignored `delta` values passed via `theta`
+
+### Deprecated
+
+Several deprecated functions (see also `?deprecated-function`):
+
+* `normfit()`: use `test_normality()` (or short `test_norm()` instead)
+
+### Minor changes
+
+- Updated citation with "The Scientific World Journal: Probability and    Statistics with Applications in Finance and Economics. Available at
+  [http://www.hindawi.com/journals/tswj/aa/909231/](http://www.hindawi.com/journals/tswj/aa/909231/)"
+- added `grid` to `test_normality` (previously known as `normfit`)
+- added a "^2" to the N(mu, sigma^2) of the legend; now its clear that the
+  displayed value is the standard deviation, not the variance.
+
 ## v0.5
 
 Version 0.5 is a long awaited - big - update to the **LambertW** package. 

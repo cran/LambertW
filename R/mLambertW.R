@@ -68,16 +68,16 @@ mLambertW <- function(theta = NULL, distname = c("normal"), beta, gamma = 0, del
     }
     
     kurt <- .moments(n = 4, delta = theta$delta)/.var_delta(theta$delta)^2
-    if (delta < 1) {
+    if (theta$delta < 1) {
       out$mean <- tau["mu_x"]
     } 
-    if (delta < 1/2) {
+    if (theta$delta < 1/2) {
       out$sd <- tau["sigma_x"] * sqrt(.var_delta(theta$delta))
     }
-    if (delta < 1/3) {
+    if (theta$delta < 1/3) {
       out$skewness <- 0
     }
-    if (delta < 1/4) {
+    if (theta$delta < 1/4) {
       out$kurtosis <- kurt
     }
   }

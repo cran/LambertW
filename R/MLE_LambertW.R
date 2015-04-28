@@ -223,7 +223,7 @@ MLE_LambertW <- function(y, distname, type = c("h", "s", "hh"),
     #loglik.opt <- -fit$minimum
     params.hat <- fit$estimate
   } else if (optim.fct == "solnp") {
-    require(Rsolnp)
+    requireNamespace("Rsolnp", quietly = TRUE)
     fit <- suppressWarnings(Rsolnp::solnp(params.init, fun = .neg_loglik_LambertW, 
                                           param.names = names(params.init),
                                           control = list(trace = 0)))
@@ -254,7 +254,7 @@ MLE_LambertW <- function(y, distname, type = c("h", "s", "hh"),
   ######################################################################################
   if (hessian) {
     # make a hypercube around theta.hat
-    if (require(numDeriv)) {
+    if (requireNamespace("numDeriv", quietly = TRUE)) {
       result$hessian <- -numDeriv::hessian(func = .neg_loglik_LambertW, x = params.hat,
                                            param.names = names(params.hat))
     } else {

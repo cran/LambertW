@@ -41,13 +41,13 @@
 #' # unskew very skewed data
 #' y <- rLambertW(n = 1000, theta = list(beta = c(0, 1), gamma = 0.3), 
 #'                distname = "normal")
-#' normfit(y)
+#' test_normality(y)
 #' fit.gmm <- IGMM(y, type="s")
 #' 
 #' x <- get_input(y, fit.gmm$tau)
 #' # the same as
 #' x <- get_input(fit.gmm)
-#' normfit(x) # symmetric Gaussian
+#' test_normality(x) # symmetric Gaussian
 #' 
 
 get_input <- function(y, tau, return.u = FALSE) {

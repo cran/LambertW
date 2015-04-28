@@ -1,8 +1,8 @@
 Package: LambertW
 Type: Package
-Title: Analyze and Gaussianize heavy-tailed, skewed data
-Version: 0.5
-Date: 2014-11-11
+Title: Analyze and Gaussianize Heavy-Tailed, Skewed Data
+Version: 0.5.1
+Date: 2015-04-20
 Author: Georg M. Goerg <im@gmge.org>
 Maintainer: Georg M. Goerg <im@gmge.org>
 URL: http://www.gmge.org http://arxiv.org/abs/0912.4554
@@ -26,5 +26,5 @@ License: GPL (>= 2)
 LazyLoad: yes
 NeedsCompilation: no
 Repository: CRAN
-Packaged: 2014-11-20 03:17:44 UTC; root
-Date/Publication: 2014-11-22 00:52:30
+Packaged: 2015-04-28 12:43:31 UTC; root
+Date/Publication: 2015-04-28 20:05:00
