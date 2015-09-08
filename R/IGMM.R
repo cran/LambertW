@@ -67,6 +67,8 @@
 #' Estimation}. Annals of Applied Statistics, 5 (3), 2197-2230.
 #' (\url{http://arxiv.org/abs/0912.4554}).
 #' @keywords iteration optimize
+#' @importFrom utils tail
+#' @importFrom utils head
 #' @export
 #' @examples
 #' 
@@ -104,7 +106,7 @@ IGMM <- function(y, type = c("h", "hh", "s"), skewness.x = 0, kurtosis.x = 3,
                  max.iter = 100, delta.lower = -1, delta.upper = 3) {
   stopifnot(tol > 0, 
             is.numeric(y),
-            !any(is.na(y)))
+            !anyNA(y))
   check_tau(tau.init)
   type <- match.arg(type)
   
@@ -128,11 +130,13 @@ IGMM <- function(y, type = c("h", "hh", "s"), skewness.x = 0, kurtosis.x = 3,
   if (any(type == c("h", "hh"))) {
     tau.init["sigma_x"] <- 
       tau.init["sigma_x"] / mLambertW(beta = c(0, 1), 
-                                      delta = mean(tau.init[grepl("delta", names(tau.init))]), 
+                                      delta = mean.default(tau.init[grepl("delta", 
+                                                                          names(tau.init))]), 
                                       distname = "normal")$sd
   } else if (type == "s") {
     tau.init["sigma_x"] <- 
-      tau.init["sigma_x"] / mLambertW(beta = c(0, 1), gamma = tau.init["gamma"], 
+      tau.init["sigma_x"] / mLambertW(beta = c(0, 1), 
+                                      gamma = tau.init["gamma"], 
                                       distname = "normal")$sd
   }
   
@@ -161,7 +165,7 @@ IGMM <- function(y, type = c("h", "hh", "s"), skewness.x = 0, kurtosis.x = 3,
       uu <- W_gamma(zz, gamma.hat)
       xx <- uu * sigma.hat + mu.hat
       tau.trace <- rbind(tau.trace, 
-                       c(mean(xx), sd(xx), gamma.hat))
+                       c(mean.default(xx), sd(xx), gamma.hat))
       if (!location.family) {
         tau.trace[nrow(tau.trace), "mu_x"] <- 0  # for example for exponential input
       }
@@ -174,7 +178,7 @@ IGMM <- function(y, type = c("h", "hh", "s"), skewness.x = 0, kurtosis.x = 3,
                            skewness.x = skewness.x, 
                            robust = robust, tol = tol, not.negative = not.negative)$gamma
     tau.trace <- rbind(tau.trace, 
-                     c(tail(tau.trace[, c("mu_x", "sigma_x")], 1), gamma.hat))
+                     c(utils::tail(tau.trace[, c("mu_x", "sigma_x")], 1), gamma.hat))
     se <- c(1, sqrt(1/2), 0.4) / sqrt(out$n)
   } else  if (type == "h") {
     # for heavy-tail versions
@@ -192,7 +196,7 @@ IGMM <- function(y, type = c("h", "hh", "s"), skewness.x = 0, kurtosis.x = 3,
       
       uu <- W_delta(zz, delta.hat)
       xx <- uu * sigma.hat + mu.hat
-      tau.trace <- rbind(tau.trace, c(mean(xx), sd(xx), delta.hat))
+      tau.trace <- rbind(tau.trace, c(mean.default(xx), sd(xx), delta.hat))
       if (!location.family) {
         tau.trace[nrow(tau.trace), "mu_x"] <- 0 
       }
@@ -247,9 +251,9 @@ IGMM <- function(y, type = c("h", "hh", "s"), skewness.x = 0, kurtosis.x = 3,
   rownames(tau.trace) <- paste("Iteration", seq_len(nrow(tau.trace)) - 1)
   
   # initial tau is the first row of tau.trace
-  tau.init <- head(tau.trace, 1)[1, ]
+  tau.init <- utils::head(tau.trace, 1)[1, ]
   # estimated tau is the last iteration
-  tau.est <- tail(tau.trace, 1)[1,]
+  tau.est <- utils::tail(tau.trace, 1)[1,]
   out <- c(out,
            list(tau.init = tau.init,
                 tau = tau.est, 
@@ -263,9 +267,13 @@ IGMM <- function(y, type = c("h", "hh", "s"), skewness.x = 0, kurtosis.x = 3,
                 message = paste("Conversion reached after", kk, "steps."),
                 method = "IGMM"))
   if (type == "s") {
-    out$distname <- paste0("Any distribution with skewness = ", skewness.x, ".")
+    out$distname <- 
+        paste0("Any distribution with finite mean & variance and skewness = ",
+               skewness.x, ".")
   } else if (type == "h") {
-    out$distname <- paste0("Any distribution with kurtosis = ", kurtosis.x, ".")
+    out$distname <- 
+        paste0("Any distribution with finite mean & variance and kurtosis = ",
+               kurtosis.x, ".")
   }
   class(out) <- "LambertW_fit"
   return(out)

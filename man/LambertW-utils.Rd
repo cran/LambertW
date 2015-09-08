@@ -20,8 +20,9 @@ pLambertW(q, distname, theta = NULL, beta = NULL, gamma = 0, delta = 0,
   alpha = 1, input.u = NULL, tau = NULL, log = FALSE,
   lower.tail = FALSE)
 
-qLambertW(p, distname, theta = NULL, beta = NULL, gamma = 0, delta = 0,
-  alpha = 1, input.u = NULL, tau = NULL)
+qLambertW(p, distname = NULL, theta = NULL, beta = NULL, gamma = 0,
+  delta = 0, alpha = 1, input.u = NULL, tau = NULL,
+  is.non.negative = FALSE)
 
 qqLambertW(y, distname, theta = NULL, beta = NULL, gamma = 0, delta = 0,
   alpha = 1, plot.it = TRUE, ...)
@@ -63,6 +64,11 @@ need to supply this argument directly.}
 \item{lower.tail}{logical; if \code{TRUE}, probabilities are given as log(p).}
 
 \item{p}{vector of probability levels}
+
+\item{is.non.negative}{logical; tell the penalty function if the data is from
+a non-negative distribution;
+by default it sets it to \code{TRUE} if the distribution is not a location but a scale family.
+ If \code{TRUE}, the penalty can be computed; otherwise, it returns \code{NA}.}
 
 \item{plot.it}{logical; should the result be plotted? Default: \code{TRUE}.}
 
@@ -210,14 +216,13 @@ Sys.sleep(0.04)
 ###############################
 ######### qLambertW ###########
 
-\dontrun{
 p.v <- c(0.01, 0.05, 0.5, 0.9, 0.95,0.99)
 qnorm(p.v)
 # same as above except for rounding errors
 qLambertW(p.v, theta = list(beta = c(0, 1), gamma = 0), distname="normal")
 # positively skewed data -> quantiles are higher
 qLambertW(p.v, theta = list(beta = c(0, 1), gamma = 0.1), distname="normal")
-}
+
 ###############################
 ######### qqLambertW ###########
 \dontrun{

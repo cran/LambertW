@@ -17,8 +17,8 @@
 check_beta <- function(beta, distname) {
 
   stopifnot(is.numeric(beta),
-            !any(is.na(beta)))
-  
+            !anyNA(beta))
+  check_distname(distname)
   dist.text <- paste0("For a '", distname, "' distribution 'beta' must ")
   switch(distname, 
          "normal" = {

@@ -28,8 +28,9 @@
 #' @export
 #' @examples
 #' 
+#' 
 #' # skewed
-#' yy <- rLambertW(n = 1000, theta = list(delta = c(0.1, 0.25), beta = c(2, 1)), 
+#' yy <- rLambertW(n = 500, theta = list(delta = c(0.1, 0.25), beta = c(2, 1)), 
 #'                 distname = "normal")
 #' fit.ml <- MLE_LambertW(yy, type = "hh", distname = "normal", 
 #'                        hessian = TRUE)
@@ -37,24 +38,27 @@
 #' test_symmetry(fit.ml, "LR")
 #' test_symmetry(fit.ml, "Wald")
 #' 
+#' \dontrun{
 #' # symmetric 
-#' yy <- rLambertW(n = 1000, theta = list(delta = c(0.2, 0.2), beta = c(2, 1)), 
+#' yy <- rLambertW(n = 500, theta = list(delta = c(0.2, 0.2), beta = c(2, 1)), 
 #'                 distname = "normal")
 #' fit.ml <- MLE_LambertW(yy, type = "hh", distname = "normal")
 #' summary(fit.ml)
 #' test_symmetry(fit.ml, "LR")
 #' test_symmetry(fit.ml, "Wald")
+#' }
 
 test_symmetry <- function(LambertW.fit, method = c("Wald", "LR")) {
   
   method <- match.arg(method)
-  obj <- LambertW.fit
-  if (is.numeric(obj)) {
-    obj <- MLE_LambertW(obj, type = "hh", distname = "normal", hessian = TRUE)
-  } else if (class(obj) == "LambertW.fit") {
-    if (obj$type != "hh") {
+  if (is.numeric(LambertW.fit)) {
+    obj <- MLE_LambertW(LambertW.fit, type = "hh", distname = "normal",
+                        hessian = (method == "LR"))
+  } else if (inherits(LambertW.fit, "LambertW_fit")) {
+    if (LambertW.fit$type != "hh") {
       stop("Estimated LambertW.fit method must be of type 'hh'.")
     }
+    obj <- LambertW.fit
   } 
   
   hessian <- obj$hessian
@@ -63,7 +67,7 @@ test_symmetry <- function(LambertW.fit, method = c("Wald", "LR")) {
   
   if (method == "Wald") {
     var.theta.hat <- try(-solve(hessian), silent = TRUE)
-    if (any(class(var.theta.hat) == "try-error")) {
+    if (inherits(var.theta.hat, "try-error")) {
       warning("Hessian was singular or NA. Changed method to 'LR'.")
       method <- "LR"
     }
@@ -79,10 +83,12 @@ test_symmetry <- function(LambertW.fit, method = c("Wald", "LR")) {
     statistic <- c(W = WW)
   } else if (method == "LR") {
     method <- "Likelihood ratio test"
-    loglik.2h <- obj$loglik.opt
-    loglik.1h <- MLE_LambertW(obj$data, type = "h", distname = obj$distname)$loglik.opt
+    mod.h <- MLE_LambertW(obj$data, type = "h", distname = obj$distname,
+                          hessian = FALSE)
+    loglik.h <- mod.h$loglik.opt
+    loglik.hh <- obj$loglik.opt
     
-    lambda <- 2 * (loglik.2h - loglik.1h)
+    lambda <- 2 * (loglik.hh - loglik.h)
     pval <- 1 - pchisq(lambda, 1)
     statistic <- c(D = lambda)
   }

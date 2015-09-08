@@ -7,7 +7,8 @@
 \title{Do-it-yourself toolkit for Lambert W\eqn{ \times} F distribution}
 \usage{
 create_LambertW_input(distname = NULL, beta, input.u = list(beta2tau = NULL,
-  d = NULL, p = NULL, r = NULL, q = NULL, distname = "MyFavoriteDistribution"))
+  d = NULL, p = NULL, r = NULL, q = NULL, distname = "MyFavoriteDistribution",
+  is.non.negative = FALSE))
 
 create_LambertW_output(LambertW.input = NULL, theta = NULL,
   distname = LambertW.input$distname)
@@ -18,7 +19,7 @@ create_LambertW_output(LambertW.input = NULL, theta = NULL,
 \item{beta}{vector; parameter \eqn{\boldsymbol \beta} of the input distribution.
 See \code{\link{check_beta}} on how to specify \code{beta} for each distribution.}
 
-\item{input.u}{optional; users can make their own 'Lambert W\eqn{    imes} F' distribution by
+\item{input.u}{optional; users can make their own 'Lambert W x F' distribution by
 supplying the necessary functions. See Description for details.}
 
 \item{LambertW.input}{an object of class \code{LambertW_input}}
@@ -85,6 +86,9 @@ user defined distribution }
 of their input distribution. By default it's called \code{"MyFavoriteDistribution"}.
 The distribution name will be used in plots and summaries of the Lambert W\eqn{\times} F
 input (and output) object.}
+\item{\code{is.non.negative}}{ logical; users should specify whether the
+distribution is for non-negative random variables or not.  This will help
+for plotting and theoretical quantile computation.}
 \item{\code{d}}{ R function of \code{(u, beta)}: probability density function (pdf) of U,}
 \item{\code{p}}{ R function of \code{(u, beta)}: cumulative distribution function (cdf) of U,}
 \item{\code{q}}{ R function of \code{(p, beta)}: quantile function of U,}
@@ -163,7 +167,8 @@ user.tmp <- list(d = function(u, beta) dnorm(u),
                    c(mu_x = beta[1], sigma_x = beta[2],
                      gamma = 0, alpha = 1, delta = 0)
                    },
-                 distname = "MyNormal")
+                 distname = "MyNormal",
+                 is.non.negative = FALSE)
 my.input <- create_LambertW_input(input.u = user.tmp, beta = c(0, 1))
 my.input
 plot(my.input)

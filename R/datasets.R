@@ -4,6 +4,7 @@
 #' @description
 #' Collection of datasets in this package.
 #' @docType data
+#' @importFrom utils data
 #' @keywords datasets
 #' 
 NULL

@@ -116,3 +116,12 @@ W_gamma_1 <- function(z, gamma) {
   warning("DEPRECATED: Please use W_gamma(..., branch = -1) instead of W_gamma_1(...).")
   W_gamma(z, gamma, branch = -1)
 } 
+
+
+#' @rdname deprecated-functions
+#' @export
+H <- function(...) {
+  warning("DEPRECATED: Please use xexp(...) instead of H(...).")
+  
+  return(xexp(...))
+}

@@ -5,7 +5,9 @@
 #' specified by \code{distname}; it only depends on \eqn{\tau}.
 #' 
 #' If \code{type = "s"} then the penalty term exists if the distribution 
-#' \code{is.non.negative = TRUE} and \code{gamma >= 0}; otherwise, it returns \code{NA}.
+#' is non-negative (see \code{get_distname_family}) and \code{gamma >= 0};
+#' otherwise, it returns \code{NA}.
+#' 
 #' @param is.non.negative logical; tell the penalty function if the data is from 
 #' a non-negative distribution; 
 #' by default it sets it to \code{TRUE} if the distribution is not a location but a scale family. 
@@ -13,16 +15,16 @@
 #' 
 #' @export
 loglik_penalty <- function(tau, y, type = c("h", "hh", "s"),
-                           distname = NULL,
-                           is.non.negative = get_distname_family(distname)$scale && 
-                             !get_distname_family(distname)$location) {
+                           is.non.negative = FALSE) {
   
-  stopifnot(is.numeric(y))
+  stopifnot(is.numeric(y),
+            is.logical(is.non.negative))
+  
   type <- match.arg(type)
   yy <- y
     
   tau <- complete_tau(tau)
-  zz <- (yy - tau["mu_x"]) / tau["sigma_x"]
+  zz <- normalize_by_tau(yy, tau)
   switch(type,
          h = {
            if (tau["delta"] == 0) {
@@ -44,11 +46,11 @@ loglik_penalty <- function(tau, y, type = c("h", "hh", "s"),
            }
          },
          s = {
-           if (tau["gamma"] == 0) {
+          if (tau["gamma"] == 0) {
              penalty <- 0
            } else {
              if (is.non.negative) {
-               penalty <- sum(log(deriv_W(tau["gamma"] * zz, branch = 0)))
+               penalty <- sum(log_deriv_W(tau["gamma"] * zz, branch = 0))
              } else {
                penalty <- NA
              }

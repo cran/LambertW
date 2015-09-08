@@ -52,15 +52,17 @@ delta_Taylor <- function(y, kurtosis.y = kurtosis(y), distname = "normal") {
             length(kurtosis.y) == 1,
             kurtosis.y > 0)
   distname <- match.arg(distname)
-  check_distname(distname)
+
   if (distname == "normal") {
     if (66 * kurtosis.y - 162 > 0) {
-      delta.hat <- max(0, 1/66 * (sqrt(66 * kurtosis.y - 162) - 6)) 
+      delta.hat <- max(0, 1/66 * (sqrt(66 * kurtosis.y - 162) - 6))
+      delta.hat <- min(delta.hat, 1/4)
     } else {
       delta.hat <- 0
     }
-    delta.hat <- min(delta.hat, 1/4)
+  } else {
+    stop("Other distribution than 'normal' is not supported for the Taylor",
+         "approximation.")
   }
-  
   return(delta.hat)
 } 

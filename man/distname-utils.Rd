@@ -23,6 +23,9 @@ or throws an error otherwise.
 \code{get_distname_family} returns a list with
 \item{location}{ logical; if \code{TRUE}, the distribution is a location family,}
 \item{scale}{ logical; if \code{TRUE}, the distribution is a scale family.}
+\item{is.non.negative}{ logical; if \code{TRUE}, the distribution has support only for
+the non-negative reals (this is usually the case when \code{location = FALSE}
+and \code{scale = TRUE})}
 
 \code{get_distnames} returns a vector of strings in alphabetical order. It lists
 all supported distributions.
@@ -42,8 +45,10 @@ See \code{\link{create_LambertW_input}} and \code{\link{create_LambertW_output}}
 \code{check_distname} checks if the distribution specified by
 the \code{distname} argument is implemented in this package.
 
-\code{get_distname_family} determines whether a distribution is a location, scale, or
-location-scale family.
+\code{get_distname_family} determines whether a distribution is a
+location, scale, or location-scale family.
+It also returns whether the distribution is supported on non-negative
+values or not.
 
 \code{get_distnames} lists all currently implemented input distributions.
 }

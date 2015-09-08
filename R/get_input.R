@@ -58,7 +58,7 @@ get_input <- function(y, tau, return.u = FALSE) {
   tau <- complete_tau(tau)
   check_tau(tau)
   
-  zz <- (y - tau["mu_x"]) / tau["sigma_x"]
+  zz <- normalize_by_tau(y, tau)
   delta.values <- tau[grepl("delta", names(tau))]
   if (all(delta.values == 0) && tau["gamma"] == 0) {
       # no transformation
@@ -75,8 +75,7 @@ get_input <- function(y, tau, return.u = FALSE) {
   } else {
     stop("Only one of gamma or delta (or delta_l/delta_l) can be non-zero.")
   }
-  xx <- uu * tau["sigma_x"] + tau["mu_x"]
-  
+  xx <- normalize_by_tau(uu, tau, inverse = TRUE)  
   if (return.u) {
     nu <- tau[4]
     if (!is.na(nu)) {

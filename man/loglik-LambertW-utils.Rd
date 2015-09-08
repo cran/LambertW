@@ -13,9 +13,7 @@ loglik_LambertW(theta, y, distname, type, return.negative = FALSE,
 loglik_input(beta, x, distname, dX = NULL, log.dX = function(x, beta)
   log(dX(x, beta)))
 
-loglik_penalty(tau, y, type = c("h", "hh", "s"), distname = NULL,
-  is.non.negative = get_distname_family(distname)$scale &&
-  !get_distname_family(distname)$location)
+loglik_penalty(tau, y, type = c("h", "hh", "s"), is.non.negative = FALSE)
 }
 \arguments{
 \item{theta}{list; a (possibly incomplete) list of parameters \code{alpha}, \code{beta}, \code{gamma},
@@ -84,7 +82,8 @@ the input. Note that this penalty is independent of the distribution
 specified by \code{distname}; it only depends on \eqn{\tau}.
 
 If \code{type = "s"} then the penalty term exists if the distribution
-\code{is.non.negative = TRUE} and \code{gamma >= 0}; otherwise, it returns \code{NA}.
+is non-negative (see \code{get_distname_family}) and \code{gamma >= 0};
+otherwise, it returns \code{NA}.
 }
 \details{
 For heavy-tail Lambert W\eqn{\times} F distributions (\code{type = "h"} or \code{type =
@@ -110,12 +109,12 @@ loglik_penalty(tau = theta2tau(list(beta = c(1, 1), delta = c(0.2, 0.2)),
 # such a decomposition doesn't exist; thus NA.
 loglik_penalty(tau = theta2tau(list(beta = c(1, 1), gamma = 0.03),
                                distname = "normal"),
-               distname = "normal",
+               is.non.negative = FALSE,
                y = yy, type = "s")
 # For scale-family input it does exist
 loglik_penalty(tau = theta2tau(list(beta = 1, gamma = 0.01),
                                distname = "exp"),
-               distname = "exp",
+               is.non.negative = TRUE,
                y = yy, type = "s")
 
 # evaluating the Gaussian log-likelihood

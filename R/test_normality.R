@@ -62,7 +62,6 @@ test_normality <- function(data, show.volatility = FALSE, plot = TRUE, pch = 1,
   
   ## show visual checks for Normality
   if (plot) {
-    title <- ""
     if (show.volatility) {
       layout.dim <- c(3, 2)
       data <- ts(data)
@@ -70,8 +69,6 @@ test_normality <- function(data, show.volatility = FALSE, plot = TRUE, pch = 1,
       layout.dim <- c(2, 2)
     }
     
-    num.plots <- prod(layout.dim)
-    #layout(matrix(seq_len(num.plots), nrow = layout.dim[1]))
     par(mfrow = layout.dim, mar = c(4.5, 4.5, 2, 0.5))
     plot(data, pch = pch, ylab = data.label)
     grid()
@@ -83,23 +80,22 @@ test_normality <- function(data, show.volatility = FALSE, plot = TRUE, pch = 1,
       }
       
       yy.range <- range(yy)
-      yy.range.length <- yy.range[2] - yy.range[1]
       x.lower <- yy.range[1] - 0.05 * abs(yy.range[1])
       x.upper <- yy.range[2] + 0.05 * abs(yy.range[2])
       
       mu.y <- mean(yy)
       sd.y <- sd(yy)
-      num.breaks <- ceiling(yy.range.length/(3.96 * sd.y * num.samples^(-1/3)))
       
       COL <- c("kernel" = 1, "normal" =  2)
       LWD <- c("kernel" = 2, "normal" = 2)
       LTY <- c("kernel" = 1, "normal" = 2)
-            
+      num.breaks <- .optimalNumberOfBinsForHist(yy)
       hist.est <- hist(x = yy, breaks = num.breaks, plot = FALSE)
       pdf.kde <- density(yy)$y
       pdf.para <- .PdfNorm(seq(x.lower, x.upper, length = 100))
       
-      hist(yy, num.breaks, xlim = c(x.lower, x.upper), 
+      hist(yy, breaks = num.breaks, 
+           xlim = c(x.lower, x.upper), 
            ylim = range(pdf.kde, pdf.para, hist.est$intensities) * 1.2, 
            prob = TRUE, density = 10, col = "darkgray", 
            main = "Density estimates", 
@@ -145,8 +141,8 @@ test_normality <- function(data, show.volatility = FALSE, plot = TRUE, pch = 1,
       if (is.ts(data)) {
         data.centered <- ts(data.centered)
       }
-      plot(data.centered^2, ylab = paste0("Squared (centered) ", 
-                                          deparse(substitute(x))))
+      plot(data.centered^2, ylab = paste0("Squared (centered) \n", 
+                                          data.label))
       grid()
       .acf_no_zero(data.centered^2)
     }

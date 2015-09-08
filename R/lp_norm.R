@@ -35,8 +35,9 @@
 
 lp_norm <- function(x, p = 2) {
 
-    if (any(is.na(x))) {
-        stop("Vector must not contain any 'NA'.")
+    if (anyNA(x)) {
+      stop("Vector must not contain any 'NA'. Contained ",
+           sum(is.na(x)), " NA entry/entries (out of ", length(x), ").")
     }
     
     if (p < 0) {

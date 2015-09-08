@@ -14,6 +14,9 @@
 #' of their input distribution. By default it's called \code{"MyFavoriteDistribution"}. 
 #' The distribution name will be used in plots and summaries of the Lambert W\eqn{\times} F 
 #' input (and output) object.}
+#' \item{\code{is.non.negative}}{ logical; users should specify whether the
+#' distribution is for non-negative random variables or not.  This will help
+#' for plotting and theoretical quantile computation.}
 #' \item{\code{d}}{ R function of \code{(u, beta)}: probability density function (pdf) of U,}
 #' \item{\code{p}}{ R function of \code{(u, beta)}: cumulative distribution function (cdf) of U,}
 #' \item{\code{q}}{ R function of \code{(p, beta)}: quantile function of U,}
@@ -21,7 +24,7 @@
 #' }
 #' 
 #' @inheritParams common-arguments
-#' @param input.u optional; users can make their own 'Lambert W\eqn{	imes} F' distribution by 
+#' @param input.u optional; users can make their own 'Lambert W x F' distribution by 
 #' supplying the necessary functions. See Description for details.
 
 #' @keywords univar distribution datagen models
@@ -36,7 +39,8 @@
 #'                    c(mu_x = beta[1], sigma_x = beta[2], 
 #'                      gamma = 0, alpha = 1, delta = 0)
 #'                    },
-#'                  distname = "MyNormal")
+#'                  distname = "MyNormal",
+#'                  is.non.negative = FALSE)
 #' my.input <- create_LambertW_input(input.u = user.tmp, beta = c(0, 1))
 #' my.input
 #' plot(my.input)
@@ -45,8 +49,14 @@
 create_LambertW_input <- function(distname = NULL, beta, 
                                   input.u = list(beta2tau = NULL, 
                                                  d = NULL, p = NULL, r = NULL, q = NULL,
-                                                 distname = "MyFavoriteDistribution")) {
+                                                 distname = "MyFavoriteDistribution",
+                                                 is.non.negative = FALSE)) {
   
+  required.input.names <- c("beta2tau",
+                            "d", "q", "r", "q",
+                            "distname",
+                            "is.non.negative")
+  stopifnot(all(match(required.input.names, names(input.u))))
   if (is.null(input.u$distname)) {
     input.u[["distname"]] <- "MyFavoriteDistribution"
   }
@@ -69,17 +79,20 @@ create_LambertW_input <- function(distname = NULL, beta,
     pU_tmp <- function(u) input.u$p(u, beta = beta)
     qU_tmp <- function(u) input.u$q(u, beta = beta)
     beta2tau_tmp <- function(beta) input.u$beta2tau(beta = beta)
+    is.non.negative <- input.u$is.non.negative
     if (any(names(beta))) {
       warning("Your 'beta' vector does not have proper 'names'. Please fix.")
     }
   } else if (!is.null(distname)) {
-    check_distname(distname)
+    dist.family <- get_distname_family(distname)
+    is.non.negative <- dist.family$is.non.negative
     dU_tmp <- function(u) dU(u, beta = beta, distname = distname)
     rU_tmp <- function(u) rU(u, beta = beta, distname = distname)
     pU_tmp <- function(u) pU(u, beta = beta, distname = distname)
     qU_tmp <- function(u) qU(u, beta = beta, distname = distname)
     beta2tau_tmp <- function(beta) beta2tau(beta = beta, distname = distname)
     names(beta) <- get_beta_names(distname)
+    
   } else {
     stop("Something went wrong in create_LambertW_input(). Either 'distname' or user-defined functions",
          " are incorrectly specified.")
@@ -88,7 +101,8 @@ create_LambertW_input <- function(distname = NULL, beta,
   result <- list(beta = beta,
                  tau = beta2tau_tmp(beta = beta),
                  distname = ifelse(is.null(distname), input.u[["distname"]], distname),
-                 user.defined = user.defined)
+                 user.defined = user.defined,
+                 is.non.negative = is.non.negative)
 
   rX <- function(n, beta = result$beta) {
     tau <- beta2tau_tmp(beta = beta)

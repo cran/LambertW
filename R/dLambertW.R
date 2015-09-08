@@ -23,13 +23,15 @@ dLambertW <- function(y, distname = NULL, theta = NULL, beta = NULL, gamma = 0, 
   fX <- function(x) fU((x - tau["mu_x"])/tau["sigma_x"])/tau["sigma_x"]
   
   type.tmp <- tau2type(tau)
-  if (all(tau[grepl("delta", names(tau))] == 0) && all(tau[grepl("alpha", names(tau))] == 1) && 
-        tau["gamma"] == 0) {
+  if (all(tau[grepl("delta", names(tau))] == 0) && 
+        all(tau[grepl("alpha", names(tau))] == 1) && 
+          tau["gamma"] == 0) {
     gg <- fX(y)
   } else {
     gg <- rep(NA, length(y))
-    zz <- (y - tau["mu_x"])/tau["sigma_x"]
+    zz <- normalize_by_tau(y, tau)
     names(zz) <- NULL
+    
     ## the heavy-tail version (if delta != 0)
     if (type.tmp == "h") {
       uu <- W_delta_alpha(zz, delta = tau["delta"], alpha = tau["alpha"])
@@ -52,17 +54,28 @@ dLambertW <- function(y, distname = NULL, theta = NULL, beta = NULL, gamma = 0, 
         y <- -y
         tau["gamma"] <- -tau["gamma"]
         tau["mu_x"] <- -tau["mu_x"]
+        zz <- normalize_by_tau(y, tau)
+        names(zz) <- NULL
       }
-      zz <- (y - tau["mu_x"])/tau["sigma_x"]
-      names(zz) <- NULL
-      r_0 <- W_gamma(zz, gamma = tau["gamma"], branch = 0)
-      r_1 <- W_gamma(zz, gamma = tau["gamma"], branch = -1)
-      x_0 <- r_0 * tau["sigma_x"] + tau["mu_x"]
-      x_1 <- r_1 * tau["sigma_x"] + tau["mu_x"]
-      g_0 <- fX(x_0) * deriv_W(tau["gamma"] * zz)
-      g_1 <- fX(x_0) * deriv_W(tau["gamma"] * zz) - fX(x_1) * deriv_W(tau["gamma"] * zz, branch = -1)
-      gg <- g_0 * as.numeric(zz >= 0) + g_1 * as.numeric(zz < 0)
-      gg[is.na(gg < -1)] <- 0
+      
+      # principal branch for all values (negative and positive)
+      r.0 <- W_gamma(zz, gamma = tau["gamma"], branch = 0)
+      x.0 <- normalize_by_tau(r.0, tau, inverse = TRUE)
+      # for derivative it's good to use 
+      # gamma * z = r.0 * gamma (r.0 = W(z * gamma) / gamma)
+      g.0 <- fX(x.0) * deriv_W(tau["gamma"] * zz, W.z = r.0 * tau["gamma"])
+      gg[zz >= 0] <- g.0[zz >= 0]
+      
+      zz.neg <- zz[zz < 0]
+      if (length(zz.neg) > 0) {
+        r.neg.1 <- W_gamma(zz.neg, gamma = tau["gamma"], branch = -1)
+        x.neg.1 <- normalize_by_tau(r.neg.1, tau, inverse = TRUE)
+        g.neg <- g.0[zz < 0] - 
+          fX(x.neg.1) * deriv_W(tau["gamma"] * zz.neg, 
+                                branch = -1,
+                                W.z = r.neg.1 * tau["gamma"])
+        gg[zz < 0] <- g.neg
+      }
     }
   } # end of else 
   names(gg) <- NULL

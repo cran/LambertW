@@ -2,9 +2,9 @@
 % Please edit documentation in R/get_support.R
 \name{get_support}
 \alias{get_support}
-\title{Computes the truncated support for skewed Lambert W distributions}
+\title{Computes support for skewed Lambert W x F distributions}
 \usage{
-get_support(tau, is.non.negative = FALSE)
+get_support(tau, is.non.negative = FALSE, input.bounds = c(-Inf, Inf))
 }
 \arguments{
 \item{tau}{named vector \eqn{\tau} which defines the variable transformation. Must have at least
@@ -14,6 +14,10 @@ get_support(tau, is.non.negative = FALSE)
 a non-negative distribution;
 by default it sets it to \code{TRUE} if the distribution is not a location but a scale family.
  If \code{TRUE}, the penalty can be computed; otherwise, it returns \code{NA}.}
+
+\item{input.bounds}{interval; the bounds of the input distribution. If
+\code{is.non.negative = FALSE}, then it will adjust it to \code{c(0, Inf)};
+also useful for bounded input distributions, such as \code{"unif"}}
 }
 \value{
 A vector of length 2 with names \code{'lower'} and \code{'upper'}.
@@ -23,6 +27,8 @@ If the input \eqn{X \sim F} has support on the entire real line
 \eqn{(-\infty, \infty)}, then the skewed Lambert W \eqn{\times} F
 distribution has truncated support \eqn{[a,b]}, \eqn{a,b \in R \cup \pm
 \infty} depending on \eqn{\boldsymbol \beta} and (the sign of) \eqn{\gamma}.
+
+For scale-families no truncation occurs.
 }
 \details{
 Half-open interval on the real line (if \eqn{\gamma \neq 0}) for

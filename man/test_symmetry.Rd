@@ -36,7 +36,7 @@ longer to compute.
 }
 \examples{
 # skewed
-yy <- rLambertW(n = 1000, theta = list(delta = c(0.1, 0.25), beta = c(2, 1)),
+yy <- rLambertW(n = 500, theta = list(delta = c(0.1, 0.25), beta = c(2, 1)),
                 distname = "normal")
 fit.ml <- MLE_LambertW(yy, type = "hh", distname = "normal",
                        hessian = TRUE)
@@ -44,13 +44,15 @@ summary(fit.ml)
 test_symmetry(fit.ml, "LR")
 test_symmetry(fit.ml, "Wald")
 
+\dontrun{
 # symmetric
-yy <- rLambertW(n = 1000, theta = list(delta = c(0.2, 0.2), beta = c(2, 1)),
+yy <- rLambertW(n = 500, theta = list(delta = c(0.2, 0.2), beta = c(2, 1)),
                 distname = "normal")
 fit.ml <- MLE_LambertW(yy, type = "hh", distname = "normal")
 summary(fit.ml)
 test_symmetry(fit.ml, "LR")
 test_symmetry(fit.ml, "Wald")
+}
 }
 \keyword{htest}
 

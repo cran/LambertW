@@ -45,12 +45,12 @@
 #' # such a decomposition doesn't exist; thus NA.
 #' loglik_penalty(tau = theta2tau(list(beta = c(1, 1), gamma = 0.03), 
 #'                                distname = "normal"),
-#'                distname = "normal",
+#'                is.non.negative = FALSE,
 #'                y = yy, type = "s") 
 #' # For scale-family input it does exist
 #' loglik_penalty(tau = theta2tau(list(beta = 1, gamma = 0.01), 
 #'                                distname = "exp"),
-#'                distname = "exp",
+#'                is.non.negative = TRUE,
 #'                y = yy, type = "s") 
 #'                
 #' # evaluating the Gaussian log-likelihood

@@ -9,39 +9,33 @@
 #' @param xlim lower and upper limit of x-axis for cdf and pdf plots.
 #' @param show.qqplot should a Lambert W\eqn{ \times} F QQ plot be displayed? Default: \code{FALSE}.
 #' @export
+#' 
 plot.LambertW_fit <- function(x, xlim = NULL, show.qqplot = FALSE, ...) {
   
   xlim.by.user <- xlim
   yy <- x$data
   tau.complete <- complete_tau(x$tau)
 
-  if (x$method == "IGMM") {
+  if (identical(x$method, "IGMM")) {
     x$distname <- "normal"
     x$theta <- tau2theta(x$tau, beta = x$tau[c("mu_x", "sigma_x")])
-  }
-  if (x$distname == "normal") {
+  } else if (identical(x$distname, "normal")) {
     x$beta <- x$tau[c("mu_x", "sigma_x")]
   }
   
-  if (x$distname == "exp") {
-    beta.y <- 1 / mean(yy) 
-  } else if (x$distname == "chisq") {
-    beta.y <- mean(yy) 
-  } else if (x$distname == "normal") {
-    beta.y <- c(mean(yy), sd(yy))
-  } else {
-    beta.y <- suppressWarnings(fitdistr(yy, x$distname)$est)
-  }
-  names(beta.y) <- get_beta_names(x$distname)
+  beta.y <- estimate_beta(yy, distname = x$distname)
   
   .PdfLambertW <- function(xx) {
     return(dLambertW(xx, theta = x$theta, distname = x$distname))
   }
   .PdfZeroLambertW = function(xx){
-    return(dLambertW(xx, theta = list(beta = beta.y), distname = x$distname))
+    return(dLambertW(xx, theta = list(beta = beta.y), 
+                     distname = x$distname))
   }
   
-  coverage <- qLambertW(c(0.005, 0.995), theta = x$theta, distname = x$distname)
+  coverage <- qLambertW(c(0.005, 0.995), 
+                        theta = x$theta, 
+                        distname = x$distname)
   x.lower <- coverage[1]
   x.upper <- coverage[2]
   if (!is.null(xlim.by.user[1])) {
@@ -52,18 +46,24 @@ plot.LambertW_fit <- function(x, xlim = NULL, show.qqplot = FALSE, ...) {
   }
   
   COL <- c(1, 2, 4)  # Kernel, LambertW, Original
-  LWD <- c(2, 2, 1)
+  LWD <- c(2, 3, 1)
   LTY <- c(1, 1, 2)
-  
-  nn <- length(yy)
-  y.range <- range(yy)
-  y.range.length <- diff(y.range)
-  # get good breaks for histogram
-  good.num.breaks <- ceiling(y.range.length/(3.96 * sd(yy) * nn^(-1/3)))
 
+  # get good breaks for histogram
+  good.num.breaks <- .optimalNumberOfBinsForHist(yy)
+
+  dist.family <- get_distname_family(x$distname)
+  if (dist.family$is.non.negative) {
+    pdf.kde <- density(yy, from = 0)
+  } else {
+    pdf.kde <- density(yy)
+  }
   hist.est <- hist(yy, good.num.breaks, plot = FALSE)
-  pdf.kde <- density(yy)$y
-  pdf.para <- .PdfZeroLambertW(seq(x.lower, x.upper, length = 100))
+  pdf.para <- try(.PdfZeroLambertW(seq(x.lower, x.upper, length = 100)),
+                  silent = TRUE)
+  if (inherits(pdf.para, "try-error")) {
+    pdf.para <- rep(0, 100)
+  }
 
   # find support
   rv.support <- get_support(x$tau)
@@ -83,22 +83,24 @@ plot.LambertW_fit <- function(x, xlim = NULL, show.qqplot = FALSE, ...) {
   }
   legend.pos <- ifelse(skewness.pos, "topright", "topleft")
   
-  y.lim <- range(pdf.kde, pdf.para, pdf.paraLW, hist.est$intensities) * 1.1
-  
+  y.lim <- range(pdf.kde$y, pdf.para, pdf.paraLW, hist.est$intensities) * 1.1
   hist(yy, good.num.breaks, xlim = c(x.lower, x.upper),
        ylim = y.lim, prob = TRUE, density = 20, col = "darkgray", 
        ylab = "", main = "", ...)
   legend(legend.pos, leg.txt, col = COL, lwd = LWD, lty = LTY, cex = 0.8,
          box.lty = 0, horiz = FALSE, adj = 0)
   
-  lines(density(yy), lwd = LWD[1], lty = LTY[1])
-  plot(.PdfZeroLambertW, x.lower, x.upper, add = TRUE, 
-       lty = LTY[3], col = COL[3], lwd = LWD[3])
+  lines(pdf.kde, lwd = LWD[1], lty = LTY[1])
+  if (any(pdf.para > 0)) {
+    plot(.PdfZeroLambertW, x.lower, x.upper, add = TRUE, 
+         lty = LTY[3], col = COL[3], lwd = LWD[3])
+  }
   plot(.PdfLambertW, min(sup.l), max(sup.l), 
        lwd = LWD[2], col = COL[2], lty = LTY[2], ylab = "", add = TRUE)
   abline(v = rv.support, lwd = 2, lty = 3, col = COL[2])
   
-  if (x$type == "s") {
+  dist.family <- get_distname_family(x$distname)
+  if (x$type == "s" && !dist.family$is.non.negative) {
     if (x$tau["gamma"] > 0) {
       legend.pos <- "right"
       bound.at <- rv.support[1]

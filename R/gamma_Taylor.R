@@ -57,10 +57,11 @@ gamma_Taylor <- function(y, skewness.y = skewness(y), skewness.x = 0){
   gamma.hat <- (skewness.y - skewness.x) / 6
   
   if (skewness.x <= 0) {
-    mu.tmp <- mean(y)
+    mu.tmp <- mean.default(y)
   } else {
     mu.tmp <- 0
   }
-  bounds <- get_gamma_bounds(y, tau = c("mu_x" = mu.tmp, "sigma_x" = sd(y), gamma = 0))
+  bounds <- get_gamma_bounds(y, tau = c("mu_x" = mu.tmp, "sigma_x" = sd(y), 
+                                        gamma = 0))
   return(sign(gamma.hat) * min(abs(gamma.hat), min(abs(bounds))))
 }

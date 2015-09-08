@@ -109,7 +109,6 @@ plot(YY)
 XX <- Gaussianize(YY, type = "hh")
 plot(XX)
 
-
 out <- Gaussianize(YY, type = "h", return.tau.mat = TRUE,
                    verbose = TRUE, method = "IGMM")
 
@@ -117,15 +116,7 @@ plot(out$input)
 out$tau.mat
 
 YY.hat <- Gaussianize(data = out$input, tau.mat = out$tau.mat, inverse = TRUE)
-stopifnot(lp_norm(YY.hat - YY, 2) < 0.01)
 plot(YY.hat[, 1], YY[, 1])
-
-UU <- Gaussianize(YY, type = "h", tau.mat = out$tau.mat,
-                  verbose = TRUE, return.u = TRUE)
-plot(UU)
-YY.hat2 <- Gaussianize(input.u = UU, tau.mat = out$tau.mat,
-                       inverse = TRUE)
-stopifnot(lp_norm(YY.hat2 - YY, 2) < 0.01)
 }
 \references{
 Goerg, G.M. (2011). \dQuote{Lambert W Random Variables - A New

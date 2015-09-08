@@ -28,7 +28,7 @@
 get_gamma_bounds <- function(y, tau) {
   
   check_tau(tau)
-  zz <- (y - tau["mu_x"]) / tau["sigma_x"]
+  zz <- normalize_by_tau(y, tau)
   # if min(z) >= 0, then this is a not.negative random variable and we should use
   # c(0, Inf) as lower and upper bound
   if (min(zz) >= 0) { 

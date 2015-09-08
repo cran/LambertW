@@ -48,7 +48,7 @@ delta_GMM <- function(z, type = c("h", "hh"),
                       delta.init = delta_Taylor(z), 
                       tol = .Machine$double.eps^0.25, 
                       not.negative = FALSE,
-                      optim.fct = c("nlm", "optimize"),
+                      optim.fct = c("optimize", "nlm"),
                       lower = -1, upper = 3) {
   
   stopifnot(is.numeric(kurtosis.x),
@@ -69,10 +69,22 @@ delta_GMM <- function(z, type = c("h", "hh"),
         delta <- exp(delta)
       }
       u.g <- W_delta(z, delta = delta)
-      if (any(is.na(u.g))) {
+
+      if (anyNA(u.g) || any(is.infinite(u.g))) {
         return(lp_norm(kurtosis.x, 2))
       } else {
         empirical.kurtosis <- kurtosis(u.g)
+        # for delta -> Inf, u.g can become (numerically) a constant vector
+        # thus kurtosis(u.g) = NA.  In this case set empirical.kurtosis
+        # to a very large value and continue.
+        if (is.na(empirical.kurtosis)) {
+          empirical.kurtosis <- 1e10
+          warning("Kurtosis estimate was NA. ",
+                  "Set to large value (", empirical.kurtosis, 
+                  ") for optimization to continue.\n",
+                  "Please double-check results (in particular the 'delta' ",
+                  "estimate).")
+        }
         return(lp_norm(empirical.kurtosis - kurtosis.x, 2))
       }
     }
@@ -83,11 +95,32 @@ delta_GMM <- function(z, type = c("h", "hh"),
         delta <- exp(delta)
       }
       u.g <- W_2delta(z, delta = delta)
-      if (any(is.na(u.g))) {
+      if (anyNA(u.g) || any(is.infinite(u.g))) {
         return(lp_norm(kurtosis.x, 2) + lp_norm(skewness.x * 2, 2))
       } else {
         empirical.kurtosis <- kurtosis(u.g)
         empirical.skewness <- skewness(u.g)
+        
+        # for delta -> Inf, u.g can become (numerically) a constant vector
+        # thus kurtosis(u.g) = NA.  In this case set empirical.kurtosis
+        # to a very large value and continue.
+        if (is.na(empirical.kurtosis)) {
+          empirical.kurtosis <- 1e10
+          warning("Kurtosis estimate was NA. ",
+                  "Set to large value (", empirical.kurtosis, 
+                  ") for optimization to continue.\n",
+                  "Please double-check results (in particular the 'delta' ",
+                  "estimates).")
+        }
+        if (is.na(empirical.skewness)) {
+          # make it skewed the same way as the input
+          empirical.skewness <- 1e10 * (2 * as.numeric(skewness(z) > 0) - 1)
+          warning("Skewness estimate was NA. ",
+                  "Set to large value (", empirical.skewness, 
+                  ") for optimization to continue.\n",
+                  "Please double-check results (in particular the 'delta' ",
+                  "estimates).")
+        }
         return(lp_norm(empirical.kurtosis - kurtosis.x, 2) + 
                  lp_norm(empirical.skewness - skewness.x, 2))
       }
@@ -106,7 +139,7 @@ delta_GMM <- function(z, type = c("h", "hh"),
   }
   
   out <- list()
-  # use optimzie only if non.negative is false
+  # use optimize only if non.negative is false
   if (length(delta.init) == 1 && optim.fct == "optimize" && !not.negative) {
       fit <- optimize(f = .obj_fct, interval = c(lower, upper), tol = tol)
       delta.hat <- fit$minimum

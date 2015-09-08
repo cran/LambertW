@@ -20,35 +20,30 @@
 #' @seealso
 #' \code{\link{get_input}}; \code{\link{Gaussianize}} with argument \code{inverse = TRUE}.
 #' @export
-#' @examples
-#' 
-#' tau.tmp <- c(mu_x = 0, sigma_x = 1, delta = 0.2)
-#' xx <- rnorm(100)
-#' yy <- get_output(xx, tau.tmp)
-#' xx.hat <- get_input(yy, tau.tmp)
-#' # they must be equal (except for numerical issues)
-#' stopifnot(lp_norm(xx - xx.hat, 1) < 0.01)
 
 get_output <- function(x, tau, return.z = FALSE) {
 
   stopifnot(is.numeric(x),
-            !any(is.na(x)))
+            !anyNA(x))
   
   tau <- complete_tau(tau)
   check_tau(tau)
   type.tmp <- tau2type(tau)
   
-  uu <- (x - tau["mu_x"]) / tau["sigma_x"]
+  uu <- normalize_by_tau(x, tau)
+  
   if (type.tmp == "s") {
     zz <- H_gamma(uu, gamma = tau["gamma"])
   } else if (type.tmp == "h") {
     zz <- G_delta_alpha(uu, delta = tau["delta"], alpha = tau["alpha"])
   } else if (type.tmp == "hh") {
-    zz <- G_2delta_2alpha(uu, delta = tau[c("delta_l", "delta_r")], alpha = tau[c("alpha_l", "alpha_r")])
+    zz <- G_2delta_2alpha(uu, delta = tau[c("delta_l", "delta_r")], 
+                          alpha = tau[c("alpha_l", "alpha_r")])
   } else {
-    stop("Something went wrong with the 'type' argument. Type ", type.tmp, " is not valid.")
+    stop("Something went wrong with the 'type' argument.\n Type ", 
+         type.tmp, " is not valid.")
   }
-  yy <- zz * tau["sigma_x"] + tau["mu_x"]
+  yy <- normalize_by_tau(zz, tau, inverse = TRUE)
   names(yy) <- NULL
   
   if (return.z) {

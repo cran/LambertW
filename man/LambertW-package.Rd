@@ -76,11 +76,13 @@ TAB
 x <- get_input(y, fit.gmm$tau)
 test_normality(x) # input is normal -> fit a Lambert W x Gaussian by MLE
 
+\dontrun{
 fit.ml <- MLE_LambertW(y, type = "s", distname = "normal", hessian = TRUE)
 summary(fit.ml)
 plot(fit.ml)
 
 MLE_LambertW(y, type = "hh", distname = "normal", return.estimate.only = TRUE)
+ }
 }
 \author{
 Author and maintainer: Georg M. Goerg (im (at) gmge.org)

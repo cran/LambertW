@@ -1,4 +1,4 @@
-#' @title Computes the truncated support for skewed Lambert W distributions
+#' @title Computes support for skewed Lambert W x F distributions
 #' 
 #' @description
 #' If the input \eqn{X \sim F} has support on the entire real line
@@ -6,9 +6,11 @@
 #' distribution has truncated support \eqn{[a,b]}, \eqn{a,b \in R \cup \pm
 #' \infty} depending on \eqn{\boldsymbol \beta} and (the sign of) \eqn{\gamma}.
 #' 
+#' For scale-families no truncation occurs.
+#' 
 #' @name get_support
 #' @inheritParams common-arguments
-#' @inheritParams loglik_penalty
+#' @inheritParams loglik-LambertW-utils
 #' @return 
 #' A vector of length 2 with names \code{'lower'} and \code{'upper'}.
 #' @details
@@ -18,6 +20,9 @@
 #' truncated support (since \eqn{\delta \geq 0} by definition); thus
 #' support is \code{c(lower = -Inf, upper = Inf)}.
 #' @keywords math
+#' @param input.bounds interval; the bounds of the input distribution. If 
+#' \code{is.non.negative = FALSE}, then it will adjust it to \code{c(0, Inf)};
+#' also useful for bounded input distributions, such as \code{"unif"}
 #' @export
 #' @examples
 #' 
@@ -28,26 +33,39 @@
 #' # no truncation for heavy tail(s)
 #' get_support(c(mu_x = 0, sigma_x = 1, delta = 0.1))
 
-get_support <- function(tau, is.non.negative = FALSE) {
-  stopifnot(is.logical(is.non.negative))
+get_support <- function(tau, is.non.negative = FALSE, 
+                        input.bounds = c(-Inf, Inf)) {
+  stopifnot(is.logical(is.non.negative),
+            is.numeric(input.bounds),
+            length(input.bounds) == 2,
+            input.bounds[1] <= input.bounds[2])
+  
   tau <- complete_tau(tau)
   check_tau(tau)
   if (is.na(tau["gamma"])) {
     tau["gamma"] <- 0
   } 
 
-  if (is.non.negative) {
-    # assumes that gamma, delta, alpha >= 0
-    rv.support <- c(0, Inf)
+  if (!(identical(input.bounds, c(-Inf, Inf)) || 
+          identical(input.bounds, c(0, Inf)))) {
+    rv.support <- get_output(input.bounds, tau)
   } else {
-    if (tau["gamma"] == 0) {
-      rv.support <- c(-Inf, Inf) 
+    if (is.non.negative) {
+      input.bounds <- c(0, Inf)
+    }
+    if (is.non.negative) {
+      # assumes that gamma, delta, alpha >= 0
+      rv.support <- c(0, Inf)
     } else {
-      bb <- 1/(-tau["gamma"] * exp(1)) * tau["sigma_x"] + tau["mu_x"]
-      if (tau["gamma"] > 0) {
-        rv.support <- c(bb, Inf)
-      } else if (tau["gamma"] < 0) {
-        rv.support <- c(-Inf, bb)
+      if (tau["gamma"] == 0) {
+        rv.support <- c(-Inf, Inf) 
+      } else {
+        bb <- normalize_by_tau(1/(-tau["gamma"] * exp(1)), tau, inverse = TRUE)
+        if (tau["gamma"] > 0) {
+          rv.support <- c(bb, Inf)
+        } else if (tau["gamma"] < 0) {
+          rv.support <- c(-Inf, bb)
+        }
       }
     }
   }

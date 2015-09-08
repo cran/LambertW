@@ -4,11 +4,14 @@
 \alias{W}
 \alias{deriv_W}
 \alias{log_W}
-\title{Lambert W function and derivative}
+\alias{log_deriv_W}
+\title{Lambert W function, its logarithm and derivative}
 \usage{
 W(z, branch = 0)
 
 deriv_W(z, branch = 0, W.z = W(z, branch = branch))
+
+log_deriv_W(z, branch = 0, W.z = W(z, branch = branch))
 
 log_W(z, branch = 0, W.z = W(z, branch = branch))
 }
@@ -25,7 +28,8 @@ numeric; same dimensions/size as \code{z}.
 \code{W} returns numeric, \code{Inf} (for \code{z = Inf}), or \code{NA} if \eqn{z < -1/e}.
 
 Note that \code{W} handles \code{Inf} and \code{NaN} differently to
- \code{\link[gsl]{lambert_W0}} and \code{\link[gsl]{lambert_Wm1}} in the \pkg{gsl} package.
+ \code{\link[lamW]{lambertW0_C}} and \code{\link[lamW]{lambertWm1_C}}
+ in the \pkg{lamW} package.  In both cases it returns \code{NA}.
 }
 \description{
 Evaluates the Lambert W function (\code{W}), its first derivative
@@ -50,20 +54,22 @@ and non-principal (\code{W(z, branch = -1)}) branch;}
 \item{\eqn{z < -1/e}}{ no solution exists in the reals.}
 }
 
+\code{log_W} computes the natural logarithm of \eqn{W(z)}.
+This can be done efficiently since \eqn{\log W(z) = \log z - W(z)}.
+
 The derivative can be expressed as a function of \eqn{W(z)}: \deqn{ W'(z) =
 \frac{1}{(1 + W(z)) \exp(W(z))} = \frac{W(z)}{z(1 + W(z))}. }
 
-Note that \eqn{W'(0) = 1} and \eqn{W'(-1/e) = 0}. For this reason it is numerically
+Moreover, by taking logs on both sides we can even simplify further to
+\deqn{ \log W'(z) = \log W(z) - \log z - \log (1 + W(z))}
+which -- since \eqn{\log W(z) = \log z - W(z)} -- simplifies to
+\deqn{ \log W'(z) = - W(z) - \log (1 + W(z)).}
+
+Note that \eqn{W'(0) = 1} and \eqn{W'(-1/e) = \infty}. For this reason it is numerically
 faster to pass the value of \eqn{W(z)} as an argument to the derivative
 \code{deriv_W}, as it has often been already evaluated in a previous step.
-
-\code{log_W} computes the natural logarithm of \eqn{W(z)}. Similarly to the derivative,
-this can be done efficiently since \eqn{\log W(z) = \log z - W(z)}.
 }
 \examples{
-W(5) # exists in the reals
-W(-5) # does not exist in the reals
-
 W(-0.25) # "reasonable" input event
 W(-0.25, branch = -1) # "extreme" input event
 
@@ -71,25 +77,13 @@ curve(W(x, branch = -1), -1, 2, type="l", col = 2, lwd = 2)
 curve(W(x), -1, 2, type="l", add = TRUE, lty = 2)
 abline(v = - 1 / exp(1))
 
-# W is the inverse of H
-H(0)
-W(0)
-
-H(10)
-W(H(10))
-
-# At the critical point z = -1, both branches coincide.
-H(-1)
-W(H(-1))
-W(H(-1), branch = -1)
-
 # For lower values, the principal branch gives the 'wrong' solution;
 # the non-principal must be used.
 H(-10)
 W(H(-10), branch = 0)
 W(H(-10), branch = -1)
 curve(log(x), 0.1, 5, lty = 2, col = 1, ylab = "")
-curve(W(x), 0.1, 5, add = TRUE, col = "red")
+curve(W(x), 0, 5, add = TRUE, col = "red")
 curve(log_W(x), 0.1, 5, add = TRUE, col = "blue")
 grid()
 legend("bottomright", c("log(x)", "W(x)", "log(W(x))"),
@@ -100,8 +94,8 @@ Corless, R. M., G. H. Gonnet, D. E. G. Hare, D. J. Jeffrey and D. E. Knuth
 (1996). \dQuote{On the Lambert W function}. Advances in Computational Mathematics, pp. 329-359.
 }
 \seealso{
-\code{\link[gsl]{lambert_W0}} and \code{\link[gsl]{lambert_Wm1}} in
-the \pkg{gsl} package.
+\code{\link[lamW]{lambertW0_C}} and \code{\link[lamW]{lambertWm1_C}} in
+the \pkg{lamW} package.
 }
 \keyword{math}
 

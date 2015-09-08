@@ -41,7 +41,8 @@ get_initial_tau <- function(y, type = c("h", "hh", "s"), location.family = TRUE)
   x.input <- get_input(y, tau.init)
   # update parameters (and remove 'NA' if exist; happens if 'gamma' is too extreme for the given data)
   if (location.family) {
-    tau.init[c("mu_x", "sigma_x")] <- c(mean(x.input, na.rm = TRUE), sd(x.input, na.rm = TRUE))
+    tau.init[c("mu_x", "sigma_x")] <- c(mean(x.input, na.rm = TRUE), 
+                                        sd(x.input, na.rm = TRUE))
   } else {
     tau.init["sigma_x"] <- sd(x.input, na.rm = TRUE)
   }

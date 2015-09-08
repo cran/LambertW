@@ -105,7 +105,6 @@
 #' XX <- Gaussianize(YY, type = "hh")
 #' plot(XX)
 #' 
-#' 
 #' out <- Gaussianize(YY, type = "h", return.tau.mat = TRUE, 
 #'                    verbose = TRUE, method = "IGMM")
 #'                    
@@ -113,15 +112,8 @@
 #' out$tau.mat
 #' 
 #' YY.hat <- Gaussianize(data = out$input, tau.mat = out$tau.mat, inverse = TRUE)
-#' stopifnot(lp_norm(YY.hat - YY, 2) < 0.01)
 #' plot(YY.hat[, 1], YY[, 1])
 #' 
-#' UU <- Gaussianize(YY, type = "h", tau.mat = out$tau.mat, 
-#'                   verbose = TRUE, return.u = TRUE)
-#' plot(UU)
-#' YY.hat2 <- Gaussianize(input.u = UU, tau.mat = out$tau.mat, 
-#'                        inverse = TRUE)
-#' stopifnot(lp_norm(YY.hat2 - YY, 2) < 0.01)
 
 Gaussianize <- function(data = NULL, type = c("h", "hh", "s"), 
                         method = c("IGMM", "MLE"),
@@ -146,7 +138,7 @@ Gaussianize <- function(data = NULL, type = c("h", "hh", "s"),
     } else {
       data <- input.u
       data.is.u <- TRUE
-      overall.mean <- mean(input.u)
+      overall.mean <- mean.default(input.u)
       if (lp_norm(overall.mean) > 0.1) {
         warning("It seems like your input data is not standardize correctly (approx zero mean, variance 1).",
                 "Pass it as 'data' argument or set 'return.u = TRUE' when ", 
@@ -223,7 +215,7 @@ Gaussianize <- function(data = NULL, type = c("h", "hh", "s"),
         if (total.estimated.time > 60) {
           total.estimated.time <- c("minutes" = total.estimated.time / 60) 
         }
-        cat("(takes ~", round(total.estimated.time, 1), 
+        cat("(will take ~", round(total.estimated.time, 1), 
             " ", names(total.estimated.time), "). \n", sep ="")
       } 
       

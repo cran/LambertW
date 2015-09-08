@@ -70,6 +70,7 @@
 p_m1 <- function(gamma, beta, distname, n = 1) {
   
   stopifnot(n > 0,
+            n == round(n),
             is.numeric(gamma),
             length(gamma) == 1)
   check_distname(distname)

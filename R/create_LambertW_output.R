@@ -27,14 +27,10 @@ create_LambertW_output <- function(LambertW.input = NULL, theta = NULL,
                                    distname = LambertW.input$distname) {
   
   if (is.null(LambertW.input) && is.null(distname)) {
-    stop("'LambertW.input' is missing. \n Please create on object of class ",
+    stop("'LambertW.input' is missing. \n Please create an object of class ",
          " 'LambertW_input' first (using 'create_LambertW_input()` and then pass it as \n ",
          "'create_LambertW_output(LambertW.input = my_LambertW_input, theta = ...).")
   } 
-  
-  if (is.null(distname)) {
-      distname <- LambertW.input$distname
-  }
   
   if (!LambertW.input$user.defined) {
     check_distname(distname)
@@ -126,7 +122,8 @@ create_LambertW_output <- function(LambertW.input = NULL, theta = NULL,
     theta.tmp$beta <- tau.tmp[c("mu_x", "sigma_x")]
     tau.update <- theta2tau(theta.tmp, distname = "normal")
     quant.vals <- qLambertW(p, theta = theta, input.u = LambertW.input$U$q,
-                            tau = tau.update)
+                            tau = tau.update, 
+                            is.non.negative = LambertW.input$is.non.negative)
     names(quant.vals)
     return(quant.vals)
   }

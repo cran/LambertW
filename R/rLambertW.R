@@ -31,8 +31,6 @@ rLambertW <- function(n, distname, theta = NULL, beta = NULL, gamma = 0, delta =
   check_tau(tau)
   
   type.tmp <- tau2type(tau)
-  xx <- uu * tau["mu_x"] + tau["sigma_x"]
-  
   if (all(tau[grepl("delta", names(tau))] == 0) && all(tau[grepl("alpha", names(tau))] == 1) && 
         tau["gamma"] == 0) {
     zz <- uu
@@ -47,9 +45,10 @@ rLambertW <- function(n, distname, theta = NULL, beta = NULL, gamma = 0, delta =
     stop("Something went wrong with the type of the distribution.")
   }
   
-  yy <- zz * tau["sigma_x"] + tau["mu_x"]
+  yy <- normalize_by_tau(zz, tau, inverse = TRUE)
   names(yy) <- NULL
   if (return.x) {
+    xx <- normalize_by_tau(uu, tau)
     return(list(x = xx, y = yy)) 
   } else {
     return(yy)

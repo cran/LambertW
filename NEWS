@@ -8,20 +8,77 @@
 * always: add more distributions by default
 * eventually convert the Lambert W toolkit to reference classes, rather than S3 classes
 
+## v0.6.0
+
+### New
+
+* moved from **gsl** package to **lamW**: the Lambert W implementation is ~4x faster than for **gsl**. Needless to say that this will also speed up many computations in the **LambertW** package. Thank you [Avraham Adler](http://www.avrahamadler.com/2015/05/26/lamw-package-cran/) for the **lamW** package.
+
+* new functions:
+  * `deriv_xexp()`
+  * `normalize_by_tau()`
+  * `log_deriv_W()`
+
+* lots of performance improvements (not only due to **lamW** package). Leads to
+  2-3 times faster estimation via IGMM or MLE overall. Detailed benchmarks will
+  follow.
+
+* added (first iteration) of unit tests using the **testthat** package
+
+### Minor changes
+
+* added recommended packages to `NAMESPACE` following new CRAN policies
+* set `from = 0` in `plot.LambertW_fit` for scale families with all positive values.
+* `get_distname_family` returns a third logical entry `non.negative` to 
+  check whether a distribution is for non-negative random variables (e.g.,
+  exponential or Gamma).
+* `loglik_penalty` loses the "distname" argument, but gains the
+  "is.non.negative" argument.
+* replaced all `any(is.na(...))` with `anyNA(...)` (small speedups)
+* made `deriv_W` faster and more precise using a log transform first and 
+  using mathematial identities of the derivative of W, its derivative, and
+  logarithm.
+* made "optimize" the default optimizer in `delta_GMM` and `gamma_GMM`
+  (it's about 30% faster than "nlm")
+
+### Bug fixes
+
+* `delta_GMM`: for `delta` too large (`>1e100`) the backtransformed data `u` would 
+  become negligibly small and numerically a constant (`1e-100`); thus 
+  `kurtosis()` estimate would be `NaN`, which resulted in stop of `nlm`
+  function in `delta_GMM`. Added an `NA` check and returned large value
+  for objective function, for `nlm()` to search for a better `delta`.
+  backtransformed
+* `get_initial_theta`: if initial estimates of `gamma` are too extreme, then 
+  the backtransformed input data for X contains `NA`. This caused an error
+  in `estimate_beta()`.  Now `NA`s are removed before passing `x.init` 
+  to `estimate_beta()` 
+* `log_W(Inf)` returned `NA`; fixed to return `Inf`.
+* `qLambertW()` didn't compute correct quantiles for non-negative distributions
+  (e.g., `"exp"` or `"gamma"`) and `type = "s"`; replaced now with closed form
+  expressions.
+
+### Deprecated
+
+Several deprecated functions (see also `?deprecated-function`):
+
+* `H()`: use `xexp()` instead
+
+
 ## v0.5.1
 
 ### New
 
 ### Bug fixes
 - `data` input to `Gaussianize()` does not have to have `colnames`; will 
-  be assigned by default if `colnames(data)` is `NULL`
+  be assigned by default if `colnames(data) = NULL`
 - fixed bug in `mLambertW` which ignored `delta` values passed via `theta`
 
 ### Deprecated
 
 Several deprecated functions (see also `?deprecated-function`):
 
-* `normfit()`: use `test_normality()` (or short `test_norm()` instead)
+* `normfit()`: use `test_normality()` (or short `test_norm()`) instead
 
 ### Minor changes
 

@@ -3,8 +3,7 @@
 deriv_W_gamma <- function(z, gamma = 0, branch = 0) {
   stopifnot(is.numeric(z), 
             is.numeric(gamma), 
-            length(gamma) == 1,
-            branch == 0 || branch == -1)
+            length(gamma) == 1)
   
   out <- rep(1, length(z))
   if (gamma != 0) {

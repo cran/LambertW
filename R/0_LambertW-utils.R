@@ -170,14 +170,13 @@
 #' ###############################
 #' ######### qLambertW ###########
 #' 
-#' \dontrun{
 #' p.v <- c(0.01, 0.05, 0.5, 0.9, 0.95,0.99)
 #' qnorm(p.v)
 #' # same as above except for rounding errors
 #' qLambertW(p.v, theta = list(beta = c(0, 1), gamma = 0), distname="normal") 
 #' # positively skewed data -> quantiles are higher
 #' qLambertW(p.v, theta = list(beta = c(0, 1), gamma = 0.1), distname="normal")
-#' }
+#' 
 #' ###############################
 #' ######### qqLambertW ###########
 #' \dontrun{

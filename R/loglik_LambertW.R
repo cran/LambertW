@@ -29,15 +29,12 @@ loglik_LambertW <- function(theta, y, distname, type,
   xx <- get_input(yy, tau = tau)
   
   dist.family <- get_distname_family(distname)
-  is.non.negative <- FALSE
-  if (!dist.family$location && dist.family$scale) {
-    is.non.negative <- TRUE
-  }
   if (type == "s") {
-    if (is.non.negative) {
+    if (dist.family$is.non.negative) {
       out <- list(loglik.input = loglik_input(beta = theta$beta, x = xx, distname = distname),
-                  loglik.penalty = loglik_penalty(tau = tau, y = yy, type = type, 
-                                                  is.non.negative = is.non.negative))
+                  loglik.penalty = loglik_penalty(tau = tau, y = yy, type = type,
+                                                  is.non.negative = 
+                                                      dist.family$is.non.negative))
       out$loglik.LambertW <- out$loglik.input + out$loglik.penalty
     } else {
       out <- list(loglik.input = NA,
@@ -46,8 +43,7 @@ loglik_LambertW <- function(theta, y, distname, type,
     }
   } else if (type %in% c("h", "hh")) {
     out <- list(loglik.input = loglik_input(beta = theta$beta, x = xx, distname = distname),
-                loglik.penalty = loglik_penalty(tau = tau, y = yy, type = type,
-                                                is.non.negative = is.non.negative))
+                loglik.penalty = loglik_penalty(tau = tau, y = yy, type = type))
     out$loglik.LambertW <- out$loglik.input + out$loglik.penalty
   }
   

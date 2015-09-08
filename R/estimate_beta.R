@@ -34,7 +34,7 @@
 #' 
 
 estimate_beta <- function(x, distname) {
-  
+  stopifnot(!anyNA(x))
   # in alphabetical order
   kSupportedByFitdistr <- c("beta", 
                             "cauchy", 
@@ -62,9 +62,9 @@ estimate_beta <- function(x, distname) {
   # skip fitdistr() for distributions that have closed form
   if (distname %in% kClosedForm) {
     switch(distname, 
-           "chisq" = {beta.init <- mean(x)},
-           "normal" = {beta.init <- c(mean(x), sd(x))},
-           "exp" = {beta.init <- 1 / mean(x)},
+           "chisq" = {beta.init <- mean.default(x)},
+           "normal" = {beta.init <- c(mean.default(x), sd(x))},
+           "exp" = {beta.init <- 1 / mean.default(x)},
            "unif" = {beta.init <- range(x)})
   } else {
     beta.init <- suppressWarnings(fitdistr(x, distname)$est)

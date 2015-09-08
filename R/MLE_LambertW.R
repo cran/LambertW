@@ -82,11 +82,11 @@ MLE_LambertW <- function(y, distname, type = c("h", "s", "hh"),
   
   # initialize result ouput
   result <- list(data = y,
-                distname = distname,
-                type = type,
-                theta.fixed = theta.fixed,
-                call = match.call(),
-                method = "MLE")
+                 distname = distname,
+                 type = type,
+                 theta.fixed = theta.fixed,
+                 call = match.call(),
+                 method = "MLE")
   if (return.estimate.only) {
     hessian <- FALSE
   }
@@ -133,7 +133,7 @@ MLE_LambertW <- function(y, distname, type = c("h", "s", "hh"),
   ### Define negative log-likelihood
   ######################################################################################
   .neg_loglik_LambertW <- function(param, param.names = names(param)) {
-    if (any(is.na(param))) {
+    if (anyNA(param)) {
       neg.loglik <- 10^12
     } else {
       names(param) <- param.names
@@ -148,8 +148,16 @@ MLE_LambertW <- function(y, distname, type = c("h", "s", "hh"),
           theta.tmp[[nn]] <- theta.fixed[[nn]]
         }
       }
-      neg.loglik <- loglik_LambertW(theta.tmp, distname = distname, y = y, return.negative = TRUE,
-                                    type = type, flattened.theta.names = param.names)
+      neg.loglik <- try(loglik_LambertW(theta.tmp, distname = distname, y = y, return.negative = TRUE,
+                                        type = type, flattened.theta.names = param.names),
+                        silent = TRUE)
+      if (inherits(neg.loglik, "try-error")) {
+        warning("Parameter search lead to candidates that lead to errors",
+                " in the log-likelihood calculation.  Please check the ",
+                "estimate theta for feasibility.\n This can happen if",
+                " estimates imply non-finite mean or standard deviation.")
+        neg.loglik <- NA
+      }
     }
     if (is.na(neg.loglik) || any(neg.loglik == c(-Inf, Inf))) { 
       # warning("Negative log-likelihood was not finite (", neg.loglik, "). Please check data/parameters.")
@@ -180,6 +188,9 @@ MLE_LambertW <- function(y, distname, type = c("h", "s", "hh"),
     }
   }
   
+  if (any("df" == names(params.init))) {
+    lb["df"] <- 2.01
+  }
   ######################################################################################
   ### Do optimization to obtain theta.hat
   ######################################################################################
@@ -282,11 +293,12 @@ MLE_LambertW <- function(y, distname, type = c("h", "s", "hh"),
   tau.hat <- theta2tau(fit$theta, distname = distname)
   
   result <- c(result,
-              list(loglik = function(...) -.neg_loglik_LambertW(...),
-                   loglik.opt = -loglik_LambertW(fit$theta, y = y, type = type, distname = distname)$loglik.LambertW,
+              list(loglik.opt = loglik_LambertW(fit$theta, y = y, type = type,
+                                                distname = distname)$loglik.LambertW,
                    params.init = params.init,
                    params.hat = params.hat,
                    theta = fit$theta,
+                   theta.fixed = theta.fixed,
                    tau = tau.hat,
                    fit = fit,
                    optim.fct = optim.fct,

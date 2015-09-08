@@ -54,7 +54,7 @@ gamma_GMM <- function(z, skewness.x = 0, gamma.init = gamma_Taylor(z), robust = 
   
   .obj_fct <- function(gamma) {
     u.d <- W_gamma(z, gamma)
-    if (any(is.na(u.d))) {
+    if (anyNA(u.d)) {
       return(Inf)
     } else {
       if (!robust) {
@@ -67,11 +67,15 @@ gamma_GMM <- function(z, skewness.x = 0, gamma.init = gamma_Taylor(z), robust = 
   }
 
   bounds <- get_gamma_bounds(z, tau = c("mu_x" = 0, "sigma_x" = 1, gamma = 0))
+  if (not.negative) {
+    bounds[1] <- 0
+  }
   lb <- bounds[1] + 1e-7
   ub <- bounds[2] - 1e-7
   if (ub == Inf) {
     ub <- 100
   }
+    
   if (optim.fct == "nlminb") {
     fit <- nlminb(gamma.init, .obj_fct, lower = lb, upper = ub, control = list(abs.tol = tol))
     out <- list(gamma = fit$par,

@@ -28,6 +28,9 @@
 summary.LambertW_fit <- function(object, ...) {
   if (object$method == "IGMM") {
     object$params.hat <- object$tau
+    object$distname.tmp <- "normal"
+  } else {
+    object$distname.tmp <- object$distname
   }
   
   try.inverse <- try(solve(-object$hessian), silent = TRUE)
@@ -48,11 +51,9 @@ summary.LambertW_fit <- function(object, ...) {
                  output = data,
                  input = get_input(object$data, tau = object$tau))
   
-  support.tmp <- get_support(object$tau)
-  if (min(result$input) >= 0) {
-    support.tmp <- c(0, Inf)
-  }
-    
+  dist.family <- get_distname_family(object$distname.tmp)
+  support.tmp <- get_support(object$tau, 
+                             is.non.negative = dist.family$is.non.negative)    
   result <- c(result,
               list(coefmat = TAB,
                    hessian = object$hessian,

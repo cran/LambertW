@@ -64,7 +64,7 @@
 #' Applications in Finance and Economics. Available at
 #'  \url{http://www.hindawi.com/journals/tswj/aa/909231/}.
 #' @keywords package
-#' @import MASS moments
+#' @import MASS moments stats graphics
 #' @examples
 #' # Replicate parts of the analysis in Goerg (2011)
 #' data(AA)
@@ -88,11 +88,11 @@
 #' x <- get_input(y, fit.gmm$tau)
 #' test_normality(x) # input is normal -> fit a Lambert W x Gaussian by MLE
 #' 
+#' \dontrun{
 #' fit.ml <- MLE_LambertW(y, type = "s", distname = "normal", hessian = TRUE)
 #' summary(fit.ml)
 #' plot(fit.ml)
 #' 
 #' MLE_LambertW(y, type = "hh", distname = "normal", return.estimate.only = TRUE)
-#' 
-#' 
+#'  }
 NULL

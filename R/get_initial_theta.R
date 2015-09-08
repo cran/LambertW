@@ -53,7 +53,12 @@ get_initial_theta <- function(y, distname, type = c("h", "hh", "s"),
                      kurtosis.x = ifelse(location.family, 3, 9))$tau
   }
   x.init <- get_input(y, tau.init)
-  beta.init <- estimate_beta(x = x.init, distname = distname)
+  # remove NA since for tau.init it can happen that the transformed data
+  # has NA (if it falls outside of branches of W)
+  beta.init <- estimate_beta(x = na.omit(x.init), distname = distname)
+  if (distname == "t" && beta.init["df"] < 2) {
+    beta.init["df"] <- 2.01
+  }
   theta.init <- tau2theta(tau.init, beta = beta.init)
   if (type == "s") {
     theta.init[["delta"]] <- NULL

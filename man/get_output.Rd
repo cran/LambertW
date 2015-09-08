@@ -27,14 +27,6 @@ If \code{return.z = TRUE}, then it returns a list with 2 vectors
 \eqn{\boldsymbol y} given the transformation vector \eqn{\tau =
 (\mu_x(\boldsymbol \beta), \sigma_x(\boldsymbol \beta), \gamma, \alpha, \delta)}.
 }
-\examples{
-tau.tmp <- c(mu_x = 0, sigma_x = 1, delta = 0.2)
-xx <- rnorm(100)
-yy <- get_output(xx, tau.tmp)
-xx.hat <- get_input(yy, tau.tmp)
-# they must be equal (except for numerical issues)
-stopifnot(lp_norm(xx - xx.hat, 1) < 0.01)
-}
 \seealso{
 \code{\link{get_input}}; \code{\link{Gaussianize}} with argument \code{inverse = TRUE}.
 }
