@@ -1,9 +1,9 @@
 #' @rdname LambertW_fit-methods
-#' @description
-#' \code{summary.LambertW_fit} computes some auxiliary results from the estimate such as
-#' standard errors, theoretical support (only for \code{type="s"}), skewness tests 
-#' (only for \code{type="hh"}), etc.  See \code{print.summary.LambertW_fit} for print out
-#' in the console.
+#' @description \code{summary.LambertW_fit} computes some auxiliary results from
+#'     the estimate such as standard errors, theoretical support (only for
+#'     \code{type="s"}), skewness tests (only for \code{type="hh"}), etc.  See
+#'     \code{print.summary.LambertW_fit} for print out in the console.
+
 #' @return
 #' \code{summary} returns a list of class \code{summary.LambertW_fit} 
 #' containing 
@@ -19,7 +19,7 @@
 #' \item{method}{estimation method} 
 #' \item{hessian}{Hessian at the optimum. Numerically obtained for \code{method = "MLE"}; 
 #' for \code{method = "IGMM"} a diagonal-matrix approximation from covariance matrix
-#' obtained by simulations for \eqn{n = 1000} observations.}
+#' obtained by simulations for \eqn{n = 1000} samples in Goerg (2011).}
 #' \item{p_m1, p_m1n}{Probability that one (or n) observation were caused by input 
 #' from the non-principal branch (see \code{\link{p_m1}}); only for \code{type = "s"}.}
 #' \item{symmetry.p.value}{p-value from Wald test of identical left and right tail parameters (see
@@ -69,14 +69,17 @@ summary.LambertW_fit <- function(object, ...) {
            result$tau <- object$tau
          },
          "MLE" = {
-           result$tau <- theta2tau(object$theta, distname = object$distname)
+           result$tau <- theta2tau(object$theta, distname = object$distname,
+                                   use.mean.variance = object$use.mean.variance)
          })
   
   if (object$method == "MLE" && object$type == "s") {
     result$p_m1 <- p_m1(gamma = object$theta$gamma, distname = object$distname, 
-                        beta = object$theta$beta, n = 1)
+                        beta = object$theta$beta, n = 1,
+                        use.mean.variance = object$use.mean.variance)
     result$p_m1n <- p_m1(gamma = object$theta$gamma, distname = object$distname, 
-                         beta = object$theta$beta, n = result$n)
+                         beta = object$theta$beta, n = result$n,
+                         use.mean.variance = object$use.mean.variance)
   } else {
     result$p_m1 <- result$p_m1n <- NA
   }

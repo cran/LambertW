@@ -2,16 +2,18 @@
 #' @description
 #' \code{loglik_input} computes the log-likelihood of various distributions for 
 #' the parameter \eqn{\boldsymbol \beta} given the data \code{x}. This can be 
-#' used independently of the Lambert W framework to compute 
+#' used independently of the Lambert W x F framework to compute 
 #' the log-likelihood of parameters for common distributions.
 #' 
 #' @inheritParams common-arguments
-#' @param dX optional; density function of \code{x}. Common distributions are already
-#' built-in (see \code{distname}). If you want to supply your own density, you
-#' \strong{must} supply a function of \code{x} and \code{beta} and set \code{distname = "user"}.
-#' @param log.dX optional; a function that returns the logarithm of the density function
-#' of \code{x}. Often -- in particular for exponential families -- 
-#' the \eqn{\log} of \eqn{f_X(x)} has a simpler form (and is thus faster to evaluate).
+#' @param dX optional; density function of \code{x}. Common distributions are
+#'     already built-in (see \code{distname}). If you want to supply your own
+#'     density, you \strong{must} supply a function of \code{(x, beta)} and set
+#'     \code{distname = "user"}.
+#' @param log.dX optional; a function that returns the logarithm of the density
+#'     function of \code{x}. Often -- in particular for exponential families --
+#'     the \eqn{\log} of \eqn{f_X(x)} has a simpler form (and is thus faster to
+#'     evaluate).
 #' @param x a numeric vector of real values (the \emph{input} data).
 #' @export
 loglik_input <- function(beta, x, distname, dX = NULL, 
@@ -72,6 +74,6 @@ loglik_input <- function(beta, x, distname, dX = NULL,
          }
          )
    
-  loglik <- sum(.log_dX(xx = x, beta = beta))
+  loglik <- sum(.log_dX(x, beta = beta))
   return(loglik)
 } 

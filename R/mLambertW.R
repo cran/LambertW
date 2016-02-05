@@ -11,6 +11,10 @@ mLambertW <- function(theta = NULL, distname = c("normal"), beta, gamma = 0, del
   }
   check_distname(distname)
   if (is.null(theta)) {
+    warning("Please specify parameters by passing a list",
+            "to the 'theta' argument directly.\n",
+            "Specifying parameters by alpha, beta, gamma, delta will be",
+            "deprecated.")
     theta <- list(beta = beta, alpha = alpha, gamma = gamma, delta = delta)
   } 
   theta <- complete_theta(theta)

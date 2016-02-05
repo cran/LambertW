@@ -9,7 +9,10 @@ print.LambertW_fit <- function(x, ...) {
   print(x$call)
   cat("Estimation method: ", x$method, "\n")
   cat("Input distribution: ", x$distname, "\n")
-  cat("Lambert W type ('h' same tails; 'hh' different tails; 's' skewed): ", 
+  cat(ifelse(x$use.mean.variance,
+             "mean-variance",
+             "location-scale"), 
+      "Lambert W x F type ('h' same tails; 'hh' different tails; 's' skewed): ", 
       x$type, "\n")
   cat("\n Parameter estimates:\n")
   if (x$method == "IGMM") {

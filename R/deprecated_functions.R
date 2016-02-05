@@ -1,14 +1,14 @@
 #' @title List of deprecated functions
 #' 
 #' @description
-#' These functions have been deprecated in v0.5 of \pkg{LambertW} 
-#' mostly for sake of following R style guides
-#' with respect to naming of functions. This means that all deprecated functions 
-#' here have an analogous function in the package
-#' with a similar -- more style consistent -- name. See also the \code{NEWS} file.
+#' These functions have been deprecated in v0.5 of \pkg{LambertW} mostly for
+#'     sake of following R style guides with respect to naming of
+#'     functions. This means that all deprecated functions here have an
+#'     analogous function with a similar -- more style consistent -- name. See
+#'     also the \code{NEWS} file.
 #' 
-#' Deprecated functions still work as expected, but they print out a warning suggesting to 
-#' use the new function (name).
+#' Deprecated functions still work as expected, but they print out a warning
+#' suggesting to use the new function (name).
 #' 
 #' @name deprecated-functions
 #' @param ... arguments passed to deprecated functions.
@@ -122,6 +122,5 @@ W_gamma_1 <- function(z, gamma) {
 #' @export
 H <- function(...) {
   warning("DEPRECATED: Please use xexp(...) instead of H(...).")
-  
   return(xexp(...))
 }

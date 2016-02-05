@@ -1,7 +1,9 @@
 #' @rdname LambertW-toolkit
 #' @description
-#' \code{create_LambertW_output} converts the input \code{LambertW_input} representing
-#' random variable \eqn{X \sim F_X} to the Lambert W \eqn{\times} \eqn{F_X} output.
+#' 
+#' \code{create_LambertW_output} converts the input \code{LambertW_input}
+#'     representing random variable \eqn{X \sim F_X} to the Lambert W
+#'     \eqn{\times} \eqn{F_X} output.
 #' 
 #' @inheritParams common-arguments
 #' @param LambertW.input an object of class \code{LambertW_input}
@@ -28,7 +30,8 @@ create_LambertW_output <- function(LambertW.input = NULL, theta = NULL,
   
   if (is.null(LambertW.input) && is.null(distname)) {
     stop("'LambertW.input' is missing. \n Please create an object of class ",
-         " 'LambertW_input' first (using 'create_LambertW_input()` and then pass it as \n ",
+         " 'LambertW_input' first (using 'create_LambertW_input()` and then ",
+         "pass it as \n ",
          "'create_LambertW_output(LambertW.input = my_LambertW_input, theta = ...).")
   } 
   
@@ -38,7 +41,8 @@ create_LambertW_output <- function(LambertW.input = NULL, theta = NULL,
   
   if (is.null(theta)) {
     cat("You have not specified the theta of the Lambert W RV transformation.",
-        "\n  By default your LambertW output will be identical to the LambertW input.")
+        "\n By default your LambertW output will be identical to the ",
+        "LambertW input.")
     theta <- list(beta = LambertW.input$beta)
   }
   theta <- complete_theta(theta, LambertW.input = LambertW.input)
@@ -49,7 +53,8 @@ create_LambertW_output <- function(LambertW.input = NULL, theta = NULL,
   }
   
   if (is.null(LambertW.input)) {
-    LambertW.input <- create_LambertW_input(distname = distname, beta = theta$beta)
+    LambertW.input <- create_LambertW_input(distname = distname,
+                                            beta = theta$beta)
   }
   
   tau.tmp <- LambertW.input$beta2tau(LambertW.input$beta)
@@ -67,7 +72,8 @@ create_LambertW_output <- function(LambertW.input = NULL, theta = NULL,
                   distname = paste("Lambert W x", LambertW.input$distname))
   results$type <- tau2type(results$tau)
   results$distname.with.beta <- paste0(results$distname, "(", 
-                                       paste(round(results$beta, 2), collapse = ","), ")")
+                                       paste(round(results$beta, 2),
+                                             collapse = ","), ")")
   
   rY <- function(n, theta = results$theta) {
     theta <- complete_theta(theta, LambertW.input = LambertW.input)

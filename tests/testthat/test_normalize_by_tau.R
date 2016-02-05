@@ -27,8 +27,6 @@ test_that("throw errors for incorrect input arguments", {
   expect_error(normalize_by_tau(random.data, correct.tau, 0))
 })
 
-
-
 test_that("it computes the correct transformation", {
   
   for (nn in names(correct.taus)) {

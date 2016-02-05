@@ -8,10 +8,11 @@
 #' or both (\code{type = "hh"}).
 #' 
 #' In principle, this works for any F.  Of course, this package implements only a finite
-#' number of distributions, which you usually pass with the \code{distname} argument.
+#' number of distributions, which can be specified with the \code{distname} argument.
 #' Most functions in this package, however, also allow you to pass your own distribution and parameters
 #' and create a Lambert W\eqn{\times} F version of it.
-#' See \code{\link{create_LambertW_input}} and \code{\link{create_LambertW_output}}.
+#' 
+#' @seealso \code{\link{create_LambertW_input}}, \code{\link{create_LambertW_output}}.
 #' 
 #' @inheritParams common-arguments
 #' @keywords misc

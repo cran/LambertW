@@ -30,13 +30,15 @@ test_that("H_gamma", {
   }
 })
 
-
-
 test_that("derivative for xexp function", {
   
   expect_equal(deriv_xexp(0), 1)
   expect_equal(deriv_xexp(random.data), 
                exp(random.data) * random.data + exp(random.data))
+  
+  # zero derivative is the actual function
+  expect_equal(deriv_xexp(random.data, 0),
+               xexp(random.data))
   # vectorized
   zero.mat <- matrix(0, ncol = 5, nrow = 4)
   expect_identical(xexp(zero.mat), zero.mat)

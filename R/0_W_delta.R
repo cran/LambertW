@@ -3,8 +3,8 @@
 #' @aliases W_delta_alpha W_2delta W_2delta_2alpha deriv_W_delta deriv_W_delta_alpha
 #' 
 #' @description
-#' Inverse transformation for heavy-tail Lambert W RVs; inverse of Tukey's h
-#' transformation as a special case.
+#' Inverse transformation \code{W_delta_alpha} for heavy-tail Lambert W RVs and its derivative.
+#' This is the inverse of Tukey's h transformation as a special case of \code{alpha = 1}.
 #' 
 #' @param z a numeric vector of real values.
 #' @param delta heavy-tail parameter(s); by default \code{delta = 0}, which
@@ -33,37 +33,13 @@
 #' 
 
 W_delta <- function(z, delta = 0) {
-  stopifnot(is.numeric(z), 
-            is.numeric(delta), 
-            length(delta) == 1)
-  if (delta == 0) {
-    uu <- z
-  } else {
-    uu <- sign(z) * (W(delta * z^2)/delta)^(1/2)
-  }
-  return(uu)
+  return(W_delta_Cpp(z, delta))
 }
 
 #' @rdname W_delta
 #' @export
 W_delta_alpha <- function(z, delta = 0, alpha = 1) {
-  
-  stopifnot(is.numeric(z),
-            is.numeric(delta),
-            is.numeric(alpha),
-            length(delta) == 1,
-            length(alpha) == 1)
-  
-  if (delta == 0) {
-    return(z)
-  } else {
-    if (alpha == 1) {
-      u <- W_delta(z, delta = delta)
-    } else {
-      u <- sign(z) * (W(alpha * delta * abs(z)^(2 * alpha))/(alpha * delta))^(1/(2 * alpha))
-    }
-    return(u)
-  }
+  return(W_delta_alpha_Cpp(z, delta, alpha))
 } 
 
 #' @rdname W_delta

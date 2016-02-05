@@ -1,10 +1,12 @@
 #' @rdname LambertW-toolkit
 #' 
 #' @details
-#' \code{create_LambertW_input} allows users to define their own Lambert W\eqn{\times} F distribution by supplying the necessary 
-#' functions about the input random variable \eqn{U} and \eqn{\boldsymbol \beta}.
-#' Here \eqn{U} is the zero mean and/or unit variance version of 
-#' \eqn{X \sim  F_X(x \mid \boldsymbol \beta)} (see References).
+#' 
+#' \code{create_LambertW_input} allows users to define their own Lambert
+#'     W\eqn{\times} F distribution by supplying the necessary functions about
+#'     the input random variable \eqn{U} and \eqn{\boldsymbol \beta}.  Here
+#'     \eqn{U} is the zero mean and/or unit variance version of \eqn{X \sim
+#'     F_X(x \mid \boldsymbol \beta)} (see References).
 #' 
 #' The argument \code{input.u} must be a list containing all of the following:
 #' \describe{
@@ -24,8 +26,10 @@
 #' }
 #' 
 #' @inheritParams common-arguments
-#' @param input.u optional; users can make their own 'Lambert W x F' distribution by 
-#' supplying the necessary functions. See Description for details.
+#' 
+#' @param input.u optional; users can make their own 'Lambert W x F'
+#'     distribution by supplying the necessary functions. See Description for
+#'     details.
 
 #' @keywords univar distribution datagen models
 #' @export

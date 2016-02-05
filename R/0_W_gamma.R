@@ -27,7 +27,7 @@
 #' \deqn{
 #' \frac{d}{dz} W_{\gamma}(z) = \frac{1}{\gamma} \cdot W'(\gamma z) \cdot \gamma = W'(\gamma z)
 #' }
-#' \code{deriv_1_W_gamma} implements this derivative (for both branches).
+#' \code{deriv_W_gamma} implements this derivative (for both branches).
 #' 
 #' @param gamma skewness parameter; by default \code{gamma = 0}, which implies
 #' \code{W_gamma(z) = z}.
@@ -39,12 +39,6 @@
 #' @export
 #' @keywords math
 W_gamma <- function(z, gamma = 0, branch = 0) {
-  stopifnot(is.numeric(gamma),
-            length(gamma) == 1)
-  if (gamma == 0) {
-    return(z) 
-  } else {
-    return(W(gamma * z, branch = branch) / gamma)
-  }
+  W_gamma_Cpp(z, gamma, branch)
 }
 

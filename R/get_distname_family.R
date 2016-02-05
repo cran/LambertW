@@ -4,7 +4,7 @@
 #' \code{get_distname_family} determines whether a distribution is a 
 #' location, scale, or location-scale family. 
 #' It also returns whether the distribution is supported on non-negative
-#' values or not.
+#' values only.
 #' 
 #' @return 
 #' \code{get_distname_family} returns a list with

@@ -26,16 +26,19 @@ plot.LambertW_fit <- function(x, xlim = NULL, show.qqplot = FALSE, ...) {
   beta.y <- estimate_beta(yy, distname = x$distname)
   
   .PdfLambertW <- function(xx) {
-    return(dLambertW(xx, theta = x$theta, distname = x$distname))
+    return(dLambertW(xx, theta = x$theta, distname = x$distname,
+                     use.mean.variance = x$use.mean.variance))
   }
   .PdfZeroLambertW = function(xx){
     return(dLambertW(xx, theta = list(beta = beta.y), 
-                     distname = x$distname))
+                     distname = x$distname,
+                     use.mean.variance = x$use.mean.variance))
   }
   
   coverage <- qLambertW(c(0.005, 0.995), 
                         theta = x$theta, 
-                        distname = x$distname)
+                        distname = x$distname,
+                        use.mean.variance = x$use.mean.variance)
   x.lower <- coverage[1]
   x.upper <- coverage[2]
   if (!is.null(xlim.by.user[1])) {
@@ -123,6 +126,7 @@ plot.LambertW_fit <- function(x, xlim = NULL, show.qqplot = FALSE, ...) {
   box(lwd = 2)
   
   if (show.qqplot) {
-    qqLambertW(yy, theta = x$theta, distname = x$distname)
+    qqLambertW(yy, theta = x$theta, distname = x$distname,
+               use.mean.variance = x$use.mean.variance)
   }
 }

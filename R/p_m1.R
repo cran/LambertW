@@ -1,11 +1,11 @@
 #' @title Non-principal branch probability
 #' 
-#' @description 
-#' Computes the probability that (at least) one (out of n) observation(s) of
-#' the latent variable \eqn{U} lies in the non-principal branch region. Here \code{m1}
-#' in the name of \code{p_m1} stands for 'minus 1', i.e, the non-principal branch.
+#' @description Computes the probability that (at least) one (out of n)
+#'     observation(s) of the latent variable \eqn{U} lies in the non-principal
+#'     branch region. The '\code{m1}' in \code{p_m1} stands for 'minus 1', i.e,
+#'     the non-principal branch.
 #' 
-#' See References and Details for mathematical derivations.
+#' See Goerg (2011) and Details for mathematical derivations.
 #' 
 #' @details
 #' The probability that one observation of the latent RV U lies in the
@@ -14,8 +14,8 @@
 #' unit variance version of the input \eqn{X \sim F_X(x \mid \boldsymbol
 #' \beta)} -- see References.
 #' 
-#' For \eqn{N} independent RVs \eqn{U_1, \ldots, U_N}, the
-#' probability that at least one data point came from the non-principal region equals 
+#' For \eqn{N} independent RVs \eqn{U_1, \ldots, U_N}, the probability that at
+#' least one data point came from the non-principal region equals
 #' \deqn{
 #' p_{-1}(\gamma, n=N) = P\left(U_i < -\frac{1}{|\gamma|} \; for \; at \;
 #' least \; one \; i \right) } 
@@ -28,19 +28,16 @@
 #' = 1 - (1-p_{-1}(\gamma, n=1))^N. }
 #' 
 #' For improved numerical stability the cdf of a geometric RV
-#' (\code{\link[stats]{pgeom}}) is used to evaluate the last expression. Nevertheless, 
-#' numerical problems can occur for \eqn{|\gamma| < 0.03}
-#' (returns \code{0} due to rounding errors).
+#' (\code{\link[stats]{pgeom}}) is used to evaluate the last
+#' expression. Nevertheless, numerical problems can occur for \eqn{|\gamma| <
+#' 0.03} (returns \code{0} due to rounding errors).
 #' 
-#' Note that \eqn{1 - (1-p_{-1}(\gamma, n=1))^N} reduces to \eqn{p_{-1}(\gamma)} for \eqn{N=1}.
-#' @references 
-#' Goerg, G.M. (2011). \dQuote{Lambert W Random Variables - A New
-#' Family of Generalized Skewed Distributions with Applications to Risk
-#' Estimation}. Annals of Applied Statistics, 5 (3), 2197-2230.
-#' (\url{http://arxiv.org/abs/0912.4554}).
+#' Note that \eqn{1 - (1-p_{-1}(\gamma, n=1))^N} reduces to \eqn{p_{-1}(\gamma)}
+#' for \eqn{N=1}.
 #' 
 #' @inheritParams common-arguments
-#' @param n number of RVs/observations; default \code{n=1}.
+#' @param gamma scalar; skewness parameter.
+#' @param n number of RVs/observations.
 #' @return 
 #' non-negative float; the probability \eqn{p_{-1}} for \code{n} observations.
 #' @keywords univar
@@ -67,7 +64,7 @@
 #' # y_i was caused by an input in the non-principal branch.
 #'
 
-p_m1 <- function(gamma, beta, distname, n = 1) {
+p_m1 <- function(gamma, beta, distname, n = 1, use.mean.variance = TRUE) {
   
   stopifnot(n > 0,
             n == round(n),
@@ -79,7 +76,8 @@ p_m1 <- function(gamma, beta, distname, n = 1) {
   if (gamma < 0) {
     gamma <- -gamma
   }
-  out <- pU(-1/gamma, beta = beta, distname = distname)
+  out <- pU(-1/gamma, beta = beta, distname = distname,
+            use.mean.variance = use.mean.variance)
   names(out) <- NULL
   
   if (n > 1 && !is.na(out)) {

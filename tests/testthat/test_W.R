@@ -41,12 +41,12 @@ test_that("input to W must be numeric", {
   
 })
 
-test_that("W is inverse of H", {
+test_that("W is inverse of xexp", {
   pos.vals <- rexp(100, rate = 10)
-  expect_equal(W(H(pos.vals), branch = 0), pos.vals)
+  expect_equal(W(xexp(pos.vals), branch = 0), pos.vals)
   
   neg.vals <- seq(-2, -10)
-  expect_equal(W(H(neg.vals), branch = -1), neg.vals)
+  expect_equal(W(xexp(neg.vals), branch = -1), neg.vals)
 })
 
 
@@ -72,8 +72,6 @@ test_that("W throw warning if input is NA or NaN and returns NA; Inf for Inf", {
 
 })
 
-
-
 test_that("W is vectorized and maintins input dimension", {
   
   data.list <- list("single" = 5,
@@ -83,18 +81,17 @@ test_that("W is vectorized and maintins input dimension", {
   for (dd in data.list) {
     expect_equal(dim(dd), dim(W(dd)))
   }
-  
 })
 
-
-require(gsl)
-test_that("lamW and gsl implementation are the same", {
-  pos.vals <- rexp(1e5)
-  neg.vals <- -rexp(1e5)
-  
-  expect_equal(lamW::lambertW0_C(pos.vals),
-               gsl::lambert_W0(pos.vals))
-  expect_equal(lamW::lambertWm1(neg.vals),
-               gsl::lambert_Wm1(neg.vals))
-})
+if (requireNamespace("gsl")) {
+    test_that("lamW and gsl implementation are the same", {
+        pos.vals <- rexp(1e5)
+        neg.vals <- -rexp(1e5)
+        
+        expect_equal(lamW::lambertW0_C(pos.vals),
+                     gsl::lambert_W0(pos.vals))
+        expect_equal(lamW::lambertWm1(neg.vals),
+                     gsl::lambert_Wm1(neg.vals))
+    })
+}
 

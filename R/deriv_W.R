@@ -37,9 +37,21 @@ log_deriv_W <- function(z, branch = 0, W.z = W(z, branch = branch)) {
     log.deriv.W[ind.neg] <- log(-(1 - 1/(W.z[ind.neg] + 1))) - log(-z[ind.neg])
   } else if (branch == -1) {
     log.deriv.W[ind.neg] <- log(deriv_W(z = z[ind.neg], 
-                                      branch = branch, W.z = W.z[ind.neg]))
+                                        branch = branch, W.z = W.z[ind.neg]))
   } else {
     stop("Branch must be either 0 or -1.")
   }
   return(log.deriv.W)
+}
+
+
+#' @rdname W
+#' @export
+#' 
+
+deriv_log_W <- function(z, branch = 0, W.z = W(z, branch = branch)) {
+    
+  deriv.log.W <-  (z * (1 + W.z))^-1
+  deriv.log.W[z < 0] <- NaN
+  return(deriv.log.W)
 }

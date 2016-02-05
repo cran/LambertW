@@ -1,9 +1,8 @@
 #' @rdname theta-utils
 #' @description
 #' \code{complete_theta} completes missing values in a parameters list so users
-#' don't have to specify everything in detail. If not supplied, then the
-#' following will be set: \code{alpha = 1}, \code{gamma = 0}, and \code{delta =
-#' 0}.
+#' don't have to specify everything in detail. If not supplied, then
+#' \code{alpha = 1}, \code{gamma = 0}, and \code{delta = 0} will be set by default.
 #' @param LambertW.input optional; if \code{beta} is missing in \code{theta},
 #' \code{LambertW.input} (which has a \code{beta} element) must be specified.
 #' 

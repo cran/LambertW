@@ -6,24 +6,22 @@
 #' test of the linear restriction \eqn{H_0: \delta_l - \delta_r = 0} or a
 #' likelihood ratio test.
 #' 
-#' By default it uses \code{"Wald"} test since this only requires the Hessian
-#' of the \code{"hh"} Lambert W fit.  The \code{"LR"} test requires the log-likelihood
-#' values for both MLEs (type \code{"h"} and \code{"hh"}) and thus takes 
-#' longer to compute.
+#' By default it uses \code{"Wald"} test since this only requires the Hessian of
+#' the \code{"hh"} Lambert W fit.  The \code{"LR"} test requires the
+#' log-likelihood values for both MLEs (type \code{"h"} and \code{"hh"}) and
+#' thus takes longer to compute.
 #'  
-#' @param LambertW.fit an object of class \code{LambertW_fit} with \code{type = "hh"} or
-#' a numeric vector (observed data). If it is data, then an
-#' asymmetric Lambert W \eqn{\times} Gaussian distribution (\code{distname =
-#' "normal"}) with two tail parameters (\code{"hh"}) will be fit to the data
-#' internally and then used as the new \code{LambertW.fit}.
+#' @param LambertW.fit an object of class \code{LambertW_fit} with \code{type =
+#'     "hh"} or a numeric vector (observed data). If it is data, then an
+#'     asymmetric Lambert W \eqn{\times} Gaussian distribution (\code{distname =
+#'     "normal"}) with two tail parameters (\code{"hh"}) will be fit to the data
+#'     internally and then used as the new \code{LambertW.fit}.
 #' @param method test methodology: \code{"Wald"} (default) or a likelihood ratio
-#' \code{"LR"} test
-#' @return 
-#' A list of class \code{"htest"} containing:
-#' \item{statistic}{the value of the test statistic,} 
-#' \item{p.value }{the p-value for the test,} 
-#' \item{method}{the character string describing the test,} 
-#' \item{data.name}{a character string giving the name(s) of the data.}
+#'     \code{"LR"} test
+#' @return A list of class \code{"htest"} containing: \item{statistic}{value of
+#'     the test statistic,} \item{p.value }{p-value for the test,}
+#'     \item{method}{character string describing the test,} \item{data.name}{a
+#'     character string giving the name(s) of the data.}
 #' @keywords htest
 #' @export
 #' @examples
@@ -83,10 +81,13 @@ test_symmetry <- function(LambertW.fit, method = c("Wald", "LR")) {
     statistic <- c(W = WW)
   } else if (method == "LR") {
     method <- "Likelihood ratio test"
+    theta.init.sym <- obj$theta
+    theta.init.sym$delta <- mean(theta.init.sym$delta)
     mod.h <- MLE_LambertW(obj$data, type = "h", distname = obj$distname,
-                          hessian = FALSE)
-    loglik.h <- mod.h$loglik.opt
-    loglik.hh <- obj$loglik.opt
+                          hessian = FALSE,
+                          theta.init = theta.init.sym)
+    loglik.h <- mod.h$loglik
+    loglik.hh <- obj$loglik
     
     lambda <- 2 * (loglik.hh - loglik.h)
     pval <- 1 - pchisq(lambda, 1)

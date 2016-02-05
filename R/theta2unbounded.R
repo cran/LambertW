@@ -5,18 +5,18 @@
 #' \eqn{\sigma_x}, \eqn{\delta}, and \eqn{\alpha}; note that this restricts
 #' \eqn{\gamma \geq 0}, \eqn{\delta \geq 0}, and \eqn{\alpha \geq 0}.). 
 #' 
-#' @param inverse logical; if \code{TRUE}, it transforms the unbounded \code{theta} back to 
-#' the original, bounded space. Default: \code{FALSE}.
+#' @param inverse logical; if \code{TRUE}, it transforms the unbounded
+#'     \code{theta} back to the original, bounded space. Default: \code{FALSE}.
 #' 
-#' @details
-#' Converting \code{theta} to an unbouded space is especially useful for 
-#' optimization routines (like \code{\link[stats]{nlm}}),
-#' which can be performed over an unconstrained space. The obtained optimum
-#' can be converted back to the original space using the inverse transformation (set
-#' \code{inverse = TRUE} transforms it via \eqn{\exp}) -- this guarantees that 
-#' the estimate satisfies non-negativity constraints 
-#' (if required). The main advantage is that this avoids using optimization routines with 
-#' boundary constraints -- since they are very slow compared to uncostrained optimization.
+#' @details Converting \code{theta} to an unbouded space is especially useful
+#'     for optimization routines (like \code{\link[stats]{nlm}}), which can be
+#'     performed over an unconstrained space. The obtained optimum can be
+#'     converted back to the original space using the inverse transformation
+#'     (set \code{inverse = TRUE} transforms it via \eqn{\exp}) -- this
+#'     guarantees that the estimate satisfies non-negativity constraints (if
+#'     required). The main advantage is that this avoids using optimization
+#'     routines with boundary constraints -- since they are much slower compared
+#'     to uncostrained optimization.
 #' 
 #' @export
 theta2unbounded <- function(theta, distname, type = c("h", "hh", "s"), 

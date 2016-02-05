@@ -1,6 +1,6 @@
 #' @rdname LambertW_input_output-methods
 #' @description
-#' \code{print.LambertW_input} prints an overview of the output object.
+#' \code{print.LambertW_input} prints an overview of the input object.
 #' @export
 
 print.LambertW_input <- function(x, ...) {

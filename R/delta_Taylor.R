@@ -20,7 +20,7 @@
 #' where \eqn{\widehat{\gamma}_2(\mathbf{y})} is the empirical kurtosis of \eqn{\mathbf{y}}.
 #' 
 #' Since the kurtosis is finite only for \eqn{\delta < 1/4},
-#' \code{delta_Taylor} upperbounds the returned estimate by \eqn{1/4}.
+#' \code{delta_Taylor} upper-bounds the returned estimate by \eqn{0.25}.
 #' 
 #' @param y a numeric vector of data values.
 #' @param kurtosis.y kurtosis of \eqn{y}; default: empirical kurtosis of data \code{y}.

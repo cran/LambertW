@@ -1,10 +1,11 @@
 #' @rdname U-utils
 #' @export
-rU <- function(n, beta, distname) {
+rU <- function(n, beta, distname, use.mean.variance = TRUE) {
   check_distname(distname)
   names(beta) <- get_beta_names(distname)
   
-  sigma.x <- beta2tau(beta, distname = distname)["sigma_x"]
+  sigma.x <- beta2tau(beta, distname = distname,
+                      use.mean.variance = use.mean.variance)["sigma_x"]
   switch(distname,
          cauchy = {
            uu <- rcauchy(n)
@@ -35,6 +36,5 @@ rU <- function(n, beta, distname) {
            uu <- runif(n, -sqrt(3), sqrt(3))
          }
   )
-  
   return(uu)
 } 

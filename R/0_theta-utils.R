@@ -10,10 +10,10 @@
 #' @examples
 #' 
 #' \dontrun{
-#' check_theta(theta = list(beta= c(1, 1, -1)), distname = "t")
+#' check_theta(theta = list(beta =  c(1, 1, -1)), distname = "t")
 #' }
 #' 
-#' check_theta(theta = list(beta= c(1, 1)), distname = "normal") # ok
+#' check_theta(theta = list(beta =  c(1, 1)), distname = "normal") # ok
 #' 
 #' params <- list(beta = c(2, 1), delta = 0.3) # alpha and gamma are missing
 #' complete_theta(params) # added default values
@@ -24,19 +24,19 @@
 #' 
 #' ###
 #' x <- rnorm(1000)
-#' get_initial_theta(x, distname="normal", type="h")
-#' get_initial_theta(x, distname="normal", type="s")
+#' get_initial_theta(x, distname = "normal", type = "h")
+#' get_initial_theta(x, distname = "normal", type = "s")
 #' 
-#' # starting values for the skewed version of a Normal
-#' y <- rLambertW(n=1000, distname="exp", beta = 2, gamma = 0.1)
-#' get_initial_theta(y, distname="exp", type="s")
+#' # starting values for the skewed version of an exponential
+#' y <- rLambertW(n = 1000, distname = "exp", beta = 2, gamma = 0.1)
+#' get_initial_theta(y, distname = "exp", type = "s")
 #' 
 #' # starting values for the heavy-tailed version of a Normal = Tukey's h
-#' y <- rLambertW(n=1000, beta = c(2, 1), distname = "normal", delta = 0.2)
-#' get_initial_theta(y, distname="normal", type = "h")#' 
+#' y <- rLambertW(n = 1000, beta = c(2, 1), distname = "normal", delta = 0.2)
+#' get_initial_theta(y, distname = "normal", type = "h")#' 
 #' 
 #' ###
-#' get_theta_bounds(type="hh", distname="normal", beta = c(0, 1))
+#' get_theta_bounds(type = "hh", distname = "normal", beta = c(0, 1))
 #' 
 #' ### 
 #' theta.restr <- theta2unbounded(list(beta = c(-1, 0.1), 
@@ -47,4 +47,3 @@
 #' theta2unbounded(theta.restr, inverse = TRUE, distname = "normal") 
 #' 
 NULL
-

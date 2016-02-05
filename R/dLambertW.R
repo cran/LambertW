@@ -1,18 +1,24 @@
 #' @rdname LambertW-utils
 #' @export
-dLambertW <- function(y, distname = NULL, theta = NULL, beta = NULL, gamma = 0, delta = 0, 
-                      alpha = 1, input.u = NULL, tau = NULL, log = FALSE) {
+dLambertW <- function(y, distname = NULL, theta = NULL, beta = NULL, gamma = 0, 
+                      delta = 0, alpha = 1, input.u = NULL, tau = NULL, 
+                      use.mean.variance = TRUE, log = FALSE) {
   
   if (is.null(theta)) {
+    warning("Please specify parameters by passing a list",
+            "to the 'theta' argument directly.\n",
+            "Specifying parameters by alpha, beta, gamma, delta will be",
+            "deprecated.")
     theta <- list(beta = beta, alpha = alpha, gamma = gamma, delta = delta)
   } 
   theta <- complete_theta(theta)
   
   if (is.null(input.u)) {
-    check_distname(distname)
     check_theta(theta = theta, distname = distname)
-    tau <- theta2tau(theta = theta, distname = distname)
-    fU <- function(u) dU(u, beta = theta$beta, distname = distname) 
+    tau <- theta2tau(theta = theta, distname = distname,
+                     use.mean.variance = use.mean.variance)
+    fU <- function(u) dU(u, beta = theta$beta, distname = distname,
+                         use.mean.variance = use.mean.variance) 
   } else {
     fU <- input.u
     if (is.null(tau)) {

@@ -1,9 +1,11 @@
 #' @rdname tau-utils
 #' @description
-#' \code{complete_tau} completes missing values so users don't have to specify every element of 
-#' \eqn{\tau}
-#' explicitly.  Mean \code{'mu_x'} and standard deviation \code{'sigma_x'} must be specified, but 
-#' \code{alpha = 1}, \code{gamma = 0}, and \code{delta = 0} will be set automatically if missing.
+#' 
+#' \code{complete_tau} completes missing values so users don't have to specify
+#'     every element of \eqn{\tau} explicitly. \code{'mu_x'} and
+#'     \code{'sigma_x'} must be specified, but \code{alpha = 1}, \code{gamma =
+#'     0}, and \code{delta = 0} will be set automatically if missing.
+#' 
 #' @export
 complete_tau <- function(tau, type = tau2type(tau)) {
   

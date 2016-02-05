@@ -121,3 +121,56 @@ for (nn in names(heavy.theta.list)) {
     expect_more_than(cor(kde.est$y, auxD(kde.est$x)), 0.9)
   })
 }
+
+
+test_that("mLambertW only works for normal so far", {
+  expect_error(mLambertW(theta = list(beta = 1), distname = "exp"))
+})
+test_that("mLambertW has correct values for Normal and delta = 0 or gamma = 0", {
+  
+  mom.lamw.h <- mLambertW(theta = list(beta = c(2, 3)),
+                          distname = "normal")
+  expect_equal(mom.lamw.h$mean, 2)
+  expect_equal(mom.lamw.h$sd, 3)
+  expect_equal(mom.lamw.h$skewness, 0)
+  expect_equal(mom.lamw.h$kurtosis, 3)
+  
+})
+
+test_that("mLambertW has correct values for Normal and delta > 0", {
+  
+  delta.v <- seq(0, 1.2, by = 0.2)
+  for (dd in delta.v) {
+    msg <- paste0("delta=", dd)
+    mom.lamw.h <- mLambertW(theta = list(beta = c(2, 3), delta = dd),
+                            distname = "normal")
+    if (dd < 1) {
+      expect_equal(mom.lamw.h$mean, 2, 
+                   info = paste0(msg, ": mean"))
+    } else {
+      expect_true(is.na(mom.lamw.h$mean))
+    }
+    
+    if (dd > 0) {
+      expect_more_than(mom.lamw.h$sd, 3, 
+                          info = paste0(msg, ": sd"))
+    } else if (dd > 0.5) {
+      expect_true(is.na(mom.lamw.h$sd))
+    }
+    
+    if (dd < 1/3) {
+      expect_equal(mom.lamw.h$skewness, 0, 
+                   info = paste0(msg, ": skewness"))
+    } else {
+      expect_true(is.na(mom.lamw.h$skewness))
+    }
+    
+    if (dd > 0) {
+      expect_more_than(mom.lamw.h$kurtosis, 3, 
+                       info = paste0(msg, ": kurtosis"))
+    } else if (dd > 1/4) {
+      expect_true(is.na(mom.lamw.h$mean))
+    }
+  }
+  
+})

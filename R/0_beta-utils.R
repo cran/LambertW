@@ -2,12 +2,8 @@
 #' @name beta-utils
 #' 
 #' @description
-#' The vector \eqn{\boldsymbol \beta} parametrizes the input distribution
-#' \eqn{X \sim F_X(x \mid \boldsymbol \beta)}. Depending on the distribution 
-#' \eqn{\boldsymbol \beta} has different length and names: e.g., 
-#' for a \code{"normal"} distribution \code{beta} is of length 
-#' \eqn{2} (\code{"mu"}, \code{"sigma"}); for an \code{"exp"}onential 
-#' distribution \code{beta} is a scalar (rate \code{"lambda"}).
+#' The parameter \eqn{\boldsymbol \beta} specifies the input distribution
+#' \eqn{X \sim F_X(x \mid \boldsymbol \beta)}.
 #' 
 #' @inheritParams common-arguments
 #' @param beta numeric; vector \eqn{\boldsymbol \beta} of the input

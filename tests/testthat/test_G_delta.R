@@ -37,4 +37,7 @@ test_that("specific mathematical identities for  G_delta_alpha", {
   expect_equal(G_delta_alpha(random.data, delta = 0, alpha = alpha.c), 
                random.data,
                info = "Identity for delta = 0  and any alpha")
+  expect_equal(G_delta_alpha(random.data, alpha = alpha.c), 
+               random.data,
+               info = "Identity for delta = 0 (default value) and any alpha")
 })

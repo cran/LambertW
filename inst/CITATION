@@ -4,7 +4,7 @@ year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
 vers <- paste("R package version", meta$Version)
 
 citEntry(entry = "Manual",
-         title = "LambertW: An R package for Lambert W x F Random Variables",
+         title = "LambertW: Probabilistic Models to Analyze and Gaussianize Heavy-Tailed, Skewed Data",
          author = personList(as.person("Georg M. Goerg")),
          year = year,
          note = vers,

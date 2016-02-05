@@ -1,29 +1,30 @@
 #' @rdname beta-utils
 #' 
 #' @description
-#' \code{estimate_beta} estimates parameter \eqn{\boldsymbol \beta} for a given
-#' input distribution using MLE or methods of momments.  Closed form solutions
+#' \code{estimate_beta} estimates \eqn{\boldsymbol \beta} for a given
+#' \eqn{F_X} using MLE or methods of moments.  Closed form solutions
 #' are used if they exist; otherwise the MLE is obtained numerically using 
 #' \code{\link[MASS]{fitdistr}}.
 #' 
 #' @details
-#' Note that \code{estimate_beta} does not do any data transformation as part 
-#' of the Lambert W\eqn{\times} F input/output framework.
-#' For an initial estimate of \eqn{\theta} in the Lambert W\eqn{\times} F estimation see 
-#' \code{\link{get_initial_theta}} and \code{\link{get_initial_tau}}.
+#' \code{estimate_beta} does not do any data transformation as part of the
+#'     Lambert W\eqn{\times} F input/output framework.  For an initial estimate
+#'     of \eqn{\theta} for Lambert W\eqn{\times} F distributions see
+#'     \code{\link{get_initial_theta}} and \code{\link{get_initial_tau}}.
 #' 
 #' @inheritParams common-arguments
 #' @inheritParams loglik_input
 #' @details
-#' A quick initial estimate of \eqn{\theta} is obtained by first
-#' finding the (approximate) input \eqn{\widehat{\boldsymbol x}_{\widehat{\theta}}}
-#' by \code{\link{IGMM}}, and then getting the MLE of \eqn{\boldsymbol \beta} for this input data
-#' \eqn{\widehat{\boldsymbol x}_{\widehat{\theta}} \sim F_X(x \mid \boldsymbol
-#' \beta)} (usually using \code{\link[MASS]{fitdistr}}).
+#' A quick initial estimate of \eqn{\theta} is obtained by first finding the
+#'     (approximate) input \eqn{\widehat{\boldsymbol x}_{\widehat{\theta}}} by
+#'     \code{\link{IGMM}}, and then getting the MLE of \eqn{\boldsymbol \beta}
+#'     for this input data \eqn{\widehat{\boldsymbol x}_{\widehat{\theta}} \sim
+#'     F_X(x \mid \boldsymbol \beta)} (usually using
+#'     \code{\link[MASS]{fitdistr}}).
 #' 
 #' @return
-#' \code{estimate_beta} returns a named vector with estimates for 
-#' \eqn{\boldsymbol \beta}.
+#' \code{estimate_beta} returns a named vector with estimates for
+#' \eqn{\boldsymbol \beta} given \code{x}.
 #' @export
 #' @examples
 #' 
@@ -51,7 +52,7 @@ estimate_beta <- function(x, distname) {
                             "t", 
                             "weibull")
   kClosedForm <- c("chisq", "exp", "normal", "unif")
-  stopifnot(!is.unsorted(sort(kSupportedByFitdistr)), # TODO: make this sorted before
+  stopifnot(!is.unsorted(sort(kSupportedByFitdistr)), # TODO: sort this before
             !is.unsorted(kClosedForm))
   
   if (!(distname %in% c(kSupportedByFitdistr, kClosedForm))) {

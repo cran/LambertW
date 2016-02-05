@@ -17,6 +17,7 @@ print.summary.LambertW_fit <- function(x, ...) {
   cat("\n Parameter estimates:\n")
   if (x$method == "IGMM") {
     cat(" Note: standard errors are only asymptotic, simulation based.\n")
+    cat(" If you want more accurate estimates see ?bootstrap .")
   }
   
   printCoefmat(x$coefmat, signif.stars = TRUE)

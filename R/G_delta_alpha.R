@@ -8,21 +8,17 @@
 #'  for \eqn{\alpha = 1} (\code{\link{G_delta}}) and Gaussian input.
 #' 
 #' @param u a numeric vector of real values.
+#' 
 #' @param delta heavy tail parameter; default \code{delta = 0}, which implies
-#' \code{G_delta_alpha(u) = u}.
-#' @param alpha exponent in \eqn{(u^2)^{\alpha}}; default \code{alpha = 1} (Tukey's h).
+#'     \code{G_delta_alpha(u) = u}.
+#'
+#' @param alpha exponent in \eqn{(u^2)^{\alpha}}; default \code{alpha = 1}
+#'     (Tukey's h).
+#' 
 #' @return 
 #' numeric; same dimension/size as \code{u}.
 #' @keywords math
 #' @export
-#' @examples
-#' 
-#' G_delta_alpha(2, delta=1)
-#' G_delta_alpha(2, delta=1, alpha = 0.5)
-#' 
-#' G_delta_alpha(2) ## default delta = 0: hence, G_delta(u) = u
-#' G_delta_alpha(0, delta=1) ## G_delta(0) = 0 for all delta
-#' 
 
 G_delta_alpha <- function(u, delta = 0, alpha = 1){
   stopifnot(is.numeric(u),
@@ -59,7 +55,7 @@ G_delta <- function(u, delta = 0) {
 
 #' @rdname G_delta_alpha
 #' @export
-G_2delta_2alpha <- function(u, delta = c(0, 1/5), alpha = c(1, 1)) {
+G_2delta_2alpha <- function(u, delta = c(0, 0), alpha = c(1, 1)) {
   stopifnot(length(delta) <= 2,
             length(alpha) <= 2,
             is.numeric(delta),

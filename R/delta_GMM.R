@@ -1,23 +1,22 @@
-#' @title Estimate optimal delta
+#' @title Estimate delta
 #' 
 #' @description
-#' This function minimizes the Euclidean distance between the theoretical
-#' kurtosis of a heavy-tail(s) Lambert W x Gaussian random variable and the sample 
-#' kurtosis of the back-transformed
-#' data \eqn{W_{\delta}(\boldsymbol z)} as a function of \eqn{\delta} (see
-#' References). Note that only an iterative application of this function will
-#' give a good estimate of \eqn{\delta} (see \code{\link{IGMM}}).
+#' 
+#' This function minimizes the Euclidean distance between the sample kurtosis of
+#'     the back-transformed data \eqn{W_{\delta}(\boldsymbol z)} and a
+#'     user-specified target kurtosis as a function of \eqn{\delta} (see
+#'     References).  Only an iterative application of this function will give a
+#'     good estimate of \eqn{\delta} (see \code{\link{IGMM}}).
 #' 
 #' @param z a numeric vector of data values.
 #' @inheritParams common-arguments
 #' @param kurtosis.x theoretical kurtosis of the input X; default: \code{3}
-#' (\eqn{X \sim} Gaussian).
+#' (e.g., for \eqn{X \sim} Gaussian).
 #' @param skewness.x theoretical skewness of the input X. Only used if \code{type = "hh"}; 
-#' default: \code{0} (\eqn{X \sim} symmetric).
+#' default: \code{0} (e.g., for \eqn{X \sim} symmetric).
 #' @param delta.init starting value for optimization; default: \code{\link{delta_Taylor}}.
-#' @param tol a positive scalar giving the tolerance at which the distance is
-#' considered close enough to zero to terminate the algorithm; default:
-#' \code{.Machine$double.eps^0.25}.
+#' @param tol a positive scalar; tolerance level for terminating 
+#' the iterative algorithm; default: \code{.Machine$double.eps^0.25}.
 #' @param not.negative logical; if \code{TRUE} the estimate for \eqn{\delta} is
 #' restricted to the non-negative reals. Default: \code{FALSE}.
 #' @param optim.fct which R optimization function should be used. Either \code{'optimize'} 
@@ -48,7 +47,7 @@ delta_GMM <- function(z, type = c("h", "hh"),
                       delta.init = delta_Taylor(z), 
                       tol = .Machine$double.eps^0.25, 
                       not.negative = FALSE,
-                      optim.fct = c("optimize", "nlm"),
+                      optim.fct = c("nlm", "optimize"),
                       lower = -1, upper = 3) {
   
   stopifnot(is.numeric(kurtosis.x),
@@ -57,7 +56,8 @@ delta_GMM <- function(z, type = c("h", "hh"),
             length(kurtosis.x) == 1,
             kurtosis.x > 0,
             length(delta.init) <= 2,
-            tol > 0)
+            tol > 0,
+            lower < upper)
   
   optim.fct <- match.arg(optim.fct)
   type <- match.arg(type)
@@ -126,7 +126,7 @@ delta_GMM <- function(z, type = c("h", "hh"),
       }
     }
     if (length(delta.init) == 1) {
-      delta.init <- c(delta.init * 1.1, delta.init * 0.9)
+      delta.init <- delta.init * c(1.1, 0.9)
     }
     if (skewness(z) > 0) {
       # revert lower and upper delta if skewness is positive
@@ -134,8 +134,9 @@ delta_GMM <- function(z, type = c("h", "hh"),
     }
   }
   if (not.negative) {
-    # add 0.01 so delta.init = 0 (or c(0, 0)) can be a possible value for initial value (delta_Taylor)
-    delta.init <- log(delta.init + 0.01) 
+    # add 0.01 so delta.init = 0 (or c(0, 0)) can be a possible value for
+    # initial value (delta_Taylor)
+    delta.init <- log(delta.init + 0.001) 
   }
   
   out <- list()

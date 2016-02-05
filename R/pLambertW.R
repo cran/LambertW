@@ -1,11 +1,16 @@
 #' @rdname LambertW-utils
-#' @param lower.tail logical; if \code{TRUE}, probabilities are given as log(p).
+#' @param lower.tail logical; if \code{TRUE} (default), probabilities are
+#' \eqn{P(X \leq x)} otherwise, \eqn{P(X > x)}.
 #' @export
 pLambertW <- function(q, distname, theta = NULL, beta = NULL, gamma = 0, delta = 0, alpha = 1, 
                       input.u = NULL, tau = NULL, log = FALSE,
-                      lower.tail = FALSE) {
+                      lower.tail = FALSE, use.mean.variance = TRUE) {
   
   if (is.null(theta)) {
+    warning("Please specify parameters by passing a list",
+            "to the 'theta' argument directly.\n",
+            "Specifying parameters by alpha, beta, gamma, delta will be",
+            "deprecated.")
     theta <- list(beta = beta, alpha = alpha, gamma = gamma, delta = delta)
   } 
   theta <- complete_theta(theta)
@@ -13,8 +18,10 @@ pLambertW <- function(q, distname, theta = NULL, beta = NULL, gamma = 0, delta =
   if (is.null(input.u)) {
     check_distname(distname)
     check_theta(theta = theta, distname = distname)
-    tau <- theta2tau(theta = theta, distname = distname)
-    FU <- function(u) pU(u, beta = theta$beta, distname = distname) 
+    tau <- theta2tau(theta = theta, distname = distname, 
+                     use.mean.variance = use.mean.variance)
+    FU <- function(u) pU(u, beta = theta$beta, distname = distname,
+                         use.mean.variance = use.mean.variance) 
   } else {
     FU <- input.u
     if (is.null(tau)) {
@@ -45,8 +52,10 @@ pLambertW <- function(q, distname, theta = NULL, beta = NULL, gamma = 0, delta =
                       delta = tau["delta_l"], alpha = tau["alpha_l"])
       theta.r <- list(beta = theta$beta, gamma = 0, 
                       delta = tau["delta_r"], alpha = tau["alpha_r"])
-      GG[!ind.pos] <- pLambertW(y[!ind.pos], theta = theta.r, distname = distname)
-      GG[ind.pos] <- pLambertW(y[ind.pos], theta = theta.l, distname = distname)
+      GG[!ind.pos] <- pLambertW(y[!ind.pos], theta = theta.r, distname = distname,
+                                use.mean.variance = use.mean.variance)
+      GG[ind.pos] <- pLambertW(y[ind.pos], theta = theta.l, distname = distname,
+                               use.mean.variance = use.mean.variance)
 
     } else if (type.tmp == "s") {
       gamma.negative <- FALSE

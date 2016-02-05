@@ -3,8 +3,14 @@
 #' @description
 #' The Lambert W function \eqn{W(z)} is the inverse of \eqn{u \exp(u) = z}.
 #' 
-#' Note that in former version this function was denoted as \code{H}. 
-#' We now use \code{xexp}.
+#' In versions < 0.6.0 of the package this function was denoted as \code{H}. 
+#' It is now replaced with the more descriptive \code{xexp} (and \code{H}
+#' is deprecated).
+#'
+#' @details
+#' The n-th derviative of \eqn{x \cdot \exp(x)} is available in closed for as
+#'
+#' \deqn{ \exp(x) \cdot (x + n).}
 #' 
 #' @param x a numeric vector of real/complex values.
 #' @param degree non-negative integer; degree of the derivative
@@ -16,9 +22,6 @@
 #' @keywords math
 #' @export
 #' @examples
-#' 
-#' xexp(0)
-#' xexp(10)
 #' 
 #' plot(xexp, -5, 0.5, type="l", xlab="u", ylab="z")
 #' grid()

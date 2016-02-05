@@ -3,18 +3,22 @@
 #' \code{loglik_LambertW} computes the log-likelihood of \eqn{\theta}
 #' for a Lambert W \eqn{\times} F distribution given observations \code{y}.
 #' 
-#' @param return.negative logical; if \code{TRUE} it returns the
-#' negative log-likelihood as a scalar (which is useful for numerical \emph{minization}
-#' algorithms that do \emph{maximum} likelihood estimation); otherwise it returns a 
-#' list of input log-likelihood, penalty, and their sum = full likelihood. Default: \code{FALSE}.
-#' @param flattened.theta.names vector of strings with names of flattened \code{theta};
-#' this is necessary for optimization functions since they drop the names of a vector, 
-#' but all functions in this package use names to address specific elements of 
-#' (the flattened) \code{theta}.
+#' @param return.negative logical; if \code{TRUE} it returns the negative
+#'     log-likelihood as a scalar (which is useful for numerical
+#'     \emph{minimization} algorithms for \emph{maximum} likelihood estimation);
+#'     otherwise it returns a list of input log-likelihood, penalty, and their
+#'     sum = full likelihood. Default: \code{FALSE}.
+#' 
+#' @param flattened.theta.names vector of strings with names of flattened
+#'     \code{theta}; this is necessary for optimization functions since they
+#'     drop the names of a vector, but all functions in this package use names
+#'     to select elements of (the flattened) \code{theta}.
+#' 
 #' @export
 loglik_LambertW <- function(theta, y, distname, type, 
                             return.negative = FALSE,
-                            flattened.theta.names = names(theta)) {
+                            flattened.theta.names = names(theta),
+                            use.mean.variance = TRUE) {
   
   stopifnot(is.numeric(y))
   check_distname(distname)
@@ -23,8 +27,9 @@ loglik_LambertW <- function(theta, y, distname, type,
     names(theta) <- flattened.theta.names
     theta <- unflatten_theta(theta, distname = distname, type = type) 
   }
-  tau <- theta2tau(theta, distname = distname)
-
+  tau <- theta2tau(theta, distname = distname, 
+                   use.mean.variance = use.mean.variance)
+  
   yy <- y
   xx <- get_input(yy, tau = tau)
   
@@ -39,7 +44,9 @@ loglik_LambertW <- function(theta, y, distname, type,
     } else {
       out <- list(loglik.input = NA,
                   loglik.penalty = NA,
-                  loglik.LambertW = sum(log(dLambertW(yy, distname = distname, theta = theta))))
+                  loglik.LambertW = sum(dLambertW(yy, distname = distname, 
+                                                  theta = theta, log = TRUE,
+                                                  use.mean.variance = use.mean.variance)))
     }
   } else if (type %in% c("h", "hh")) {
     out <- list(loglik.input = loglik_input(beta = theta$beta, x = xx, distname = distname),

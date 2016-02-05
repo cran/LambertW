@@ -50,3 +50,19 @@ test_that("mathematical identities for the log of derivative hold", {
 
 })
 
+
+test_that("mathematical identities for the derivative of log(W) hold", {
+  
+  expect_equal(deriv_log_W(rep(0, length = 10)), rep(Inf, length = 10))
+  expect_true(is.na(deriv_log_W(0 - 0.0001)))
+  
+  # it actually computes the derivative
+  for (bb in c(0, -1)) {
+    eps <- 1e-5
+    expect_equal((log_W(pos.data + eps, branch = bb) -
+                     log_W(pos.data - eps, branch = bb)) / (2 * eps),
+                 deriv_log_W(pos.data, branch = bb),
+                 tol = 1e-4,
+                 info = paste("for branch", bb))
+  }
+})

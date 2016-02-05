@@ -7,11 +7,14 @@ random.data <- rnorm(n = 100)
 test_that("specific identities for W_gamma", {
   
   for (gg in gamma.v) {
-    expect_equal(W_gamma(0, gamma = gg), 0)
+    expect_equal(W_gamma(0, gamma = gg), 0,
+                 info = "0 at 0")
     if (gg < 0) {
-      expect_equal(W_gamma(Inf, gamma = gg), -Inf)
+      expect_true(is.nan(W_gamma(Inf, gamma = gg)),
+                  info = paste("NaN at Inf and gamma = ", gg, " < 0"))
     } else {
-      expect_equal(W_gamma(Inf, gamma = gg), Inf)
+      expect_equal(W_gamma(Inf, gamma = gg), Inf,
+                   info = paste("Inf at Inf and gamma = ", gg, " >= 0"))
     }
     expect_equal(W_gamma(c(0.1, 0.2), gamma = gg),
                  -W_gamma(-c(0.1, 0.2), gamma = -gg),
@@ -31,8 +34,9 @@ test_that("W_gamma input must be length 1", {
 })
 
 test_that("input to W_gamma must be numeric", {
-  for (vv in list("foo")) {
-    expect_error(W_gamma(vv, gamma = 0.2))
+  for (vv in list("foo", list(a = 1, b = 2))) {
+    expect_error(W_gamma(vv, gamma = 0.2),
+                 info = paste("input can't be of type ", class(vv)[1]))
   }
 })
 

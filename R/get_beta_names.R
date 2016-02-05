@@ -1,14 +1,17 @@
 #' @rdname beta-utils
 #' @description
-#' \code{get_beta_names} returns (typical) names for \eqn{\boldsymbol \beta}
-#' and the given distribution. E.g., for a \code{'normal'} distribution the names of the
-#' two-dimenstional \code{beta} are \code{'mu'} and \code{'sigma'}.
+#' \code{get_beta_names} returns (typical) names for each component of
+#' \eqn{\boldsymbol \beta}.
+#' 
+#' Depending on the distribution 
+#' \eqn{\boldsymbol \beta} has different length and names: e.g., 
+#' for a \code{"normal"} distribution \code{beta} is of length 
+#' \eqn{2} (\code{"mu"}, \code{"sigma"}); for an \code{"exp"}onential 
+#' distribution \code{beta} is a scalar (rate \code{"lambda"}).
+#' 
 #' @return
-#' \code{get_beta_names} returns a vector of strings for each element of \code{beta}.
+#' \code{get_beta_names} returns a vector of characters.
 #' @export
-#' @examples
-#' get_beta_names("normal")
-#' get_beta_names("exp")
 #' 
 get_beta_names <- function(distname) {
   check_distname(distname)

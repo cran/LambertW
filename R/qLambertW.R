@@ -4,7 +4,8 @@
 qLambertW <- function(p, distname = NULL, theta = NULL, beta = NULL, gamma = 0, 
                       delta = 0, alpha = 1, 
                       input.u = NULL, tau = NULL, 
-                      is.non.negative = FALSE) {
+                      is.non.negative = FALSE,
+                      use.mean.variance = TRUE) {
   
   stopifnot(xor(is.null(distname), is.null(input.u)))
   
@@ -13,6 +14,10 @@ qLambertW <- function(p, distname = NULL, theta = NULL, beta = NULL, gamma = 0,
   }
   
   if (is.null(theta)) {
+    warning("Please specify parameters by passing a list",
+            "to the 'theta' argument directly.\n",
+            "Specifying parameters by alpha, beta, gamma, delta will be",
+            "deprecated.")
     theta <- list(beta = beta, alpha = alpha, gamma = gamma, delta = delta)
   } 
   theta <- complete_theta(theta)
@@ -20,9 +25,12 @@ qLambertW <- function(p, distname = NULL, theta = NULL, beta = NULL, gamma = 0,
   if (is.null(input.u)) {
     is.non.negative <- get_distname_family(distname)$is.non.negative
     check_theta(theta = theta, distname = distname)
-    tau <- theta2tau(theta = theta, distname = distname)
-    q.U <- function(p) qU(p, beta = theta$beta, distname = distname)
-    # support of the LambertW RV; is bounded for skewed Lambert W x F distributions
+    tau <- theta2tau(theta = theta, distname = distname, 
+                     use.mean.variance = use.mean.variance)
+    q.U <- function(p) qU(p, beta = theta$beta, distname = distname,
+                          use.mean.variance = use.mean.variance)
+    # support of the LambertW RV; is bounded for skewed Lambert W x F
+    # distributions
     rv.support <- get_support(tau, is.non.negative = is.non.negative)
   } else {
     q.U <- input.u
@@ -60,7 +68,8 @@ qLambertW <- function(p, distname = NULL, theta = NULL, beta = NULL, gamma = 0,
           # define auxiliary objective function as distance to alpha-level
           # then minimize quantile so it matches this alpha-level
           aux.p <- function(y.a) {
-            return(lp_norm(pLambertW(y.a, theta = theta, distname = distname) -
+            return(lp_norm(pLambertW(y.a, theta = theta, distname = distname,
+                                     use.mean.variance = use.mean.variance) -
                              prob, 2))
           }
           # use default (-10, 10) as values for standard Gaussian

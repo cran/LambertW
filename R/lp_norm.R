@@ -3,15 +3,18 @@
 #' @description
 #' Computes the \eqn{\ell^p} norm of an n-dimensional (real/complex) 
 #' vector \eqn{\mathbf{x} \in \mathbf{C}^n}
-#' \deqn{ \left|\left| \mathbf{x} \right|\right|_p = \left( \sum_{i=1}^n
-#' \left| x_i \right|^p \right)^{1/p}, p \in (0, \infty)} 
-#' where \eqn{\left| x_i \right|} is the absolute value of \eqn{x_i}. 
-#' For \eqn{p=2} this is Euclidean norm; for \eqn{p=1} it is Manhattan norm. For 
-#' \eqn{p=0} it is defined as the number of non-zero elements in \eqn{\mathbf{x}};
-#' for \eqn{p = \infty} it is the maximum of the absolute values of \eqn{\mathbf{x}}.
 #' 
-#' Note that the norm of \eqn{\mathbf{x}} equals \eqn{0} if and only if
-#'  \eqn{\mathbf{x} = \mathbf{0}}.
+#' \deqn{ \left|\left| \mathbf{x} \right|\right|_p = \left( \sum_{i=1}^n
+#' \left| x_i \right|^p \right)^{1/p}, p \in [0, \infty],}
+#' 
+#' where \eqn{\left| x_i \right|} is the absolute value of \eqn{x_i}.  For
+#'     \eqn{p=2} this is Euclidean norm; for \eqn{p=1} it is Manhattan norm. For
+#'     \eqn{p=0} it is defined as the number of non-zero elements in
+#'     \eqn{\mathbf{x}}; for \eqn{p = \infty} it is the maximum of the absolute
+#'     values of \eqn{\mathbf{x}}.
+#' 
+#' The norm of \eqn{\mathbf{x}} equals \eqn{0} if and only if \eqn{\mathbf{x} =
+#'     \mathbf{0}}.
 #' 
 #' @param x n-dimensional vector (possibly complex values)
 #' @param p which norm? Allowed values \eqn{p \geq 0} including \code{Inf}. 
@@ -24,7 +27,7 @@
 #' kRealVec <- c(3, 4)
 #' # Pythagoras
 #' lp_norm(kRealVec)
-#' # did not really know Manhattan,
+#' # did not know Manhattan,
 #' lp_norm(kRealVec, p = 1)
 #' 
 #' # so he just imagined running in circles.
@@ -34,24 +37,10 @@
 #'
 
 lp_norm <- function(x, p = 2) {
-
-    if (anyNA(x)) {
-      stop("Vector must not contain any 'NA'. Contained ",
-           sum(is.na(x)), " NA entry/entries (out of ", length(x), ").")
-    }
-    
-    if (p < 0) {
-      stop("p must be non-negative.")
-    } else if (p == 0) {
-      # number of non-zero elements
-      lp.norm <- sum(x != 0)
-    } else if (p == Inf) {
-      # max_i(|x_i|)
-      lp.norm <- max(abs(x))
+    if (is.complex(x)) {
+      lp.norm <- lp_norm_complex_Cpp(x, p)
     } else {
-      # basic definition
-      lp.norm <- sum(abs(x)^p)^(1/p)
+      lp.norm <- lp_norm_Cpp(x, p)
     }
     return(lp.norm)
 }
-

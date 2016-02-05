@@ -2,18 +2,16 @@
 #' Input parameters to get a zero mean, unit variance output for a given gamma
 #' 
 #' @description
-#' Given \eqn{\gamma}, this function computes the input mean
-#' \eqn{\mu_x(\gamma)} and standard deviation \eqn{\sigma_x(\gamma)} for
-#' Gaussian input \eqn{X \sim N(\mu_x(\gamma), \sigma_x^2(\gamma))}, such that
-#' the resulting skewed Lambert W Gaussian RV \eqn{Y} has zero mean and unit
-#' variance.
+#' Computes the input mean \eqn{\mu_x(\gamma)} and standard deviation 
+#' \eqn{\sigma_x(\gamma)} for input \eqn{X \sim F(x \mid \boldsymbol \beta)}
+#' such that the resulting skewed Lambert W x F RV \eqn{Y} with 
+#' \eqn{\gamma} has zero-mean and unit-variance.  So far works only for Gaussian 
+#' input and scalar \eqn{\gamma}.
 #' 
 #' The function works for any output mean and standard deviation, but
 #' \eqn{\mu_y = 0} and \eqn{\sigma_y = 1} are set as default as they 
-#' are the most useful, e.g., to generate a standardized Lambert W white noise sequence.
-#' 
-#' So far only for Gaussian input.
-#' 
+#' are the most useful, e.g., to generate a standardized Lambert W white noise 
+#' sequence.
 #' 
 #' @param gamma skewness parameter
 #' @param mu.y output mean; default: \code{0}.

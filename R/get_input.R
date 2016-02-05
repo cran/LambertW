@@ -4,13 +4,14 @@
 #' 
 #' @description
 #' \code{get_input} back-transforms the observed data \eqn{\boldsymbol y} to the
-#' (approximate) input data \eqn{\boldsymbol x_{\tau}} using 
-#' the transformation vector \eqn{\tau =
-#' (\mu_x(\boldsymbol \beta), \sigma_x(\boldsymbol \beta), \gamma, \alpha, \delta)}.
+#'     (approximate) input data \eqn{\boldsymbol x_{\tau}} using the
+#'     transformation vector \eqn{\tau = (\mu_x(\boldsymbol \beta),
+#'     \sigma_x(\boldsymbol \beta), \gamma, \alpha, \delta)}.
 #' 
-#' Note that \code{get.input} should be deprecated; however, since this function
-#' was explicitly referenced in Goerg (2011) I keep it here for future reference.
-#' New code should use \code{get_input} exclusively.
+#' Note that \code{get.input} should be deprecated; however, since it was
+#'     explicitly referenced in Goerg (2011) I keep it here for future
+#'     reference.  New code should use \code{get_input} exclusively.
+#' 
 #' @param y a numeric vector of data values or an object of class
 #' \code{LambertW_fit}.
 #' @param return.u should the normalized input be returned; default:
@@ -37,7 +38,6 @@
 #' @examples
 #' 
 #' set.seed(12)
-#' 
 #' # unskew very skewed data
 #' y <- rLambertW(n = 1000, theta = list(beta = c(0, 1), gamma = 0.3), 
 #'                distname = "normal")
@@ -51,7 +51,7 @@
 #' 
 
 get_input <- function(y, tau, return.u = FALSE) {
-  if (class(y) == "LambertW_fit") {
+  if (inherits(y, "LambertW_fit")) {
     tau <- y$tau
     y <- y$data
   }
@@ -73,14 +73,10 @@ get_input <- function(y, tau, return.u = FALSE) {
       uu <- W_delta_alpha(zz, delta = tau["delta"], alpha = tau['alpha'])
     }
   } else {
-    stop("Only one of gamma or delta (or delta_l/delta_l) can be non-zero.")
+    stop("Only one of gamma or delta (or delta_l/delta_r) can be non-zero.")
   }
   xx <- normalize_by_tau(uu, tau, inverse = TRUE)  
   if (return.u) {
-    nu <- tau[4]
-    if (!is.na(nu)) {
-      uu <- sqrt(nu/(nu - 2)) * uu
-    }
     out <- list(u = uu, x = xx)
     return(out)
   } else {
@@ -91,6 +87,6 @@ get_input <- function(y, tau, return.u = FALSE) {
 #' @rdname get_input
 #' @export
 get.input <- function(...) {
-  # warning("DEPRECATED: Please use get_input() instead of get.input().")
+  warning("DEPRECATED: Please use get_input() instead of get.input().")
   return(get_input(...))
 }

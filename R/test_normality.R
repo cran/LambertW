@@ -1,40 +1,42 @@
 #' @title Visual and statistical Gaussianity check
 #' 
 #' @description
-#' Graphical and statistical check if data is Gaussian (3 common Normality
+#' Graphical and statistical check if data is Gaussian (three common Normality
 #' tests, QQ-plots, histograms, etc).
 #' 
-#' \code{test_normality} does not show the autocorrelation function (ACF) estimate for
-#' lag \eqn{0}, since it always equals \eqn{1}. Thus removing it does not 
-#' lose any information, but greatly improves the y-axis scale for higher order lags
-#'  (which are usually very small compared to 1).
+#' \code{test_normality} does not show the autocorrelation function (ACF)
+#' estimate for lag \eqn{0}, since it always equals \eqn{1}. Thus removing it
+#' does not lose any information, but greatly improves the y-axis scale for
+#' higher order lags (which are usually very small compared to 1).
 #' 
 #' @param data a numeric vector of data values.
-#' @param plot Should visual checks (histogram, densities, qqplot, ACF) be plotted?
-#' Default \code{TRUE}; otherwise only hypothesis test results are returned.
-#' @param show.volatility logical; if \code{TRUE} the squared (centered) data 
-#' and its ACF are also shown. Useful for time series data to see if squares exhibit
-#' dependence (for financial data they typically do); default: \code{FALSE}.
-#' @param pch a vector of plotting characters or symbols; default \code{pch = 1}.
-#' @param add.legend logical; if \code{TRUE} (default) a legend is placed in 
-#' histogram/density plot.
-#' @param seed optional; if sample size > 5,000, then some normality tests
-#' fail to run.  In this case it uses a subsample of size 5,000.  For replicability,
-#' one can pass a seed.  By default it is a random seed.
-#' @return 
-#' A list with results of 3 normality tests (each of class \code{htest}) and the seed
-#' used for subsampling:
-#' \item{anderson.darling}{Anderson Darling (if \pkg{nortest} package is available),} 
-#' \item{shapiro.francia}{Shapiro-Francia (if \pkg{nortest} package is available),}
-#' \item{shapiro.wilk}{Shapiro-Wilk,}
-#' \item{seed}{seed for subsampling (only used if sample size > 5,000).}
+#' @param plot Should visual checks (histogram, densities, qqplot, ACF) be
+#'     plotted?  Default \code{TRUE}; otherwise only hypothesis test results are
+#'     returned.
+#' @param show.volatility logical; if \code{TRUE} the squared (centered) data
+#'     and its ACF are also shown. Useful for time series data to see if squares
+#'     exhibit dependence (for financial data they typically do); default:
+#'     \code{FALSE}.
+#' @param pch a vector of plotting characters or symbols; default \code{pch =
+#'     1}.
+#' @param add.legend logical; if \code{TRUE} (default) a legend is placed in
+#'     histogram/density plot.
+#' @param seed optional; if sample size > 5,000, then some normality tests fail
+#'     to run.  In this case it uses a subsample of size 5,000.  For
+#'     reproducibility, the seed can be specified by user.  By default it uses a
+#'     random seed.
+#' @return A list with results of 3 normality tests (each of class \code{htest})
+#'     and the seed used for subsampling: \item{anderson.darling}{Anderson
+#'     Darling (if \pkg{nortest} package is available),}
+#'     \item{shapiro.francia}{Shapiro-Francia (if \pkg{nortest} package is
+#'     available),} \item{shapiro.wilk}{Shapiro-Wilk,} \item{seed}{seed for
+#'     subsampling (only used if sample size > 5,000).}
 #' 
-#' @seealso 
-#' \code{\link[stats]{shapiro.test}} in the \pkg{stats} package; 
-#' \code{\link[nortest]{ad.test}}, \code{\link[nortest]{sf.test}} in the \pkg{nortest} package.
-#' @references 
-#' Thode Jr., H.C. (2002): \dQuote{Testing for Normality}. Marcel
-#' Dekker, New York.
+#' @seealso \code{\link[stats]{shapiro.test}} in the \pkg{stats} package;
+#'     \code{\link[nortest]{ad.test}}, \code{\link[nortest]{sf.test}} in the
+#'     \pkg{nortest} package.
+#' @references Thode Jr., H.C. (2002): \dQuote{Testing for Normality}. Marcel
+#'     Dekker, New York.
 #' @keywords htest hplot
 #' @export
 #' @examples
@@ -159,9 +161,10 @@ test_normality <- function(data, show.volatility = FALSE, plot = TRUE, pch = 1,
     # Anderson-Darling does not have a restriction on sample size.
     out[["anderson.darling"]] <- nortest::ad.test(data)
   }
-  # only update tests if the 'nortest' package is available; otherwise return 'NA'
+  # only update tests if 'nortest' package is available; otherwise return 'NA'
   if (num.samples > 5000) {
-    cat("Shaprio-Wilk and Shapiro-Francia tests can not be computed for sample size > 5000.\n", 
+    cat("Shaprio-Wilk and Shapiro-Francia tests cannot be computed for ",
+        "sample size > 5000.\n", 
         "Use random subsample of size 5000 instead.\n")
     set.seed(seed)
     data.test <- sample(data, size = 5000)
@@ -180,7 +183,7 @@ test_normality <- function(data, show.volatility = FALSE, plot = TRUE, pch = 1,
 #' @export
 #' @param ... arguments as in \code{test_normality}.
 #' @description
-#' \code{test_norm} is a short cut for \code{test_normality}.
+#' \code{test_norm} is a shortcut for \code{test_normality}.
 
 test_norm <- function(...) {
   test_normality(...)

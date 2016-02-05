@@ -5,7 +5,7 @@
 #' quantiles given \eqn{\theta}.
 #' @export
 qqLambertW <- function(y, distname, theta = NULL, beta = NULL, gamma = 0, delta = 0, alpha = 1, 
-                       plot.it = TRUE, ...) {
+                       plot.it = TRUE, use.mean.variance = TRUE, ...) {
   
   
   stopifnot(is.numeric(y),
@@ -13,6 +13,10 @@ qqLambertW <- function(y, distname, theta = NULL, beta = NULL, gamma = 0, delta 
   
   check_distname(distname)
   if (is.null(theta)) {
+    warning("Please specify parameters by passing a list",
+            "to the 'theta' argument directly.\n",
+            "Specifying parameters by alpha, beta, gamma, delta will be",
+            "deprecated.")
     theta <- list(beta = beta, alpha = alpha, gamma = gamma, delta = delta)
   } 
   theta <- complete_theta(theta)
@@ -27,7 +31,8 @@ qqLambertW <- function(y, distname, theta = NULL, beta = NULL, gamma = 0, delta 
   nn <- length(y)
   
   p.n <- ppoints(nn)
-  x <- qLambertW(p.n, theta = theta, distname = distname)
+  x <- qLambertW(p.n, theta = theta, distname = distname,
+                 use.mean.variance = use.mean.variance)
   sorted.x <- sort(x)
   sorted.y <- sort(y)
   if (plot.it) {

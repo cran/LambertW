@@ -1,80 +1,92 @@
 #' @title Gaussianize matrix-like objects
 #' 
 #' @description
-#' \code{Gaussianize} is probably the most useful function in this package. It works
-#' the same way as the \code{\link[base]{scale}} function, but instead of just 
-#' centering and scaling the data, it actually \emph{Gaussianizes} the data. 
-#' See Goerg (2011, 2014) and Examples.
+#' \code{Gaussianize} is probably the most useful function in this package. It
+#'     works the same way as \code{\link[base]{scale}}, but instead of just
+#'     centering and scaling the data, it actually \emph{Gaussianizes} the data
+#'     (works well for unimodal data).  See Goerg (2011, 2016) and Examples.
+#'
+#' \strong{Important:} For multivariate input \code{X} it performs a column-wise
+#'     Gaussianization (by simply calling \code{apply(X, 2, Gaussianize)}),
+#'     which is only a marginal Gaussianization.  This does \emph{not} mean (and
+#'     is in general definitely not the case) that the transformed data is then
+#'     jointly Gaussian.
 #' 
-#' By default \code{Gaussianize} returns the \eqn{X \sim N(\mu_x, \sigma_x^2)} 
-#' input, not the zero-mean, unit-variance \eqn{U \sim N(0, 1)} input.
-#' Use \code{return.u = TRUE} to obtain \eqn{U}.
+#' By default \code{Gaussianize} returns the \eqn{X \sim N(\mu_x, \sigma_x^2)}
+#'     input, not the zero-mean, unit-variance \eqn{U \sim N(0, 1)} input.  Use
+#'     \code{return.u = TRUE} to obtain \eqn{U}. 
+#' @param data a numeric matrix-like object; either the data that should be
+#'     Gaussianized; or the data that should ''DeGaussianized'' (\code{inverse =
+#'     TRUE}), i.e., converted back to the original space.
 #' 
-#' @param data a numeric matrix-like object; either the data that should be Gaussianized;
-#' or the data that should ''DeGaussianized'' (\code{inverse = TRUE}), i.e., 
-#' converted back to original space.
-#' @param type what type of non-normality: symmetric heavy-tails \code{"h"},
-#' skewed heavy-tails \code{"hh"}, or just skewed \code{"s"}.
+#' @param type what type of non-normality: symmetric heavy-tails \code{"h"}
+#'     (default), skewed heavy-tails \code{"hh"}, or just skewed \code{"s"}.
+#' 
 #' @param method what estimator should be used: \code{"MLE"} or \code{"IGMM"}.
-#' \code{"IGMM"} gives exactly Gaussian characteristics (kurtosis \eqn{\equiv}
-#' 3 for \code{"h"} or skewness \eqn{\equiv} 0 for \code{"s"}), \code{"MLE"}
-#' comes close to this. Default is \code{"IGMM"} since it is much faster than \code{"MLE"}.
-#' @param return.tau.mat logical; if \code{TRUE} it also returns the estimated 
-#' \eqn{\tau} parameters as a matrix (same number of columns as \code{data}).  
-#' This matrix can then be used to \code{Gaussianize} new data with pre-estimated
-#' \eqn{\tau}. It can be used to ``DeGaussianize'' data by passing it as 
-#' an argument (\code{tau.mat}) to \code{Gaussianize()} and set \code{inverse = TRUE}.
-#' @param inverse logical; if \code{TRUE} it performs the inverse transformation 
-#' using \code{tau.mat} to "DeGaussianize" the data back to the original space again.
-#' @param tau.mat instead of estimating \eqn{\tau} from the data
-#' you can pass it as a matrix (usually obtained via
-#' \code{Gaussianize(..., return.tau.mat = TRUE)}). If \code{inverse = TRUE}
-#'  it uses this \code{tau} matrix to ``DeGaussianize'' the data again. 
-#' This is useful to back-transform new data, e.g., predictions or fits,
-#' on the Gaussianize space back to the original space.
-#' @param verbose logical; if \code{TRUE}, it prints out progress information in 
-#' the console. Default: \code{FALSE}.
-#' @param return.u logical; if \code{TRUE} it returns the zero-mean, unit variance
-#' Gaussian input.  If \code{FALSE} (default) it returns the input \eqn{X}.
-#' @param input.u optional; if you used \code{return.u = TRUE} in a previous step,
-#' and now you want to convert the data back to original space, then you have
-#' to pass it as \code{input.u}.  If you pass numeric data as \code{data}, \code{Gaussianize} 
-#' assumes that \code{data} is the input corresponding to \eqn{X} -- not \eqn{U}.
+#'     \code{"IGMM"} gives exactly Gaussian characteristics (kurtosis
+#'     \eqn{\equiv} 3 for \code{"h"} or skewness \eqn{\equiv} 0 for \code{"s"}),
+#'     \code{"MLE"} comes close to this. Default: \code{"IGMM"} since it is much
+#'     faster than \code{"MLE"}.
+#' 
+#' @param return.tau.mat logical; if \code{TRUE} it also returns the estimated
+#'     \eqn{\tau} parameters as a matrix (same number of columns as
+#'     \code{data}).  This matrix can then be used to \code{Gaussianize} new
+#'     data with pre-estimated \eqn{\tau}. It can also be used to
+#'     ``DeGaussianize'' data by passing it as an argument (\code{tau.mat}) to
+#'     \code{Gaussianize()} and set \code{inverse = TRUE}.
+#' 
+#' @param inverse logical; if \code{TRUE} it performs the inverse transformation
+#'     using \code{tau.mat} to "DeGaussianize" the data back to the original
+#'     space again.
+#' 
+#' @param tau.mat instead of estimating \eqn{\tau} from the data you can pass it
+#'     as a matrix (usually obtained via \code{Gaussianize(..., return.tau.mat =
+#'     TRUE)}). If \code{inverse = TRUE} it uses this \code{tau} matrix to
+#'     ``DeGaussianize'' the data again.  This is useful to back-transform new
+#'     data in the Gaussianized space, e.g., predictions or fits, back to the
+#'     original space.
+#' 
+#' @param verbose logical; if \code{TRUE}, it prints out progress information in
+#'     the console. Default: \code{FALSE}.
+#' 
+#' @param return.u logical; if \code{TRUE} it returns the zero-mean, unit
+#'     variance Gaussian input.  If \code{FALSE} (default) it returns the input
+#'     \eqn{X}.
+#'
+#' @param input.u optional; if you used \code{return.u = TRUE} in a previous
+#'     step, and now you want to convert the data back to original space, then
+#'     you have to pass it as \code{input.u}.  If you pass numeric data as
+#'     \code{data}, \code{Gaussianize} assumes that \code{data} is the input
+#'     corresponding to \eqn{X}, not \eqn{U}.
+#'
 #' @return 
-#' Same dimension/size as input \code{data}.  If \code{inverse = FALSE} it is the 
-#' Gaussianize matrix / vector; if \code{TRUE} it is the ``DeGaussianized'' matrix / vector.
+#' numeric matrix-like object with same dimension/size as input \code{data}. 
+#' If \code{inverse = FALSE} it is the Gaussianize matrix / vector; 
+#' if \code{TRUE} it is the ``DeGaussianized'' matrix / vector.
 #' 
 #' The numeric parameters of mean, scale, and skewness/heavy-tail parameters
-#' that were used in the Gaussianizing transformation are returned as
-#' attributes of the output matrix: \code{'Gaussianized:mu'}, \code{'Gaussianized:sigma'}, and for
+#'     that were used in the Gaussianizing transformation are returned as
+#'     attributes of the output matrix: \code{'Gaussianized:mu'},
+#'     \code{'Gaussianized:sigma'}, and for
 #' 
 #' \item{type = \code{"h"}:}{\code{'Gaussianized:delta'} & \code{'Gaussianized:alpha'},}
 #' \item{type = \code{"hh"}:}{\code{'Gaussianized:delta_l'} and \code{'Gaussianized:delta_r'} & 
 #' \code{'Gaussianized:alpha_l'} and \code{'Gaussianized:alpha_r'},}
 #' \item{type = \code{"s"}:}{\code{'Gaussianized:gamma'}.}
 #' 
-#' They can also be returned as a separate matrix using \code{return.tau.mat = TRUE}. In
-#' this case \code{Gaussianize} returns a list with elements:
-#' \item{input}{Gaussianized input data \eqn{\boldsymbol x} 
-#' (or \eqn{\boldsymbol u} if \code{return.u = TRUE}),}
-#' \item{tau.mat}{matrix with \eqn{\tau} estimates that we used to get \code{x}; 
-#' has same number of columns as \code{x}, and 3, 4, or 6 rows (depending on \code{type}).}
+#' They can also be returned as a separate matrix using \code{return.tau.mat =
+#'     TRUE}. In this case \code{Gaussianize} returns a list with elements:
+#'     \item{input}{Gaussianized input data \eqn{\boldsymbol x} (or
+#'     \eqn{\boldsymbol u} if \code{return.u = TRUE}),} \item{tau.mat}{matrix
+#'     with \eqn{\tau} estimates that we used to get \code{x}; has same number
+#'     of columns as \code{x}, and 3, 5, or 6 rows (depending on
+#'     \code{type='s'}, \code{'h'}, or \code{'hh'}).}
 #'
-#' @references 
-#' Goerg, G.M. (2011). \dQuote{Lambert W Random Variables - A New
-#' Family of Generalized Skewed Distributions with Applications to Risk
-#' Estimation}. Annals of Applied Statistics, 5 (3), 2197-2230.
-#' (\url{http://arxiv.org/abs/0912.4554}).
-#' 
-#' Goerg, G.M. (2014). \dQuote{The Lambert Way to Gaussianize
-#' heavy-tailed data with the inverse of Tukey's h transformation as a
-#' special case}. The Scientific World Journal: Probability and Statistics with 
-#' Applications in Finance and Economics. Available at
-#'  \url{http://www.hindawi.com/journals/tswj/aa/909231/}.
 #' @keywords univar multivariate
 #' @export
 #' @examples
-#' 
+#'
+#' # Univariate example
 #' set.seed(20)
 #' y1 <- rcauchy(n = 100)
 #' out <- Gaussianize(y1, return.tau.mat = TRUE)
@@ -85,7 +97,7 @@
 #' y.cum.avg <- (cumsum(y1)/seq_along(y1))[-seq_len(kStartFrom)]
 #' x.cum.avg <- (cumsum(x1)/seq_along(x1))[-seq_len(kStartFrom)]
 #' 
-#' plot(c((kStartFrom+1): length(y1)), y.cum.avg, type="l" , lwd = 2, 
+#' plot(c((kStartFrom + 1): length(y1)), y.cum.avg, type="l" , lwd = 2, 
 #'      main="CLT in practice", xlab = "n", 
 #'      ylab="Cumulative sample average", 
 #'      ylim = range(y.cum.avg, x.cum.avg))
@@ -97,7 +109,8 @@
 #' 
 #' plot(x1, y1, xlab="Gaussian-like input", ylab = "Cauchy - output")
 #' grid()
-#' 
+#'
+#' # multivariate example
 #' y2 <- 0.5 * y1 + rnorm(length(y1))
 #' YY <- cbind(y1, y2)
 #' plot(YY)
@@ -111,7 +124,8 @@
 #' plot(out$input)
 #' out$tau.mat
 #' 
-#' YY.hat <- Gaussianize(data = out$input, tau.mat = out$tau.mat, inverse = TRUE)
+#' YY.hat <- Gaussianize(data = out$input, tau.mat = out$tau.mat,
+#'                       inverse = TRUE)
 #' plot(YY.hat[, 1], YY[, 1])
 #' 
 
@@ -140,9 +154,10 @@ Gaussianize <- function(data = NULL, type = c("h", "hh", "s"),
       data.is.u <- TRUE
       overall.mean <- mean.default(input.u)
       if (lp_norm(overall.mean) > 0.1) {
-        warning("It seems like your input data is not standardize correctly (approx zero mean, variance 1).",
-                "Pass it as 'data' argument or set 'return.u = TRUE' when ", 
-                "you previously call Gaussianize(data, return.u = TRUE, inverse = FALSE).")
+        warning("It seems like your input data is not standardize correctly ",
+                "(approx zero mean, variance 1). Pass it as 'data' argument or",
+                "set 'return.u = TRUE' when you previously called ",
+                "Gaussianize(data, return.u = TRUE, inverse = FALSE).")
       }
     }
   }
@@ -167,8 +182,8 @@ Gaussianize <- function(data = NULL, type = c("h", "hh", "s"),
     
     if (ncol(tau.mat) != ncol(data)) {
       stop("Number of columns in tau.mat must be the same as input data. \n",
-           " Every column of tau.mat defines the transformation for corresponding \n",
-           "column of y (or input.u).")
+           " Every column of tau.mat defines the transformation for ",
+           "corresponding column of y (or input.u).")
     }
     if (data.is.u) {
       if (verbose) {
@@ -231,7 +246,7 @@ Gaussianize <- function(data = NULL, type = c("h", "hh", "s"),
       }
       rownames(tau.mat) <- names(tau.1)
       colnames(tau.mat) <- colnames(data)
-      tau.mat <- round(tau.mat, 6)  # round it so that delta ~= 0 becomes actually 0
+      tau.mat <- round(tau.mat, 6)  # so that delta ~= 0 becomes actually 0
     } else { 
       if (verbose) {
         cat("Use provided tau.\n")
@@ -241,9 +256,11 @@ Gaussianize <- function(data = NULL, type = c("h", "hh", "s"),
       
       type.tmp <- tau2type(tau.mat[, 1])
       if (type.tmp != type) {
-        warning("The tau.mat you provided suggests a type '", type.tmp, "' transformation.\n",
-                "However, you specified 'type = ", type, "' as the argument. \n",
-                "It will ignore this and use '", type.tmp, "' transformation instead.")
+        warning("The tau.mat you provided suggests a type '", type.tmp,
+                "' transformation.\n",
+                "However, you specified 'type = ", type, "' as the argument.\n",
+                "It will ignore this and use '", type.tmp,
+                "' transformation instead.")
         type <- type.tmp
       }
     }

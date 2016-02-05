@@ -1,12 +1,12 @@
 #' @rdname beta-utils
-#' @description 
-#' \code{check_beta} checks if \eqn{\boldsymbol \beta} defines a valid distribution. 
-#' E.g., for normal distribution \code{'sigma'} must be positive.
-#' @return
-#' \code{check_beta} throws an error if \eqn{\boldsymbol \beta} is not 
-#' appropriate for the given distribution; e.g., if it has too many values or if
-#' they are not within proper bounds (e.g., \code{beta['sigma']} of a \code{"normal"}
-#' distribution must be positive).
+#' @description
+#' \code{check_beta} checks if \eqn{\boldsymbol \beta} defines a
+#'     valid distribution, e.g., for normal distribution \code{'sigma'} must be
+#'     positive.
+#' @return \code{check_beta} throws an error if \eqn{\boldsymbol \beta} is not
+#'     appropriate for the given distribution; e.g., if it has too many values
+#'     or if they are not within proper bounds (e.g., \code{beta['sigma']} of a
+#'     \code{"normal"} distribution must be positive).
 #' @export
 #' @examples
 #' 
@@ -26,7 +26,7 @@ check_beta <- function(beta, distname) {
              stop(dist.text, " be a vector of length 2.",
                   "\n Currently it has length ", length(beta), ".")
            } 
-           if (beta[2] < 0) {
+           if (beta[2] <= 0) {
              stop(dist.text, " must have a non-negative second entry (beta[2] ~ standard deviation).", 
                   "Currently, beta[2] = ", beta[2])
            }
@@ -37,7 +37,7 @@ check_beta <- function(beta, distname) {
                   "\n Currently it has length ", length(beta), ".")
            } 
            if (beta[2] < 0) {
-             stop(dist.text, " must have a non-negative second entry (beta[2] ~ scale parameter).", 
+             stop(dist.text, " must have a positive second entry (beta[2] ~ scale parameter).", 
                   "Currently, beta[2] = ", beta[2])
            }
            if (beta[3] <= 0) {

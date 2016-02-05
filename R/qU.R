@@ -1,12 +1,13 @@
 #' @rdname U-utils
 #' @export
-qU <- function(p, beta, distname) {
+qU <- function(p, beta, distname, use.mean.variance = TRUE) {
 
   check_distname(distname)
   names(beta) <- get_beta_names(distname)
   check_beta(beta, distname = distname)
   
-  sigma.x <- beta2tau(beta, distname)["sigma_x"]
+  sigma.x <- beta2tau(beta, distname, 
+                      use.mean.variance = use.mean.variance)["sigma_x"]
   switch(distname,
          cauchy = {
            qU <- function(p) qcauchy(p)
@@ -21,7 +22,8 @@ qU <- function(p, beta, distname) {
            qU <- function(p) qf(p, beta[1], beta[2]) / sigma.x
          },
          gamma = {
-           qU <- function(p) qgamma(p, shape = beta["shape"], scale = beta["scale"]) / sigma.x
+           qU <- function(p) qgamma(p, shape = beta["shape"], 
+                                    scale = beta["scale"]) / sigma.x
          },
          laplace = {
            #TODO
@@ -30,7 +32,7 @@ qU <- function(p, beta, distname) {
            qU <- function(p) qnorm(p)
          },
          t = {
-           if (beta["df"] <= 2) {
+           if (beta["df"] <= 2 && use.mean.variance) {
              stop("'df' of t-distribution for location-scale Lambert W x t distributions must be ",
                   " larger than 2.")
            }

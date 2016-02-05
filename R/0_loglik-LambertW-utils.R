@@ -2,20 +2,24 @@
 #' @name loglik-LambertW-utils
 #' 
 #' @description
-#' Evaluates the log-likelihood for \eqn{\theta} given observed data. See Details.
+#' Evaluates the log-likelihood for \eqn{\theta} given observations \code{y}.
 #' 
 #' @details
-#' For heavy-tail Lambert W\eqn{\times} F distributions (\code{type = "h"} or \code{type =
-#' "hh"}) the log-likelihood decomposes into an input log-likelihood plus a penalty term 
-#' for transforming the data.
-#' For skewed Lambert W \eqn{\times} F distributions this decomposition only exists for non-negative input RVs
-#'  (e.g., \code{"exp"}onential, \code{"gamma"}, \code{"f"}, \ldots{}). If negative values are possible 
-#'  (\code{"normal"}, \code{"t"}, \code{"unif"}, \code{"cauchy"}, \ldots{}) then \code{loglik_input} and \code{loglik_penalty} 
-#'  return \code{NA}, but the value of the output log-likelihood will still be returned correctly 
-#' as \code{loglik.LambertW}.
+#' For heavy-tail Lambert W\eqn{\times} F distributions (\code{type = "h"} or
+#'     \code{type = "hh"}) the log-likelihood decomposes into an input
+#'     log-likelihood plus a penalty term for transforming the data.
 #' 
-#' See References for details on the decomposition of the log-likelihood into 
-#' a log-likelihood on the input parameters plus a penalty term for transforming the data.
+#' For skewed Lambert W \eqn{\times} F distributions this decomposition only
+#'     exists for non-negative input RVs (e.g., \code{"exp"}onential,
+#'     \code{"gamma"}, \code{"f"}, \ldots{}). If negative values are possible
+#'     (\code{"normal"}, \code{"t"}, \code{"unif"}, \code{"cauchy"}, \ldots{})
+#'     then \code{loglik_input} and \code{loglik_penalty} return \code{NA}, but
+#'     the value of the output log-likelihood will still be returned correctly
+#'     as \code{loglik.LambertW}.
+#' 
+#' See Goerg (2016) for details on the decomposition of the log-likelihood into
+#'     a log-likelihood on the input parameters plus a penalty term for
+#'     transforming the data.
 #' 
 #' @inheritParams common-arguments
 #' @param y a numeric vector of real values (the observed data).
@@ -27,12 +31,6 @@
 #' \item{loglik.penalty}{ penalty for transforming the data,} 
 #' \item{loglik.LambertW}{ total log-likelihood of \code{theta} given the observed data; 
 #' if the former two values exist this is simply their sum.}
-#' @references 
-#' Goerg, G.M. (2014). \dQuote{The Lambert Way to Gaussianize heavy-tailed data 
-#' with the inverse of Tukey's h transformation as a special case.}
-#'  The Scientific World Journal: Probability and Statistics with 
-#' Applications in Finance and Economics. Available at
-#'  \url{http://www.hindawi.com/journals/tswj/aa/909231/}.
 #' @keywords univar distribution
 #' @examples
 #' set.seed(1)

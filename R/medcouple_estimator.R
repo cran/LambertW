@@ -3,24 +3,26 @@
 #' @description
 #' A robust measure of asymmetry. See References for details.
 #' 
-#' @param x numeric vector; if length > 3,000, it uses a random subsample (otherwise
-#' \code{mc} takes too long to compute; \code{mc} calculations are of order \eqn{n^2}.)
-#' @return 
-#' float; measures the degree of asymmetry
-#' @references 
-#' Brys, G., M. Hubert, and A. Struyf (2004). \dQuote{A robust
-#' measure of skewness}. Journal of Computational and Graphical Statistics 13
-#' (4), 996 - 1017.
+#' @param x numeric vector; if length > 3,000, it uses a random subsample
+#'     (otherwise it takes too long to compute as calculations are of order
+#'     \eqn{N^2}.)
+#' @param seed numeric; seed used for sampling (when \code{length(x) >
+#'     3000}).
+#' @return float; measures the degree of asymmetry
+#' @seealso \code{\link{test_symmetry}}
+#' @references Brys, G., M. Hubert, and A. Struyf (2004). \dQuote{A robust
+#'     measure of skewness}. Journal of Computational and Graphical Statistics
+#'     13 (4), 996 - 1017.
 #' @keywords univar
 #' @export
 #' @examples
 #' 
-#' # a little simulation/demonstration
+#' # a simulation
 #' kNumSim <- 100
 #' kNumObs <- 200
 #' 
 #' ################# Gaussian (Symmetric) #### 
-#' A <- t(replicate(kNumSim, {xx <- rnorm(kNumObs); c(skewness(xx), mc(xx))}))
+#' A <- t(replicate(kNumSim, {xx <- rnorm(kNumObs); c(skewness(xx), medcouple_estimator(xx))}))
 #' ########### skewed LambertW x Gaussian #### 
 #' tau.s <- gamma_01(0.2) # zero mean, unit variance, but positive skewness
 #' rbind(mLambertW(theta = list(beta = tau.s[c("mu_x", "sigma_x")], 
@@ -29,10 +31,10 @@
 #' B <- t(replicate(kNumSim, 
 #'                  {
 #'                    xx <- rLambertW(n = kNumObs, 
-#'                                    theta = list(beta=tau.s[c("mu_x", "sigma_x")], 
+#'                                    theta = list(beta = tau.s[c("mu_x", "sigma_x")], 
 #'                                                 gamma = tau.s["gamma"]), 
 #'                                    distname="normal")
-#'                    c(skewness(xx), mc(xx))
+#'                    c(skewness(xx), medcouple_estimator(xx))
 #'                  }))
 #'                   
 #' colnames(A) <- colnames(B) <- c("MedCouple", "Pearson Skewness")
@@ -55,10 +57,16 @@
 #' apply(B, 2, sd)
 #' 
 
-mc <- function(x) {
-  stopifnot(is.numeric(x))
+medcouple_estimator <- function(x, seed = sample.int(1e6, 1)) {
+
+  stopifnot(is.numeric(x),
+            is.numeric(seed),
+            length(seed) == 1,
+            seed > 0)
+  set.seed(seed)
   if (length(x) > 3000) {
-    warning("mc() is too slow for samples larger than 3000. Using a subsample of 3000 instead.")
+    warning("medcouple_estimator() is too slow for samples larger than 3000. ",
+            "Using a subsample of 3000 instead.")
     x <- sample(x, size = 3000)
   }
   #### kernel

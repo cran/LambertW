@@ -2,12 +2,18 @@
 #' @name get_output
 #' 
 #' @description
-#' \code{get_output} transforms the input \eqn{\boldsymbol x} to the observed data
-#' \eqn{\boldsymbol y} given the transformation vector \eqn{\tau =
-#' (\mu_x(\boldsymbol \beta), \sigma_x(\boldsymbol \beta), \gamma, \alpha, \delta)}.
+#' \code{get_output} transforms the input \eqn{\boldsymbol x} to the observed
+#'     data \eqn{\boldsymbol y} given the transformation vector \eqn{\tau =
+#'     (\mu_x(\boldsymbol \beta), \sigma_x(\boldsymbol \beta), \gamma, \alpha,
+#'     \delta)}.
+#'
+#' This is the inverse of \code{\link{get_input}}.
 #' 
 #' @param x a numeric vector of data values.
-#' @param return.z should the shifted and scaled output also be returned? Default: \code{FALSE}.
+#' 
+#' @param return.z should the shifted and scaled output also be returned?
+#'     Default: \code{FALSE}.
+#' 
 #' @inheritParams common-arguments
 #' @return 
 #' A numeric object of same size/dimension as input \code{x}.
@@ -47,8 +53,7 @@ get_output <- function(x, tau, return.z = FALSE) {
   names(yy) <- NULL
   
   if (return.z) {
-    return(list(z = zz,
-                y = yy))
+    return(list(z = zz, y = yy))
   } else {
     return(yy)
   }

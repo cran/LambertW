@@ -8,11 +8,38 @@
 * always: add more distributions by default
 * eventually convert the Lambert W toolkit to reference classes, rather than S3 classes
 
+## v0.6.2
+
+### New
+
+* rewrote a couple of functions in C++ using the amazing (!) **Rcpp** package.
+  3-4x speed up for `W` related functions; also for `IGMM` and `MLE_LambertW`
+
+* added bootstrap functions for users to easily check if a Lambert W x F distribution with finite mean and variance input makes sense:
+  * `bootstrap.LambertW_fit`
+  * `analyze_convergence`
+
+* added `use.mean.variance` argument to distinguish between mean-variance 
+  Lambert W x F distributions and general location-scale Lambert W x F 
+  distributions. See also Goerg (2015b).  See the help file on these functions for references on why they were included.
+
+* added more unit tests (moving code from "Examples" to unit tests)
+
+### Minor changes
+
+* revised the manual to reflect changes in recent R package dependencies 
+* `theta` argument in the `dpqr` function becomes the recommended argument to 
+  specify the distribution.  `alpha`, `beta`, `gamma`, `delta` now give 
+  warnings and will be deprecated in future versions.
+* added third order approximation in `gamma_Taylor` for better initial estimates.
+* added dependency on **Rcpp**
+* removed dependency of **moments** package, and made **Rcpp** versions of `skewness()` and `kurtosis()` instead directly in **LambertW**.
+
 ## v0.6.0
 
 ### New
 
-* moved from **gsl** package to **lamW**: the Lambert W implementation is ~4x faster than for **gsl**. Needless to say that this will also speed up many computations in the **LambertW** package. Thank you [Avraham Adler](http://www.avrahamadler.com/2015/05/26/lamw-package-cran/) for the **lamW** package.
+* moved from **gsl** to **lamW** R package: the Lambert W implementation is ~4x faster than for **gsl**. Needless to say that this will also speed up many computations in the **LambertW** package. Thank you [Avraham Adler](http://www.avrahamadler.com/2015/05/26/lamw-package-cran/) for the **lamW** package.
 
 * new functions:
   * `deriv_xexp()`
@@ -20,8 +47,7 @@
   * `log_deriv_W()`
 
 * lots of performance improvements (not only due to **lamW** package). Leads to
-  2-3 times faster estimation via IGMM or MLE overall. Detailed benchmarks will
-  follow.
+  2-3x faster estimation via IGMM or MLE overall.
 
 * added (first iteration) of unit tests using the **testthat** package
 
@@ -60,10 +86,9 @@
 
 ### Deprecated
 
-Several deprecated functions (see also `?deprecated-function`):
+See also `?deprecated-function`:
 
 * `H()`: use `xexp()` instead
-
 
 ## v0.5.1
 
@@ -142,7 +167,7 @@ Definitely check out the new manual - it has been reviewed *very* thoroughly.
 * Removed **nortest** package dependency; *suggest* only. Since `normfit` is often called for visual checks only, I made the normality tests optional. They are called if the **nortest** package is available (`require(nortest) == TRUE`); otherwise
   it just returns `NA`.  This is useful in case users do not have the **nortest** package available 
   in their R installation.
-* fixed bug in `qU()` and `pU()`: incorrect usage of standard deviation vs scale in t distribution (`dU()`, and thus log-likelihood was correct).
+* fixed bug in `qU()` and `pU()`: incorrect usage of standard deviation vs scale in t distribution (`dU()` and thus log-likelihood was correct).
 * `ks.test.t` now uses the scale parameter, rather than standard deviation.  This now 
   allows to test also if degrees of freedom < 2.
 * `MLE_LambertW` changed the `estimate.only` argument to `return.estimate.only`.
@@ -167,13 +192,10 @@ Several deprecated functions (see also `?deprecated-function`):
 * `W_2delta_alpha()`: use `W_2delta_2alpha()`.
 * `W_gamma_1()`: use `W_gamma(..., branch = -1)`.
 
-
-
 ### Removed
 
 * `G()` since it was never used. If you need it use `G_delta(z, delta = 0)`.
-* `MLE_LambertW_new()` and (`MLE_LambertW_new.default()`); `MLE_LambertW` now works also
-  for unbounded optimziation.
+* `MLE_LambertW_new()` and (`MLE_LambertW_new.default()`); `MLE_LambertW` now works also for unbounded optimziation.
 * `.default` methods for `IGMM` and `MLE_LambertW`. They just work one way on a numeric vector.
 * dependency on **maxLik** package for numerical Hessian computation.  Use `optim(..., hessian = TRUE)` instead.
 * **Rsolnp**, **numDeriv**, and **nortest** are only suggested packages; not required anymore.
