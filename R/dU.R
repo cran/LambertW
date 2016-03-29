@@ -39,5 +39,7 @@ dU <- function(u, beta, distname, use.mean.variance = TRUE) {
          unif = {
            fU <- function(u) dunif(u, -sqrt(3), sqrt(3))
          })
-  return(fU(u))
+  f.u <- fU(u)
+  names(f.u) <- names(u)
+  return(f.u)
 } 

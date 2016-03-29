@@ -8,6 +8,14 @@
 * always: add more distributions by default
 * eventually convert the Lambert W toolkit to reference classes, rather than S3 classes
 
+## v0.6.4
+
+### Minor changes
+
+* updated test files to upcomig version of **testthat** package
+* added a couple of unit tests
+* removed unused variable in `skewness.cpp`
+
 ## v0.6.2
 
 ### New

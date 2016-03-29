@@ -62,7 +62,7 @@ test_that("W(z) is asymptotically like log(z)", {
   expect_true(all(diff(W.log.ratio) > 0))
 })
 
-test_that("W throw warning if input is NA or NaN and returns NA; Inf for Inf", {
+test_that("W throws warning if input is NA or NaN and returns NA; Inf for Inf", {
 
   expect_equal(W(c(0, Inf)), c(0, Inf))
   
@@ -82,16 +82,3 @@ test_that("W is vectorized and maintins input dimension", {
     expect_equal(dim(dd), dim(W(dd)))
   }
 })
-
-if (requireNamespace("gsl")) {
-    test_that("lamW and gsl implementation are the same", {
-        pos.vals <- rexp(1e5)
-        neg.vals <- -rexp(1e5)
-        
-        expect_equal(lamW::lambertW0_C(pos.vals),
-                     gsl::lambert_W0(pos.vals))
-        expect_equal(lamW::lambertWm1(neg.vals),
-                     gsl::lambert_Wm1(neg.vals))
-    })
-}
-

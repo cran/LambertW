@@ -8,10 +8,11 @@ theta.list <- list("s" = list(beta = c(mu = 2, sigma = .1), gamma = -0.1),
 
 yy.list <- lapply(theta.list,
                   function(tt) {
-                    rLambertW(n = nobs, distname = "normal",
-                              theta = tt)
+                    yy <- rLambertW(n = nobs, distname = "normal",
+                                    theta = tt)
+                    yy[yy < 0] <- 1e-4
+                    return(yy)
                   })
-
 
 test_that("plot works", {
   for (tt in names(yy.list)) {

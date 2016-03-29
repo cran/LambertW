@@ -29,7 +29,8 @@ test_that("H_gamma input must be length 1", {
   # by default it's gamma = 0
   expect_equal(H_gamma(random.data, gamma = 0), H_gamma(random.data),
                info = "default is gamma = 0")
-  expect_error(H(0, gamma = c(0, 1)),
+  # xexp() = H()
+  expect_error(xexp(0, gamma = c(0, 1)),
                info = "gamma must be length one")
 })
 

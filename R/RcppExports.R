@@ -28,7 +28,7 @@ normalize_by_tau_Cpp <- function(x, mu_x, sigma_x, inverse) {
 #' \code{skewness} estimates the third central, normalized moment from data.
 #' 
 #' @param x a numeric vector.
-#' @seealso Corresponding functions in the \pkg{moments} packakge.
+#' @seealso Corresponding functions in the \pkg{moments} package.
 #' @export
 skewness <- function(x) {
     .Call('LambertW_skewness', PACKAGE = 'LambertW', x)

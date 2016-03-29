@@ -52,17 +52,16 @@ test_that("W_gamma is inverse of H_gamma", {
 })
 
 test_that("W_gamma treats branch correctly", {
-  expect_less_than(W_gamma(-1, gamma = 0.1, branch = -1),
-                   W_gamma(-1, gamma = 0.1, branch = 0),
-                   info = "non-principal branch is less than principal")
+  cat("non-principal branch is less than principal")
+  expect_lt(W_gamma(-1, gamma = 0.1, branch = -1),
+            W_gamma(-1, gamma = 0.1, branch = 0))
   
-  expect_more_than(W_gamma(1, gamma = -0.1, branch = -1),
-                   W_gamma(1, gamma = -0.1, branch = 0),
-                   info = "non-principal branch is more than principal")
+  cat("non-principal branch is greater than principal")
+  expect_gt(W_gamma(1, gamma = -0.1, branch = -1),
+            W_gamma(1, gamma = -0.1, branch = 0))
 })
 
 context("Testing derivatives")
-
 
 test_that("deriv_W_gamma is correct", {
   eps <- 1e-7

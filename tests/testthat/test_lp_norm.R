@@ -8,10 +8,10 @@ test_that("lp norm is correct for real values", {
   expect_equal(lp_norm(c(3, 4), p = Inf), 4)
   
   # 1.5 norm is between 1 and 2
-  expect_less_than(lp_norm(c(3, 4), p = 1.5),
-                   lp_norm(c(3, 4), p = 1))
-  expect_more_than(lp_norm(c(3, 4), p = 1.5),
-                   lp_norm(c(3, 4), p = 2))
+  expect_lt(lp_norm(c(3, 4), p = 1.5),
+            lp_norm(c(3, 4), p = 1))
+  expect_gt(lp_norm(c(3, 4), p = 1.5),
+            lp_norm(c(3, 4), p = 2))
   
   expect_error(lp_norm(10, -1))
 })

@@ -18,6 +18,6 @@ skewness(x)
 \code{skewness} estimates the third central, normalized moment from data.
 }
 \seealso{
-Corresponding functions in the \pkg{moments} packakge.
+Corresponding functions in the \pkg{moments} package.
 }
 

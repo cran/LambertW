@@ -19,3 +19,11 @@ test_that("support is correct for corner cases", {
                  check.names = FALSE)
   }
 })
+
+test_that("get_support is correct for uniform distribution", {
+
+  theta.tmp <- list(beta = c(min = -1, max = 1), delta = 0)
+  tau.tmp <- theta2tau(theta.tmp, distname = "unif")
+  expect_identical(get_support(tau = tau.tmp, input.bounds = c(-1, 1)),
+                   c(lower = -1, upper = 1))
+})

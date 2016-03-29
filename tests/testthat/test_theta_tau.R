@@ -22,3 +22,14 @@ test_that("tau2theta is inverse of theta2tau", {
     expect_equivalent(theta.tmp[[nn]], theta[[nn]])
   }
 })
+
+test_that("theta2tau computes correct mean/variance for uniform", {
+  for (dd in c(0, 0.1, 1)) {
+    theta.tmp <- list(beta = c(min = -1, max = 1), delta = dd)
+    tau.tmp <- theta2tau(theta.tmp, "unif")
+  
+    expect_equivalent(tau.tmp["mu_x"], 0)
+    expect_equivalent(tau.tmp["sigma_x"], sqrt(1 / 12) * 2)
+    expect_equivalent(tau.tmp["delta"], dd)
+  }
+})

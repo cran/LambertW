@@ -7,12 +7,12 @@ test_that("MLE estimates c(mu, sigma) correctly for a Normal distribution", {
   for (tt in c("s", "h", "hh")) {
     mod <- MLE_LambertW(xx, type = tt, distname = "normal")
     # mean is approx equal
-    expect_more_than(mod$theta$beta["mu"], -2 - .5 * 2 / sqrt(nobs))
-    expect_less_than(mod$theta$beta["mu"], -2 + .5 * 2 / sqrt(nobs))
+    expect_gt(mod$theta$beta["mu"], -2 - .5 * 2 / sqrt(nobs))
+    expect_lt(mod$theta$beta["mu"], -2 + .5 * 2 / sqrt(nobs))
     
     # TODO: replace with actual CI for sigma
-    expect_more_than(mod$theta$beta["sigma"], .5 - 2 / sqrt(nobs))
-    expect_less_than(mod$theta$beta["sigma"], .5  + 2 / sqrt(nobs))
+    expect_gt(mod$theta$beta["sigma"], .5 - 2 / sqrt(nobs))
+    expect_lt(mod$theta$beta["sigma"], .5  + 2 / sqrt(nobs))
     
     # other parameters are zero for Gaussian data
     other.params <- mod$tau[!grepl("mu_x|sigma_x|alpha", names(mod$tau))]
@@ -36,18 +36,18 @@ test_that("MLE estimates are close to truth", {
   for (tt in names(yy.list)) {
     mod <- MLE_LambertW(yy.list[[tt]], type = tt, distname = "normal")
     # mean is approx equal
-    expect_more_than(mod$theta$beta["mu"], 
+    expect_gt(mod$theta$beta["mu"], 
                      theta.list[[tt]]$beta["mu"] - 
                        theta.list[[tt]]$beta["sigma"] * 2 / sqrt(nobs))
-    expect_less_than(mod$theta$beta["mu"], 
+    expect_lt(mod$theta$beta["mu"], 
                      theta.list[[tt]]$beta["mu"] + 
                        theta.list[[tt]]$beta["sigma"] * 2 / sqrt(nobs))
     
     # TODO: replace with actual CI for sigma
-    expect_more_than(mod$theta$beta["sigma"], 
-                     theta.list[[tt]]$beta["sigma"] - 2 / sqrt(nobs))
-    expect_less_than(mod$theta$beta["sigma"],
-                     theta.list[[tt]]$beta["sigma"] + 2 / sqrt(nobs))
+    expect_gt(mod$theta$beta["sigma"], 
+              theta.list[[tt]]$beta["sigma"] - 2 / sqrt(nobs))
+    expect_lt(mod$theta$beta["sigma"],
+              theta.list[[tt]]$beta["sigma"] + 2 / sqrt(nobs))
     
     # other parameters are zero for Gaussian data
     for (nn in names(theta.list[[tt]])) {

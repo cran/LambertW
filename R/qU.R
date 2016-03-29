@@ -42,7 +42,9 @@ qU <- function(p, beta, distname, use.mean.variance = TRUE) {
          }, 
          unif = {
            qU <- function(p) qunif(p, -sqrt(3), sqrt(3))
-         }
-  )  
-  return(qU(p))
+         })
+  
+  q.u <- qU(p)
+  names(q.u) <- names(p)
+  return(q.u)
 } 

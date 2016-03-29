@@ -118,7 +118,7 @@ for (nn in names(heavy.theta.list)) {
     # KDE estimated is close to true density
     samples.from.dist <- auxR(n = 1e3)
     kde.est <- density(samples.from.dist)
-    expect_more_than(cor(kde.est$y, auxD(kde.est$x)), 0.9)
+    expect_gt(cor(kde.est$y, auxD(kde.est$x)), 0.9)
   })
 }
 
@@ -152,8 +152,9 @@ test_that("mLambertW has correct values for Normal and delta > 0", {
     }
     
     if (dd > 0) {
-      expect_more_than(mom.lamw.h$sd, 3, 
-                          info = paste0(msg, ": sd"))
+      # testthat 0.11.* removed the 'info' field for expect_gt :( 
+      # will include again once fixed
+      expect_gt(mom.lamw.h$sd, 3) # info = paste0(msg, ": sd"))
     } else if (dd > 0.5) {
       expect_true(is.na(mom.lamw.h$sd))
     }
@@ -166,11 +167,10 @@ test_that("mLambertW has correct values for Normal and delta > 0", {
     }
     
     if (dd > 0) {
-      expect_more_than(mom.lamw.h$kurtosis, 3, 
-                       info = paste0(msg, ": kurtosis"))
+      # info = paste0(msg, ": kurtosis")
+      expect_gt(mom.lamw.h$kurtosis, 3)
     } else if (dd > 1/4) {
       expect_true(is.na(mom.lamw.h$mean))
     }
   }
-  
 })

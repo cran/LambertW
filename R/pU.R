@@ -38,5 +38,7 @@ pU <- function(u, beta, distname, use.mean.variance = TRUE) {
          }
         )
  
-  return(FU(u))
+  F.u <- FU(u)
+  names(F.u) <- names(u)
+  return(F.u)
 } 
