@@ -2,8 +2,8 @@
 % Please edit documentation in R/LambertW-package.R
 \docType{package}
 \name{LambertW-package}
-\alias{LambertW}
 \alias{LambertW-package}
+\alias{LambertW}
 \title{R package for Lambert W\eqn{ \times} F distributions}
 \description{
 This package is based on notation, definitions, and results of Goerg (2011,
@@ -50,7 +50,7 @@ Feel free to contact me for comments, suggestions, code improvements,
     implementation of new input distributions, bug reports, etc.
 }
 \examples{
- 
+
 # Replicate parts of the analysis in Goerg (2011)
 data(AA)
 y <- AA[AA$sex=="f", "bmi"]
@@ -61,9 +61,9 @@ summary(fit.gmm)  # gamma is significant and positive
 plot(fit.gmm)
 
 # Compare empirical to theoretical moments (given parameter estimates)
-moments.theory <- 
- mLambertW(theta = list(beta = fit.gmm$tau[c("mu_x", "sigma_x")], 
-                        gamma = fit.gmm$tau["gamma"]), 
+moments.theory <-
+ mLambertW(theta = list(beta = fit.gmm$tau[c("mu_x", "sigma_x")],
+                        gamma = fit.gmm$tau["gamma"]),
            distname = "normal")
 TAB <- rbind(unlist(moments.theory),
              c(mean(y), sd(y), skewness(y), kurtosis(y)))
@@ -77,9 +77,6 @@ fit.ml <- MLE_LambertW(y, type = "s", distname = "normal", hessian = TRUE)
 summary(fit.ml)
 plot(fit.ml)
 
-}
-\author{
-Author and maintainer: Georg M. Goerg (im (at) gmge.org)
 }
 \references{
 Goerg, G.M. (2011). \dQuote{Lambert W Random Variables - A New Family of
@@ -97,5 +94,7 @@ Goerg, G.M. (2016).  \dQuote{Rebuttal of the ``Letter to the Editor of
     Annals of Applied Statistics'' on Lambert W x F distributions and the
     IGMM algorithm}.  Available on arxiv.
 }
+\author{
+Author and maintainer: Georg M. Goerg (im (at) gmge.org)
+}
 \keyword{package}
-

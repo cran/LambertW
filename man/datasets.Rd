@@ -2,12 +2,14 @@
 % Please edit documentation in R/datasets.R
 \docType{data}
 \name{datasets}
+\alias{datasets}
 \alias{AA}
 \alias{SolarFlares}
-\alias{datasets}
 \title{Datasets}
-\format{\code{AA} is a \code{data.frame} with 13 columns and 202 rows.
-See \code{ais} dataset in the \pkg{DAAG} package for details.}
+\format{
+\code{AA} is a \code{data.frame} with 13 columns and 202 rows.
+See \code{ais} dataset in the \pkg{DAAG} package for details.
+}
 \source{
 \code{AA} was the basis for the analyses that are reported in 
 Telford and Cunningham (1991).
@@ -48,4 +50,3 @@ distributions in empirical data''. SIAM Review 51, 661-703 (2009). See also
 \url{http://tuvalu.santafe.edu/~aaronc/powerlaws/}.
 }
 \keyword{datasets}
-

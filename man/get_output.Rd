@@ -36,4 +36,3 @@ This is the inverse of \code{\link{get_input}}.
 \code{\link{get_input}}; \code{\link{Gaussianize}} with argument \code{inverse = TRUE}.
 }
 \keyword{manip}
-

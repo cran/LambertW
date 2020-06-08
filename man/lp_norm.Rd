@@ -46,4 +46,3 @@ sapply(kComplexVec, lp_norm)
 
 }
 \keyword{math}
-

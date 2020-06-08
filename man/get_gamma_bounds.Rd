@@ -36,4 +36,3 @@ Skewed Lambert W\eqn{\times} F distributions have
     and maxiumum of the normalized data \eqn{\mathbf{z} = (\mathbf{y} -
     \mu_x) / \sigma_x}.
 }
-

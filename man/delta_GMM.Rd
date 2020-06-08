@@ -4,10 +4,18 @@
 \alias{delta_GMM}
 \title{Estimate delta}
 \usage{
-delta_GMM(z, type = c("h", "hh"), kurtosis.x = 3, skewness.x = 0,
-  delta.init = delta_Taylor(z), tol = .Machine$double.eps^0.25,
-  not.negative = FALSE, optim.fct = c("nlm", "optimize"), lower = -1,
-  upper = 3)
+delta_GMM(
+  z,
+  type = c("h", "hh"),
+  kurtosis.x = 3,
+  skewness.x = 0,
+  delta.init = delta_Taylor(z),
+  tol = .Machine$double.eps^0.25,
+  not.negative = FALSE,
+  optim.fct = c("nlm", "optimize"),
+  lower = -1,
+  upper = 3
+)
 }
 \arguments{
 \item{z}{a numeric vector of data values.}
@@ -62,4 +70,3 @@ delta_GMM(y) # after the first iteration
 \code{\link{IGMM}} to estimate all parameters jointly.
 }
 \keyword{optimize}
-

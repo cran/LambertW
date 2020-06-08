@@ -4,11 +4,20 @@
 \alias{IGMM}
 \title{Iterative Generalized Method of Moments -- IGMM}
 \usage{
-IGMM(y, type = c("h", "hh", "s"), skewness.x = 0, kurtosis.x = 3,
-  tau.init = get_initial_tau(y, type), robust = FALSE,
-  tol = .Machine$double.eps^0.25, location.family = TRUE,
-  not.negative = NULL, max.iter = 100, delta.lower = -1,
-  delta.upper = 3)
+IGMM(
+  y,
+  type = c("h", "hh", "s"),
+  skewness.x = 0,
+  kurtosis.x = 3,
+  tau.init = get_initial_tau(y, type),
+  robust = FALSE,
+  tol = .Machine$double.eps^0.25,
+  location.family = TRUE,
+  not.negative = NULL,
+  max.iter = 100,
+  delta.lower = -1,
+  delta.upper = 3
+)
 }
 \arguments{
 \item{y}{a numeric vector of real values.}
@@ -119,12 +128,11 @@ summary(fity)
 plot(fity)
 
 }
-\author{
-Georg M. Goerg
-}
 \seealso{
 \code{\link{delta_GMM}}, \code{\link{gamma_GMM}}, \code{\link{analyze_convergence}}
 }
+\author{
+Georg M. Goerg
+}
 \keyword{iteration}
 \keyword{optimize}
-

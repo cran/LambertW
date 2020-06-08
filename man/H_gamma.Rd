@@ -23,4 +23,3 @@ Skewed Lambert W\eqn{\times} F RV transformation: \eqn{H_{\gamma}(u) = u
 \code{\link{xexp}}
 }
 \keyword{math}
-

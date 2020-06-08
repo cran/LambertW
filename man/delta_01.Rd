@@ -43,4 +43,3 @@ delta_01(1)  # neither mean nor variance exist, thus NA
 }
 \keyword{math}
 \keyword{univar}
-

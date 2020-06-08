@@ -1,12 +1,11 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-
 //' @rdname estimate-moments
 //' @description
 //' \code{kurtosis} estimates the fourth central, normalized moment from data.
-//' 
 //' @export
+//' 
 // [[Rcpp::export]]
 double kurtosis(const NumericVector& x) {
   int nn = x.length();

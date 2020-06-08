@@ -54,4 +54,3 @@ The derivative of \eqn{W_{\gamma}(z)} with respect to \eqn{z} simplifies to
 \code{\link{H_gamma}}
 }
 \keyword{math}
-

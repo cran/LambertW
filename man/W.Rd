@@ -3,9 +3,9 @@
 \name{W}
 \alias{W}
 \alias{deriv_W}
+\alias{log_deriv_W}
 \alias{deriv_log_W}
 \alias{log_W}
-\alias{log_deriv_W}
 \title{Lambert W function, its logarithm and derivative}
 \usage{
 W(z, branch = 0)
@@ -115,4 +115,3 @@ Corless, R. M., G. H. Gonnet, D. E. G. Hare, D. J. Jeffrey and D. E. Knuth
     \code{\link{xexp}}.
 }
 \keyword{math}
-

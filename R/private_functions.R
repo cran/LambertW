@@ -1,5 +1,6 @@
 #' # private functions
-#' 
+#' @param x numeric vector to be plotted
+#' @noRd
 
 .optimalNumberOfBinsForHist <- function(x) {
   # Compute the optimal number of bins for a histogram.

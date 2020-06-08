@@ -20,4 +20,3 @@ skewness(x)
 \seealso{
 Corresponding functions in the \pkg{moments} package.
 }
-

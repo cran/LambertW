@@ -75,4 +75,3 @@ gamma_Taylor(yy)
 \code{\link{IGMM}} to estimate all parameters jointly.
 }
 \keyword{optimize}
-

@@ -4,12 +4,19 @@
 \alias{MLE_LambertW}
 \title{Maximum Likelihood Estimation for Lambert W\eqn{ \times} F distributions}
 \usage{
-MLE_LambertW(y, distname, type = c("h", "s", "hh"), theta.fixed = list(alpha
-  = 1), use.mean.variance = TRUE, theta.init = get_initial_theta(y, distname
-  = distname, type = type, theta.fixed = theta.fixed, use.mean.variance =
-  use.mean.variance, method = "IGMM"), hessian = TRUE,
-  return.estimate.only = FALSE, optim.fct = c("optim", "nlm", "solnp"),
-  not.negative = FALSE)
+MLE_LambertW(
+  y,
+  distname,
+  type = c("h", "s", "hh"),
+  theta.fixed = list(alpha = 1),
+  use.mean.variance = TRUE,
+  theta.init = get_initial_theta(y, distname = distname, type = type, theta.fixed =
+    theta.fixed, use.mean.variance = use.mean.variance, method = "IGMM"),
+  hessian = TRUE,
+  return.estimate.only = FALSE,
+  optim.fct = c("optim", "nlm", "solnp"),
+  not.negative = FALSE
+)
 }
 \arguments{
 \item{y}{a numeric vector of real values.}
@@ -88,4 +95,3 @@ set \code{theta.fixed = list()}.
 
 }
 \keyword{optimize}
-

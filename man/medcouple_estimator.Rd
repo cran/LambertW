@@ -71,4 +71,3 @@ Brys, G., M. Hubert, and A. Struyf (2004). \dQuote{A robust
 \code{\link{test_symmetry}}
 }
 \keyword{univar}
-

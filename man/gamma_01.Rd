@@ -41,4 +41,3 @@ gamma_01(1)
 
 }
 \keyword{math}
-

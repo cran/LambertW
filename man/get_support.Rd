@@ -48,4 +48,3 @@ get_support(c(mu_x = 0, sigma_x = 1, gamma = 0.1))
 get_support(c(mu_x = 0, sigma_x = 1, delta = 0.1))
 }
 \keyword{math}
-

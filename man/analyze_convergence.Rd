@@ -2,15 +2,17 @@
 % Please edit documentation in R/analyze_convergence.R
 \name{analyze_convergence}
 \alias{analyze_convergence}
-\alias{plot.convergence_LambertW_fit}
 \alias{summary.convergence_LambertW_fit}
+\alias{plot.convergence_LambertW_fit}
 \title{Analyze convergence of Lambert W estimators}
 \usage{
-analyze_convergence(LambertW_fit, sample.sizes = round(seq(0.2, 1, length = 5)
-  * length(LambertW_fit$data)), ...)
+analyze_convergence(
+  LambertW_fit,
+  sample.sizes = round(seq(0.2, 1, length = 5) * length(LambertW_fit$data)),
+  ...
+)
 
-\method{summary}{convergence_LambertW_fit}(object, type = c("basic", "norm",
-  "perc", "bca"), ...)
+\method{summary}{convergence_LambertW_fit}(object, type = c("basic", "norm", "perc", "bca"), ...)
 
 \method{plot}{convergence_LambertW_fit}(x, ...)
 }
@@ -97,4 +99,3 @@ for (jj in seq_along(plot.lists[[1]])) {
 Stehlik and Hermann (2015). ``Letter to the Editor''. Ann. Appl. Stat. 9
    2051. doi:10.1214/15-AOAS864 -- \url{http://projecteuclid.org/euclid.aoas/1453994190}
 }
-

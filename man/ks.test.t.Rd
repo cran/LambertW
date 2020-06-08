@@ -45,4 +45,3 @@ ks.test.t(xx, beta.true)
 \code{\link[MASS]{fitdistr}}, \code{\link[stats]{ks.test}}
 }
 \keyword{htest}
-

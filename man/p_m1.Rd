@@ -85,4 +85,3 @@ p_m1(1.5, n=100, beta = beta.01, distname = "normal")
 
 }
 \keyword{univar}
-

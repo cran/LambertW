@@ -44,4 +44,3 @@ with location and scale parameter.}
 \description{
 Reference list of most common function arguments in this package.
 }
-

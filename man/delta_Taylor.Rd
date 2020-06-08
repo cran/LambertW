@@ -60,4 +60,3 @@ delta_GMM(y) # iterative estimate
 \code{\link{IGMM}}  to estimate all parameters jointly.
 }
 \keyword{optimize}
-

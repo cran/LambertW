@@ -4,9 +4,15 @@
 \alias{gamma_GMM}
 \title{Estimate gamma}
 \usage{
-gamma_GMM(z, skewness.x = 0, gamma.init = gamma_Taylor(z), robust = FALSE,
-  tol = .Machine$double.eps^0.25, not.negative = FALSE,
-  optim.fct = c("optimize", "nlminb"))
+gamma_GMM(
+  z,
+  skewness.x = 0,
+  gamma.init = gamma_Taylor(z),
+  robust = FALSE,
+  tol = .Machine$double.eps^0.25,
+  not.negative = FALSE,
+  optim.fct = c("optimize", "nlminb")
+)
 }
 \arguments{
 \item{z}{a numeric vector of data values.}
@@ -60,4 +66,3 @@ function; \code{\link{medcouple_estimator}} for a robust measure of asymmetry;
 jointly.
 }
 \keyword{optimize}
-

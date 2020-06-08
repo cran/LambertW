@@ -7,8 +7,7 @@
 \usage{
 bootstrap(object, ...)
 
-\method{bootstrap}{LambertW_fit}(object, sample.size = length(object$data),
-  R = 100, ...)
+\method{bootstrap}{LambertW_fit}(object, sample.size = length(object$data), R = 100, ...)
 }
 \arguments{
 \item{object}{an object of class \code{"LambertW_fit"}; usually
@@ -42,4 +41,3 @@ plot(boot.est, 3)
 summary(boot.est)
 }
 }
-

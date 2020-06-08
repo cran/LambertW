@@ -4,9 +4,17 @@
 \alias{Gaussianize}
 \title{Gaussianize matrix-like objects}
 \usage{
-Gaussianize(data = NULL, type = c("h", "hh", "s"), method = c("IGMM",
-  "MLE"), return.tau.mat = FALSE, inverse = FALSE, tau.mat = NULL,
-  verbose = FALSE, return.u = FALSE, input.u = NULL)
+Gaussianize(
+  data = NULL,
+  type = c("h", "hh", "s"),
+  method = c("IGMM", "MLE"),
+  return.tau.mat = FALSE,
+  inverse = FALSE,
+  tau.mat = NULL,
+  verbose = FALSE,
+  return.u = FALSE,
+  input.u = NULL
+)
 }
 \arguments{
 \item{data}{a numeric matrix-like object; either the data that should be
@@ -117,7 +125,7 @@ legend("bottomright", c("Cauchy", "Gaussianize"), col = c(1, 2),
 
 plot(x1, y1, xlab="Gaussian-like input", ylab = "Cauchy - output")
 grid()
-
+\dontrun{
 # multivariate example
 y2 <- 0.5 * y1 + rnorm(length(y1))
 YY <- cbind(y1, y2)
@@ -135,8 +143,8 @@ out$tau.mat
 YY.hat <- Gaussianize(data = out$input, tau.mat = out$tau.mat,
                       inverse = TRUE)
 plot(YY.hat[, 1], YY[, 1])
+}
 
 }
 \keyword{multivariate}
 \keyword{univar}
-
