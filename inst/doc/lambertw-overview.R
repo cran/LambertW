@@ -4,17 +4,12 @@ opts_chunk$set(cache = TRUE)
 options(digits = 3)
 
 
-## ----load-packages------------------------------------------------------------
-library(LambertW)
-library(ggplot2)
-library(reshape2)
-library(data.table)
-
 ## ----eu-stock-markets---------------------------------------------------------
 ret <- diff(log(EuStockMarkets)) * 100
 plot(ret)
 
 ## ----pairs-metrics------------------------------------------------------------
+library(LambertW)  # this will load the `moments` package as well
 data_metrics <- function(x) {
   c(mean = mean(x), sd = sd(x), min = min(x), max = max(x), 
     skewness = skewness(x), kurtosis = kurtosis(x))
@@ -36,10 +31,9 @@ ret.gauss.metrics
 ## ----DAX-FTSE, fig.width = 16, fig.height = 8---------------------------------
 layout(matrix(1:2, ncol = 2, byrow = TRUE))
 plot(ret[, "FTSE"], ret[, "DAX"])
-# grid()
+grid()
 plot(ret.gauss[, "DAX"], ret.gauss[, "FTSE"])
-# grid()
-
+grid()
 
 ## ----fit-models, include = TRUE, eval = FALSE---------------------------------
 #  # try these models on your own

@@ -8,12 +8,20 @@
 * always: add more distributions by default
 * convert Lambert W toolkit to reference classes, rather than S3 classes
 
+## 0.6.6
+
+* fixed link issues with new way of parsing URLs in `Rd` files for R
+* updated vignette (added `markdown` to `Suggests`)
+
 ## v0.6.5
 
-* moved code to [https://github.com/gmgeorg/LambertW](https://github.com/gmgeorg/LambertW)
-* fixed CRAN check `WARNINGS` (thanks to Kurt Hornik for help on resolving Rcpp build errors)
-* fixed zero-division bug in `get_initial_tau()` (happened when `mad(y) = 0` -- which can happen
-  for data with majority of values fall on the same exact value)
+* moved code to
+  [https://github.com/gmgeorg/LambertW](https://github.com/gmgeorg/LambertW)
+* fixed CRAN check `WARNINGS` (thanks to Kurt Hornik for help on resolving Rcpp
+  build errors)
+* fixed zero-division bug in `get_initial_tau()` (happened when `mad(y) = 0` --
+  which can happen for data with majority of values fall on the same exact
+  value)
 * added a introduction vignette
 
 ## v0.6.4
@@ -62,7 +70,7 @@
 * moved from **gsl** to **lamW** R package: the Lambert W implementation is ~4x
   faster than for **gsl**. Needless to say that this will also speed up many
   computations in the **LambertW** package. Thank you [Avraham
-  Adler](http://www.avrahamadler.com/2015/05/26/lamw-package-cran/) for the
+  Adler](https://www.avrahamadler.com/2015/05/26/lamw-package-cran/) for the
   **lamW** package.
 
 * new functions:
@@ -133,7 +141,7 @@ Several deprecated functions (see also `?deprecated-function`):
 
 - Updated citation with "The Scientific World Journal: Probability and
   Statistics with Applications in Finance and Economics. Available at
-  [http://www.hindawi.com/journals/tswj/aa/909231/](http://www.hindawi.com/journals/tswj/aa/909231/)"
+  [https://www.hindawi.com/journals/tswj/2015/909231/](https://www.hindawi.com/journals/tswj/2015/909231/)"
 - added `grid` to `test_normality` (previously known as `normfit`)
 - added a "^2" to the N(mu, sigma^2) of the legend; now its clear that the
   displayed value is the standard deviation, not the variance.
@@ -189,7 +197,7 @@ Definitely check out the new manual - it has been reviewed *very* thoroughly.
 * more error checking and much more meaningful error messages.
 * following more closely [Google's R style
   guide](https://google.github.io/styleguide/Rguide.html) (with some of [Hadley
-  Wickham's guide](http://r-pkgs.had.co.nz/style.html) too)
+  Wickham's tidyverse guide](https://style.tidyverse.org/) too)
      * use underscore `_` as separator in function names
      * changed assignments from `=` to `<-`
      * changed variable names with underscore `_` to `.` (unless it `_` helps
