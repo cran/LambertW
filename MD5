@@ -1,6 +1,6 @@
-c879c806787d115c8c0d8a35c1757f45 *DESCRIPTION
+49f58eb5528d333c91de607bb869a8f9 *DESCRIPTION
 ee5497ff82d720beba832531a7c5334e *NAMESPACE
-fbf2563dc2e496b2561bfd855077eb40 *NEWS.md
+b16285afac2ba755839421775876e30a *NEWS.md
 985617a26476663691bdd1678b7335dd *R/0_LambertW-toolkit.R
 2277718a1fce026c577dc09cd2bcbf45 *R/0_LambertW-utils.R
 b43c630633a02b9f5f8e2c77dd9d193d *R/0_LambertW_fit-methods.R
@@ -15,7 +15,7 @@ c05432348aea332e8d34fa435ee59500 *R/0_distname-utils.R
 6c16edeb1a89c11bcfc11e454612f370 *R/0_tau-utils.R
 1e5843c10bafd78476ef29ea912ea3bf *R/0_theta-utils.R
 abbc33bf22f2732fdf88fd2bd03c0a1e *R/G_delta_alpha.R
-3f9d629115602a37e4bb7e5ad5595780 *R/Gaussianize.R
+5aa41f6dfe413c02274407822496783e *R/Gaussianize.R
 3d65a51490497ba0e1a491cab88e50ff *R/H_gamma.R
 3b7da98662f0834f7172f2d796cba6f9 *R/IGMM.R
 f30c2059759361c7438e44c796d9a930 *R/LambertW-package.R
@@ -35,7 +35,7 @@ f9c4b340b31a4cf5e89ce239d510342b *R/check_theta.R
 a75a17d0b17f9200876190cd40d9dbdc *R/create_LambertW_output.R
 7faed8618f90193d73b22eabeb1e3aef *R/dLambertW.R
 74fb5e2486211048b54a88e32b183bfd *R/dU.R
-987b4687b0d7c4894fc308554ec00d34 *R/datasets.R
+81637901c936926f2a62540fe8dc7ca0 *R/datasets.R
 a5083cbb6d2d90ec33c0edf422123d95 *R/delta_01.R
 9c8ce805524d71eb2a57cb5d642708b4 *R/delta_GMM.R
 a47632be87b5ea95d18309e20a4e205c *R/delta_Taylor.R
@@ -93,18 +93,18 @@ f0cb79c2a924b53b5322c3b2b3dd6a71 *R/theta2unbounded.R
 4d4143331630a46112c6471425985d6d *R/unflatten_theta.R
 42e0bbb34b3a0871eb0efb28e4e715b4 *R/xexp.R
 88dbb440d347d27149285619f7ce999d *R/zzz.R
-764b3e8953388e668059b5dcc1df788a *README.md
+0b5ccf66b48663a0b4ac9abd3b9ff94e *README.md
 0ced7532dddd6190eb5c03df8d1947f9 *build/vignette.rds
 284903600f189498464db1efd8a3d6a4 *data/AA.rda
 e766bc78781034b091461e25310234c5 *data/SolarFlares.rda
 8a827117e61ddf32fba1cb0544dffcda *inst/CITATION
 663a34eeb250f1461c8d9e5794a2218d *inst/doc/lambertw-overview.R
 9fdee97feb521a5ce7ddf17e6984763f *inst/doc/lambertw-overview.Rmd
-ec40b42bcf266a7fde25d64f5619d1dd *inst/doc/lambertw-overview.html
+20b28e430617184fb641c6ea36e6b339 *inst/doc/lambertw-overview.html
 1309d8d81aef55533f2b0aac337ea788 *inst/include/LambertW.h
 93d2e36be8b3a849f30cfae2fa0bb2f4 *inst/include/LambertW_RcppExports.h
 273bd937c79d8ee2cf3305d27eb073b3 *man/G_delta_alpha.Rd
-c7ed14b60aa822e4a3d43eda7e42d2a7 *man/Gaussianize.Rd
+1ab12ddfac184bf95259e56ba8d692a9 *man/Gaussianize.Rd
 b45a5eb4aa68282fc3742ef3bdc76e50 *man/H_gamma.Rd
 c0569b40f60a088af974a42dbd6a4bef *man/IGMM.Rd
 532a67a12a1bdcdfad14107ece3b2f4a *man/LambertW-package.Rd
@@ -121,7 +121,7 @@ fd6e7038a94f59a3c94655909c7c4285 *man/W_gamma.Rd
 37d31ccbb590fcdc7718f62bb6dddbae *man/beta-utils.Rd
 6372ac90550ac60d3f550cd71d658aa0 *man/bootstrap.Rd
 206c57153c7809f70ef155efa2a00094 *man/common-arguments.Rd
-5d6403819345fbe739482ab2a7754499 *man/datasets.Rd
+a6124e64329b1d41b2d5bf5a8e6f13a3 *man/datasets.Rd
 90d76bb8482b61a39c111fcc936c0756 *man/delta_01.Rd
 143e75bb1033c910e645001f33039507 *man/delta_GMM.Rd
 763ea34b1a4eab318f5830763a1fbff3 *man/delta_Taylor.Rd
