@@ -89,15 +89,15 @@
 #' @examples
 #' 
 #' # estimate tau for the skewed version of a Normal
-#' y <- rLambertW(n = 1000, theta = list(beta = c(2, 1), gamma = 0.2), 
+#' y <- rLambertW(n = 100, theta = list(beta = c(2, 1), gamma = 0.2), 
 #'                distname = "normal")
 #' fity <- IGMM(y, type = "s")
 #' fity
 #' summary(fity)
 #' plot(fity)
-#' 
+#' \dontrun{
 #' # estimate tau for the skewed version of an exponential
-#' y <- rLambertW(n = 1000, theta = list(beta = 1, gamma = 0.5), 
+#' y <- rLambertW(n = 100, theta = list(beta = 1, gamma = 0.5), 
 #'                distname = "exp")
 #' fity <- IGMM(y, type = "s", skewness.x = 2, location.family = FALSE)
 #' fity
@@ -105,7 +105,7 @@
 #' plot(fity)
 #' 
 #' # estimate theta for the heavy-tailed version of a Normal = Tukey's h
-#' y <- rLambertW(n = 500, theta = list(beta = c(2, 1), delta = 0.2), 
+#' y <- rLambertW(n = 100, theta = list(beta = c(2, 1), delta = 0.2), 
 #'                distname = "normal")
 #' system.time(
 #' fity <- IGMM(y, type = "h")
@@ -113,7 +113,7 @@
 #' fity
 #' summary(fity)
 #' plot(fity)
-#' 
+#' }
 
 IGMM <- function(y, type = c("h", "hh", "s"), skewness.x = 0, kurtosis.x = 3,
                  tau.init = get_initial_tau(y, type),
@@ -219,7 +219,7 @@ IGMM <- function(y, type = c("h", "hh", "s"), skewness.x = 0, kurtosis.x = 3,
       DEL <- delta_GMM(zz, delta.init = tau.trace[kk + 1, "delta"], 
                        kurtosis.x = kurtosis.x, tol = tol,
                        not.negative = not.negative, 
-                       type = "h")
+                       type = "h", lower=delta.lower, upper=delta.upper)
       delta.hat <- DEL$delta
       
       uu <- W_delta(zz, delta.hat)
@@ -270,6 +270,7 @@ IGMM <- function(y, type = c("h", "hh", "s"), skewness.x = 0, kurtosis.x = 3,
                            delta.init = tail(tau.trace[, c("delta_l", "delta_r")], 1), 
                            kurtosis.x = kurtosis.x, skewness.x = skewness.x, 
                            tol = tol, not.negative = not.negative,
+                           lower=delta.lower, upper=delta.upper,
                            type = "hh")$delta
     tau.trace <- rbind(tau.trace, 
                      c(tail(tau.trace[, c("mu_x", "sigma_x")], 1), delta.hat))
