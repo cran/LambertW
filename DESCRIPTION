@@ -2,7 +2,7 @@ Package: LambertW
 Type: Package
 Title: Probabilistic Models to Analyze and Gaussianize Heavy-Tailed,
         Skewed Data
-Version: 0.6.9
+Version: 0.6.9-1
 Authors@R: 
     person(given = "Georg M.",
            family = "Goerg",
@@ -33,10 +33,10 @@ LazyLoad: yes
 NeedsCompilation: yes
 Repository: CRAN
 LinkingTo: Rcpp, lamW
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Encoding: UTF-8
 VignetteBuilder: knitr
-Packaged: 2023-10-29 22:04:28 UTC; georg
+Packaged: 2023-11-30 15:44:52 UTC; georg
 Author: Georg M. Goerg [aut, cre]
 Maintainer: Georg M. Goerg <im@gmge.org>
-Date/Publication: 2023-10-30 08:20:19 UTC
+Date/Publication: 2023-11-30 17:50:02 UTC

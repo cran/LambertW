@@ -1,6 +1,6 @@
-7597cc9ce5edc068ec1f51ce21d55aaf *DESCRIPTION
+48c43daa82e5ce910544df40bbda6078 *DESCRIPTION
 ee5497ff82d720beba832531a7c5334e *NAMESPACE
-a33df3848b98a991a4e8dfe53230f18b *NEWS.md
+3178929f8d01fc11e442fa7aea793140 *NEWS.md
 985617a26476663691bdd1678b7335dd *R/0_LambertW-toolkit.R
 2277718a1fce026c577dc09cd2bcbf45 *R/0_LambertW-utils.R
 b43c630633a02b9f5f8e2c77dd9d193d *R/0_LambertW_fit-methods.R
@@ -20,7 +20,7 @@ abbc33bf22f2732fdf88fd2bd03c0a1e *R/G_delta_alpha.R
 65ecdf50b7327a15f1feb6cc9f042a61 *R/IGMM.R
 f30c2059759361c7438e44c796d9a930 *R/LambertW-package.R
 6751f5d3c75fd2033011a068c3c00581 *R/MLE_LambertW.R
-ca13ee3a407d3740d5c81e962b780f52 *R/RcppExports.R
+4bae3c359ba8df614e75d0ece0ce5ec0 *R/RcppExports.R
 0c8a665009fd2b3aea741a074b3abdd3 *R/analyze_convergence.R
 3ec5a3f53c550f3599911861261be9e6 *R/beta2tau.R
 7a582e82eb2a67cd8e2b601b10806768 *R/bootstrap.R
@@ -100,7 +100,7 @@ e766bc78781034b091461e25310234c5 *data/SolarFlares.rda
 19ecda432fd7efa3d575cf06df756fc9 *inst/CITATION
 4437c41610913b5ec5044416b50e2982 *inst/doc/lambertw-overview.R
 f7036a0459ab2a3b13a695b8ab5b7512 *inst/doc/lambertw-overview.Rmd
-0247260f27d70c9d65a0b6582883d6ad *inst/doc/lambertw-overview.html
+ae9c998d7c3514adc2598afb03140c65 *inst/doc/lambertw-overview.html
 1309d8d81aef55533f2b0aac337ea788 *inst/include/LambertW.h
 93d2e36be8b3a849f30cfae2fa0bb2f4 *inst/include/LambertW_RcppExports.h
 273bd937c79d8ee2cf3305d27eb073b3 *man/G_delta_alpha.Rd
@@ -145,7 +145,7 @@ d74028b4d39a35019c965b3911281a42 *man/test_normality.Rd
 daa04d6a125325ecd781d3a999b61b42 *man/test_symmetry.Rd
 b5b17d8e3ca6fce12b30c486dd81794c *man/theta-utils.Rd
 1f792ab42347c8147a73126b900a9674 *man/xexp.Rd
-4398996566ffec5654afd3dfd3a54ec9 *src/RcppExports.cpp
+86fd8678d4976055669d02b5f6062741 *src/RcppExports.cpp
 86e358ec993c00a392f0bba1b96d9c91 *src/W_Cpp.cpp
 e92ab2631b6cd61796c0c0bf4843fc6c *src/W_delta_Cpp.cpp
 292c3074b29bf5661052310a4a31816d *src/W_gamma_Cpp.cpp
