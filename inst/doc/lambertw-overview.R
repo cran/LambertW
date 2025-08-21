@@ -31,9 +31,9 @@ ret.gauss.metrics
 attr(ret.gauss, "Gaussianized:delta")
 
 ## ----skew-tail-gaussianize, eval=FALSE, include=TRUE--------------------------
-#  ret.gauss <- LambertW::Gaussianize(ret, type = "hh", method = "IGMM")
-#  colnames(ret.gauss) <- gsub("\\.X", "", colnames(ret.gauss))
-#  plot(ret.gauss)
+# ret.gauss <- LambertW::Gaussianize(ret, type = "hh", method = "IGMM")
+# colnames(ret.gauss) <- gsub("\\.X", "", colnames(ret.gauss))
+# plot(ret.gauss)
 
 ## ----DAX-FTSE, fig.width = 16, fig.height = 8---------------------------------
 layout(matrix(1:2, ncol = 2, byrow = TRUE))
@@ -43,14 +43,14 @@ plot(ret.gauss[, "DAX"], ret.gauss[, "FTSE"])
 grid()
 
 ## ----fit-models, include = TRUE, eval = FALSE---------------------------------
-#  # try these models on your own
-#  mod <- lm(FTSE ~ DAX + SMI + CAC, data = ret)
-#  mod.robust <- rlm(FTSE ~ DAX + SMI + CAC, data = ret)
-#  mod.gauss <- lm(FTSE ~ DAX + SMI + CAC, data = ret.gauss)
-#  
-#  summary(mod)
-#  summary(mod.robust)
-#  summary(mod.gauss)
+# # try these models on your own
+# mod <- lm(FTSE ~ DAX + SMI + CAC, data = ret)
+# mod.robust <- rlm(FTSE ~ DAX + SMI + CAC, data = ret)
+# mod.gauss <- lm(FTSE ~ DAX + SMI + CAC, data = ret.gauss)
+# 
+# summary(mod)
+# summary(mod.robust)
+# summary(mod.gauss)
 
 ## ----vars-ret, message=FALSE--------------------------------------------------
 library(vars)
